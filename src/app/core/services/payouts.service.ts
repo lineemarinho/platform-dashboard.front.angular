@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment.dev";
 import { PayoutsResponse } from "../../shared/interfaces";
 import { FilterBuilderUtil } from "../../shared/utils/filter-builder.util";
+import { getApiUrl } from "../../shared/utils/organization-auth.util";
 
 @Injectable({
   providedIn: "root",
@@ -12,9 +12,7 @@ export class PayoutsService {
   private readonly baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl =
-      environment.azureAD.auth.gowd.api.host +
-      environment.azureAD.auth.gowd.api.context;
+    this.baseUrl = getApiUrl();
   }
 
   getPayouts(
@@ -36,7 +34,7 @@ export class PayoutsService {
     // Se houver filtros, usa o formato completo da API
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
 
-    console.log("=== ENVIANDO PAYLOAD PAYOUTS PARA API ===");
+    console.log("=== ENVIANDO PAYLOAD PARA API PAYOUTS ===");
     console.log("Payload:", payload);
 
     return this.http.post<PayoutsResponse>(
@@ -46,10 +44,11 @@ export class PayoutsService {
   }
 
   getPayoutDetails(payoutId: string): Observable<any> {
-    const url = `${this.baseUrl}/v1/payin/order/${payoutId}`;
+    const url = `${this.baseUrl}/v1/payout/order/${payoutId}`;
 
     console.log("=== BUSCANDO DETALHES DO PAYOUT ===");
-    console.log("URL:", url);
+    console.log("Base URL:", this.baseUrl);
+    console.log("URL completa:", url);
     console.log("ID:", payoutId);
 
     return this.http.get(url);

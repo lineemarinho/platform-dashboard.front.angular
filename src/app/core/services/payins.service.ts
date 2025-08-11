@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment.dev";
 import { PayinsResponse } from "../../shared/interfaces";
 import { FilterBuilderUtil } from "../../shared/utils/filter-builder.util";
+import { getApiUrl } from "../../shared/utils/organization-auth.util";
 
 @Injectable({
   providedIn: "root",
@@ -12,9 +12,7 @@ export class PayinsService {
   private readonly baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl =
-      environment.azureAD.auth.gowd.api.host +
-      environment.azureAD.auth.gowd.api.context;
+    this.baseUrl = getApiUrl();
   }
 
   getPayins(
@@ -33,7 +31,7 @@ export class PayinsService {
     // Se houver filtros, usa o formato completo da API
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
 
-    console.log("=== ENVIANDO PAYLOAD PAYINS PARA API ===");
+    console.log("=== ENVIANDO PAYLOAD PARA API PAYINS ===");
     console.log("Payload:", payload);
 
     return this.http.post<PayinsResponse>(
@@ -45,7 +43,8 @@ export class PayinsService {
   getPayinById(id: string): Observable<any> {
     console.log("=== BUSCANDO PAYIN POR ID ===");
     console.log("ID:", id);
-    console.log("URL:", `${this.baseUrl}/v1/payin/order/${id}`);
+    console.log("Base URL:", this.baseUrl);
+    console.log("URL completa:", `${this.baseUrl}/v1/payin/order/${id}`);
 
     return this.http.get<any>(`${this.baseUrl}/v1/payin/order/${id}`);
   }

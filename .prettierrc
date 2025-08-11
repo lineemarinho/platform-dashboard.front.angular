@@ -1,0 +1,8 @@
+{
+  "bracketSameLine": true,
+  "endOfLine": "lf",
+  "useTabs": true,
+  "tabWidth": 2,
+  "embeddedLanguageFormatting": "auto",
+  "htmlWhitespaceSensitivity": "css"
+}

@@ -1,21 +1,18 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
-import { AccountHoldersResponse } from '../../shared/interfaces';
-import { ApiFilterRequest } from '../../shared/utils/filter-builder.util';
-import { FilterBuilderUtil } from '../../shared/utils/filter-builder.util';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { AccountHoldersResponse } from "../../shared/interfaces";
+import { FilterBuilderUtil } from "../../shared/utils/filter-builder.util";
+import { getApiUrl } from "../../shared/utils/organization-auth.util";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class HoldingsService {
   private readonly baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl =
-      environment.azureAD.auth.gowd.api.host +
-      environment.azureAD.auth.gowd.api.context;
+    this.baseUrl = getApiUrl();
   }
 
   getHoldings(
