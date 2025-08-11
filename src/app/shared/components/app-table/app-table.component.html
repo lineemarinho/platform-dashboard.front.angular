@@ -55,7 +55,7 @@
               <img
                 [src]="getCurrencyIcon(cell)"
                 [alt]="'Ícone da moeda ' + cell"
-                [title]="cell"
+                [title]="'Ícone da moeda ' + cell"
                 class="w-5 h-5 mr-2"
               />
               <span class="text-gray-900">{{ cell }}</span>
@@ -68,11 +68,21 @@
               {{ cell }}
             </div>
 
-            <div
-              *ngIf="columns[j]?.type === 'date'"
-              class="text-gray-900"
-            >
+            <div *ngIf="columns[j]?.type === 'date'" class="text-gray-900">
               <span class="text-xs">{{ cell }}</span>
+            </div>
+
+            <div
+              *ngIf="columns[j]?.type === 'country'"
+              class="flex items-center gap-2"
+            >
+              <img
+                [src]="getCountryFlag(cell)"
+                [alt]="'Bandeira de ' + cell"
+                [title]="cell"
+                class="w-5 h-5 rounded-sm"
+              />
+              <span class="text-gray-900 text-xs">{{ cell }}</span>
             </div>
 
             <div
@@ -97,7 +107,10 @@
             </div>
           </td>
 
-          <td *ngIf="showActions" class="px-3 py-4 text-xs sm:text-sm text-gray-500">
+          <td
+            *ngIf="showActions"
+            class="px-3 py-4 text-xs sm:text-sm text-gray-500"
+          >
             <div class="flex items-center gap-2">
               <button
                 *ngIf="hasExpandedData()"
@@ -228,7 +241,7 @@
             <img
               [src]="getCurrencyIcon(cell)"
               [alt]="'Ícone da moeda ' + cell"
-              [title]="cell"
+              [title]="'Ícone da moeda ' + cell"
               class="w-4 h-4 mr-2"
             />
             <span class="break-words">{{ cell }}</span>
@@ -239,10 +252,7 @@
           >
             {{ cell }}
           </div>
-          <div
-            *ngIf="columns[j + 1]?.type === 'date'"
-            class="text-gray-900"
-          >
+          <div *ngIf="columns[j + 1]?.type === 'date'" class="text-gray-900">
             {{ cell }}
           </div>
           <div *ngIf="!columns[j + 1]?.type || columns[j + 1]?.type === 'text'">

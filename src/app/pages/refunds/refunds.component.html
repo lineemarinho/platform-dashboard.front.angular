@@ -2,100 +2,80 @@
 
 <!-- Desktop Filters -->
 <div class="hidden lg:block mb-6">
-  <form
-    [formGroup]="filterForm"
-    class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4"
-  >
-    <div class="min-w-[200px]">
-      <app-input
-        type="text"
-        [label]="'orderId' | locale"
-        fontSize="xs"
-        placeholder="Order ID"
-        formControlName="orderId"
-      ></app-input>
+  <form [formGroup]="filterForm" class="flex items-end justify-between">
+    <div class="flex flex-wrap gap-3 items-end">
+      <div class="min-w-[120px]">
+        <app-input
+          type="date"
+          [label]="'startDate' | locale"
+          fontSize="xs"
+          formControlName="startDate"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[120px]">
+        <app-input
+          type="date"
+          [label]="'endDate' | locale"
+          fontSize="xs"
+          formControlName="endDate"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[150px]">
+        <app-input
+          type="text"
+          [label]="'refundId' | locale"
+          fontSize="xs"
+          placeholder="ID do reembolso"
+          formControlName="refundId"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[150px]">
+        <app-input
+          type="text"
+          [label]="'refundE2E' | locale"
+          fontSize="xs"
+          placeholder="E2E do reembolso"
+          formControlName="refundE2E"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[150px]">
+        <app-input
+          type="text"
+          [label]="'orderId' | locale"
+          fontSize="xs"
+          placeholder="ID do pedido"
+          formControlName="orderId"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[150px]">
+        <app-input
+          type="text"
+          [label]="'orderE2E' | locale"
+          fontSize="xs"
+          placeholder="E2E do pedido"
+          formControlName="orderE2E"
+        ></app-input>
+      </div>
     </div>
 
-    <div class="min-w-[200px]">
-      <app-input
-        type="text"
-        [label]="'company' | locale"
-        fontSize="xs"
-        placeholder="Company"
-        formControlName="company"
-      ></app-input>
-    </div>
-
-    <div class="min-w-[200px]">
-      <app-select
-        [label]="'provider' | locale"
-        fontSize="xs"
-        formControlName="provider"
-        [options]="[
-          { value: 'PIX_JD', label: 'PIX JD' },
-          { value: 'PIX_ITAU', label: 'PIX Itaú' }
-        ]"
-      ></app-select>
-    </div>
-
-    <div class="min-w-[200px]">
-      <app-select
-        [label]="'channel' | locale"
-        fontSize="xs"
-        formControlName="channel"
-        [options]="[
-          { value: 'MED', label: 'MED' },
-          { value: 'WEB', label: 'WEB' }
-        ]"
-      ></app-select>
-    </div>
-
-    <div class="min-w-[200px]">
-      <app-input
-        type="text"
-        [label]="'requester' | locale"
-        fontSize="xs"
-        placeholder="Requester"
-        formControlName="requester"
-      ></app-input>
-    </div>
-
-    <div class="min-w-[200px]">
-      <app-select
-        [label]="'status' | locale"
-        fontSize="xs"
-        formControlName="status"
-        [options]="[
-          { value: 'PROCESSING', label: 'Processing' },
-          { value: 'COMPLETED', label: 'Completed' },
-          { value: 'FAILED', label: 'Failed' }
-        ]"
-      ></app-select>
-    </div>
-
-    <div class="min-w-[200px]">
-      <app-input
-        type="text"
-        [label]="'reason' | locale"
-        fontSize="xs"
-        placeholder="Reason"
-        formControlName="reason"
-      ></app-input>
+    <div class="flex gap-3 pt-4">
+      <app-button
+        type="outline"
+        [label]="'clear' | locale"
+        (click)="onClear()"
+      ></app-button>
+      <app-button
+        type="primary"
+        [label]="'filter' | locale"
+        (click)="onFilter()"
+      ></app-button>
     </div>
   </form>
-
-  <div class="flex gap-3 pt-4">
-    <app-button
-      type="outline"
-      [label]="'clear' | locale"
-      (click)="onClear()"
-    ></app-button>
-    <app-button
-      type="primary"
-      [label]="'filter' | locale"
-      (click)="onFilter()"
-    ></app-button>
-  </div>
 </div>
 
 <!-- Mobile Filters Toggle -->
@@ -113,10 +93,48 @@
   <form [formGroup]="filterForm" class="space-y-4">
     <div>
       <app-input
+        type="date"
+        [label]="'startDate' | locale"
+        fontSize="xs"
+        formControlName="startDate"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-input
+        type="date"
+        [label]="'endDate' | locale"
+        fontSize="xs"
+        formControlName="endDate"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'refundId' | locale"
+        fontSize="xs"
+        placeholder="ID do reembolso"
+        formControlName="refundId"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'refundE2E' | locale"
+        fontSize="xs"
+        placeholder="E2E do reembolso"
+        formControlName="refundE2E"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-input
         type="text"
         [label]="'orderId' | locale"
         fontSize="xs"
-        placeholder="Order ID"
+        placeholder="ID do pedido"
         formControlName="orderId"
       ></app-input>
     </div>
@@ -124,67 +142,10 @@
     <div>
       <app-input
         type="text"
-        [label]="'company' | locale"
+        [label]="'orderE2E' | locale"
         fontSize="xs"
-        placeholder="Company"
-        formControlName="company"
-      ></app-input>
-    </div>
-
-    <div>
-      <app-select
-        [label]="'provider' | locale"
-        fontSize="xs"
-        formControlName="provider"
-        [options]="[
-          { value: 'PIX_JD', label: 'PIX JD' },
-          { value: 'PIX_ITAU', label: 'PIX Itaú' }
-        ]"
-      ></app-select>
-    </div>
-
-    <div>
-      <app-select
-        [label]="'channel' | locale"
-        fontSize="xs"
-        formControlName="channel"
-        [options]="[
-          { value: 'MED', label: 'MED' },
-          { value: 'WEB', label: 'WEB' }
-        ]"
-      ></app-select>
-    </div>
-
-    <div>
-      <app-input
-        type="text"
-        [label]="'requester' | locale"
-        fontSize="xs"
-        placeholder="Requester"
-        formControlName="requester"
-      ></app-input>
-    </div>
-
-    <div>
-      <app-select
-        [label]="'status' | locale"
-        fontSize="xs"
-        formControlName="status"
-        [options]="[
-          { value: 'PROCESSING', label: 'Processing' },
-          { value: 'COMPLETED', label: 'Completed' },
-          { value: 'FAILED', label: 'Failed' }
-        ]"
-      ></app-select>
-    </div>
-
-    <div>
-      <app-input
-        type="text"
-        [label]="'reason' | locale"
-        fontSize="xs"
-        placeholder="Reason"
-        formControlName="reason"
+        placeholder="E2E do pedido"
+        formControlName="orderE2E"
       ></app-input>
     </div>
   </form>

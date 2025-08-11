@@ -12,6 +12,8 @@ import { PageTitleComponent } from '../../shared/components/page-title/page-titl
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { Payin } from '../../shared/interfaces';
 import { LocalePipe } from '../../shared/pipes';
+import { StatusUtil } from '../../shared/utils/status.util';
+import { FilterBuilderUtil, FilterCondition, FilterGroup } from '../../shared/utils/filter-builder.util';
 
 @Component({
   selector: 'app-payins',
@@ -57,19 +59,30 @@ export class PayinsComponent implements OnInit {
     { key: 'createdAt', label: 'Created At', type: 'date' as const },
   ];
 
+  // Opções para Search By
+  searchByOptions = [
+    { value: 'code', label: 'Código' },
+    { value: 'company', label: 'Empresa' },
+    { value: 'customer', label: 'Cliente' },
+    { value: 'paymentMethod', label: 'Método de pagamento' },
+    { value: 'financialPartner', label: 'Parceiro financeiro' },
+  ];
+
+  // Opções de status usando o StatusUtil
+  statusOptions = StatusUtil.getPaymentStatusOptions();
+
   constructor(
     private payinsService: PayinsService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
     this.filterForm = this.formBuilder.group({
-      code: [''],
+      startDate: [''],
+      endDate: [''],
+      searchBy: [''],
       status: [''],
-      company: [''],
-      customer: [''],
-      paymentMethod: [''],
-      financialPartner: [''],
-      origin: [''],
+      idempotencyKey: [''],
+      e2eId: [''],
     });
   }
 
@@ -118,7 +131,7 @@ export class PayinsComponent implements OnInit {
   }
 
   onFilter(): void {
-    this.currentPage = 1;
+    this.currentPage = 1; // Reset para primeira página ao filtrar
     this.loadPayins();
   }
 
@@ -171,24 +184,75 @@ export class PayinsComponent implements OnInit {
     this.loadPayins();
   }
 
+  /**
+   * Constrói os filtros no formato da API
+   */
+  private buildApiFilters(): (FilterCondition | FilterGroup)[] {
+    const formValue = this.filterForm.value;
+    const filters: (FilterCondition | FilterGroup)[] = [];
+
+    // Filtros de data
+    if (formValue.startDate || formValue.endDate) {
+      const dateFilters = FilterBuilderUtil.buildDateRangeFilter(
+        'createdAt',
+        'createdAt',
+        formValue.startDate,
+        formValue.endDate
+      );
+      filters.push(...dateFilters);
+    }
+
+    // Filtro por campo de busca
+    if (formValue.searchBy && formValue.searchBy !== '') {
+      // Aqui você pode implementar lógica específica baseada no campo selecionado
+      // Por exemplo, se searchBy for 'code', buscar no campo 'code'
+      const searchFilter = FilterBuilderUtil.buildTextFilter(formValue.searchBy, formValue.searchBy);
+      if (searchFilter) filters.push(searchFilter);
+    }
+
+    // Filtro por status
+    if (formValue.status) {
+      const statusFilter = FilterBuilderUtil.buildSelectFilter('status', formValue.status);
+      if (statusFilter) filters.push(statusFilter);
+    }
+
+    // Filtro por chave de idempotência
+    if (formValue.idempotencyKey) {
+      const idempotencyFilter = FilterBuilderUtil.buildTextFilter('idempotencyKey', formValue.idempotencyKey);
+      if (idempotencyFilter) filters.push(idempotencyFilter);
+    }
+
+    // Filtro por E2E ID
+    if (formValue.e2eId) {
+      const e2eFilter = FilterBuilderUtil.buildTextFilter('e2eId', formValue.e2eId);
+      if (e2eFilter) filters.push(e2eFilter);
+    }
+
+    return FilterBuilderUtil.buildFinalFilters(filters);
+  }
+
   loadPayins(): void {
-    console.log('Iniciando carregamento de payins...');
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    console.log('Parâmetros:', { skip, take });
+    // Constrói os filtros no formato da API
+    const apiFilters = this.buildApiFilters();
+    
+    console.log("Parâmetros:", { skip, take });
+    console.log("Filtros construídos:", apiFilters);
 
-    this.payinsService.getPayins(skip, take).subscribe({
+    // Agora passa os filtros para o serviço
+    this.payinsService.getPayins(skip, take, apiFilters).subscribe({
       next: (response) => {
-        console.log('Dados recebidos:', response);
+        console.log("Dados recebidos:", response);
         this.payins.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log('Loading finalizado, dados:', this.payins());
+        console.log("Loading finalizado, dados:", this.payins());
       },
       error: (error) => {
-        console.error('Erro ao carregar payins:', error);
+        console.error("Erro ao carregar payins:", error);
         this.isLoading = false;
       },
     });

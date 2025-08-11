@@ -16,6 +16,11 @@ import {
 import { DocumentType } from "../../shared/enums";
 import { AccountHolder, Company } from "../../shared/interfaces";
 import { LocalePipe } from "../../shared/pipes/locale.pipe";
+import {
+  FilterBuilderUtil,
+  FilterCondition,
+  FilterGroup,
+} from "../../shared/utils/filter-builder.util";
 import { MaskUtil } from "../../shared/utils/mask.util";
 
 @Component({
@@ -52,17 +57,17 @@ export class HoldingsComponent implements OnInit {
   }));
 
   tableColumns = [
-    { key: "fullName", label: "fullName" as const, type: "text" as const },
-    { key: "document", label: "document" as const, type: "text" as const },
-    { key: "email", label: "email" as const, type: "text" as const },
-    { key: "birthdate", label: "birthDate" as const, type: "date" as const },
-    { key: "active", label: "status" as const, type: "status" as const },
-    { key: "phone", label: "phone" as const, type: "text" as const },
-    { key: "type", label: "type" as const, type: "text" as const },
-    { key: "companyId", label: "companyId" as const, type: "text" as const },
-    { key: "country", label: "country" as const, type: "text" as const },
-    { key: "createdAt", label: "createdAt" as const, type: "date" as const },
-    { key: "updatedAt", label: "updatedAt" as const, type: "date" as const },
+    { key: "fullName", label: "Nome completo", type: "text" as const },
+    { key: "document", label: "Documento", type: "text" as const },
+    { key: "email", label: "Email", type: "text" as const },
+    { key: "birthdate", label: "Data de nascimento", type: "date" as const },
+    { key: "active", label: "Status", type: "status" as const },
+    { key: "phone", label: "Telefone", type: "text" as const },
+    { key: "type", label: "Tipo", type: "text" as const },
+    { key: "companyId", label: "ID Empresa", type: "id" as const },
+    { key: "country", label: "País", type: "country" as const },
+    { key: "createdAt", label: "Data de criação", type: "date" as const },
+    { key: "updatedAt", label: "Última atualização", type: "date" as const },
   ];
 
   constructor(
@@ -76,6 +81,7 @@ export class HoldingsComponent implements OnInit {
       email: [""],
       documentType: [""],
       document: [""],
+      fullName: [""],
     });
   }
 
@@ -86,13 +92,11 @@ export class HoldingsComponent implements OnInit {
   }
 
   setupDocumentTypeListener(): void {
-    // Escuta mudanças no tipo de documento para aplicar máscara
     this.filterForm
       .get("documentType")
       ?.valueChanges.subscribe((documentType) => {
         const documentControl = this.filterForm.get("document");
         if (documentControl && documentControl.value) {
-          // Aplica a máscara quando o tipo muda
           const maskedValue = MaskUtil.applyDocumentMask(
             documentControl.value,
             documentType
@@ -106,9 +110,12 @@ export class HoldingsComponent implements OnInit {
     const documentType = this.filterForm.get("documentType")?.value;
     const inputValue = event.target.value;
 
-    if (documentType) {
+    if (documentType && inputValue) {
       const maskedValue = MaskUtil.applyDocumentMask(inputValue, documentType);
-      this.filterForm.get("document")?.setValue(maskedValue);
+      const documentControl = this.filterForm.get("document");
+      if (documentControl && documentControl.value !== maskedValue) {
+        documentControl.setValue(maskedValue, { emitEvent: false });
+      }
     }
   }
 
@@ -130,21 +137,63 @@ export class HoldingsComponent implements OnInit {
     }));
   }
 
+  onFilter(): void {
+    this.currentPage = 1;
+    this.loadHoldings();
+  }
+
+  private buildApiFilters(): (FilterCondition | FilterGroup)[] {
+    const formValue = this.filterForm.value;
+    const filters: (FilterCondition | FilterGroup)[] = [];
+
+    if (formValue.companyId && formValue.companyId !== "") {
+      const companyFilter = FilterBuilderUtil.buildSelectFilter(
+        "companyId",
+        formValue.companyId
+      );
+      if (companyFilter) filters.push(companyFilter);
+    }
+
+    if (formValue.email && formValue.email.trim() !== "") {
+      const emailFilter = FilterBuilderUtil.buildTextFilter(
+        "email",
+        formValue.email
+      );
+      if (emailFilter) filters.push(emailFilter);
+    }
+
+    if (formValue.fullName && formValue.fullName.trim() !== "") {
+      const nameFilter = FilterBuilderUtil.buildTextFilter(
+        "fullName",
+        formValue.fullName
+      );
+      if (nameFilter) filters.push(nameFilter);
+    }
+
+    if (formValue.documentType || formValue.document) {
+      const documentFilters = FilterBuilderUtil.buildDocumentFilter(
+        formValue.documentType,
+        formValue.document
+      );
+      filters.push(...documentFilters);
+    }
+
+    return FilterBuilderUtil.buildFinalFilters(filters);
+  }
+
   loadHoldings(): void {
-    console.log("Iniciando carregamento...");
+    if (this.isLoading) return;
+
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
+    const apiFilters = this.buildApiFilters();
 
-    console.log("Parâmetros:", { skip, take });
-
-    this.holdingsService.getHoldings(skip, take).subscribe({
+    this.holdingsService.getHoldings(skip, take, apiFilters).subscribe({
       next: (response) => {
-        console.log("Dados recebidos:", response);
         this.holdings.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log("Loading finalizado, dados:", this.holdings());
       },
       error: (error) => {
         console.error("Erro ao carregar holdings:", error);
@@ -181,13 +230,9 @@ export class HoldingsComponent implements OnInit {
     this.router.navigate(["/account-holders", accountHolder.id]);
   }
 
-  onFilter(): void {
-    // Implementar filtros
-    this.loadHoldings();
-  }
-
   onClear(): void {
     this.filterForm.reset();
+    this.currentPage = 1;
     this.loadHoldings();
   }
 
@@ -232,7 +277,9 @@ export class HoldingsComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
-    this.currentPage = page;
-    this.loadHoldings();
+    if (this.currentPage !== page) {
+      this.currentPage = page;
+      this.loadHoldings();
+    }
   }
 }

@@ -1,14 +1,15 @@
-import { KeyValuePipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, Input, TemplateRef } from '@angular/core';
-import { ToastService } from '../../../core/services/toast.service';
-import { TranslationService } from '../../../core/services/translation.service';
-import { LocalePipe } from '../../pipes/locale.pipe';
-import { StatusBadgeComponent } from '../status-badge/status-badge.component';
+import { KeyValuePipe, NgFor, NgIf, NgTemplateOutlet } from "@angular/common";
+import { Component, Input, TemplateRef } from "@angular/core";
+import { ToastService } from "../../../core/services/toast.service";
+import { TranslationService } from "../../../core/services/translation.service";
+import { LocalePipe } from "../../pipes/locale.pipe";
+import { StatusBadgeComponent } from "../status-badge/status-badge.component";
+import { StatusUtil } from "../../utils/status.util";
 
 export interface TableColumn {
   key: string;
   label: string;
-  type?: 'text' | 'status' | 'currency' | 'money' | 'date' | 'id' | 'actions';
+  type?: "text" | "status" | "currency" | "money" | "date" | "id" | "actions" | "country";
 }
 
 export interface ExpandedRowData {
@@ -16,9 +17,9 @@ export interface ExpandedRowData {
 }
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './app-table.component.html',
-  styleUrls: ['./app-table.component.css'],
+  selector: "app-table",
+  templateUrl: "./app-table.component.html",
+  styleUrls: ["./app-table.component.css"],
   standalone: true,
   imports: [
     NgFor,
@@ -73,13 +74,13 @@ export class AppTableComponent {
       .writeText(text)
       .then(() => {
         this.toastService.success(
-          this.translationService.translate('copiedToClipboard'),
+          this.translationService.translate("copiedToClipboard"),
           2000
         );
       })
       .catch(() => {
         this.toastService.error(
-          this.translationService.translate('copyError'),
+          this.translationService.translate("copyError"),
           3000
         );
       });
@@ -89,77 +90,59 @@ export class AppTableComponent {
     return this.columnMap(row);
   }
 
-  getStatusType(
-    status: string
-  ):
-    | 'approved'
-    | 'pending'
-    | 'rejected'
-    | 'cancelled'
-    | 'processing'
-    | 'completed'
-    | 'active'
-    | 'inactive' {
-    const statusLower = status.toLowerCase();
-    if (
-      [
-        'approved',
-        'pending',
-        'rejected',
-        'cancelled',
-        'processing',
-        'completed',
-        'active',
-        'inactive',
-      ].includes(statusLower)
-    ) {
-      return statusLower as any;
-    }
-    return 'pending';
+  getStatusType(status: string): 'approved' | 'pending' | 'rejected' | 'cancelled' | 'processing' | 'completed' | 'active' | 'inactive' {
+    return StatusUtil.getStatusType(status);
   }
 
   getStatusClass(status: string): string {
-    const statusLower = status.toLowerCase();
-    switch (statusLower) {
-      case 'approved':
-        return 'bg-green-100 text-green-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'rejected':
-        return 'bg-red-100 text-red-800';
-      case 'cancelled':
-        return 'bg-gray-100 text-gray-800';
-      case 'processing':
-        return 'bg-blue-100 text-blue-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
+    return StatusUtil.getStatusClass(status);
   }
 
   getCurrencyIcon(currency: string): string {
     switch (currency.toUpperCase()) {
-      case 'BRL':
-        return 'assets/flags/brl.svg';
-      case 'USD':
-        return 'assets/flags/usd.svg';
-      case 'EUR':
-        return 'assets/flags/eur.svg';
-      case 'CLP':
-        return 'assets/flags/clp.svg';
-      case 'USDT':
-        return 'assets/flags/usdt.svg';
-      case 'ARS':
-        return 'assets/flags/ars.svg';
-      case 'PEN':
-        return 'assets/flags/pen.svg';
-      case 'MXN':
-        return 'assets/flags/mxn.svg';
-      case 'COB':
-        return 'assets/flags/cop.svg';
+      case "BRL":
+        return "assets/flags/brl.svg";
+      case "USD":
+        return "assets/flags/usd.svg";
+      case "EUR":
+        return "assets/flags/eur.svg";
+      case "CLP":
+        return "assets/flags/clp.svg";
+      case "USDT":
+        return "assets/flags/usdt.svg";
+      case "ARS":
+        return "assets/flags/ars.svg";
+      case "PEN":
+        return "assets/flags/pen.svg";
+      case "MXN":
+        return "assets/flags/mxn.svg";
+      case "COB":
+        return "assets/flags/cop.svg";
       default:
-        return 'assets/flags/usd.svg';
+        return "assets/flags/usd.svg";
+    }
+  }
+
+  getCountryFlag(countryCode: string): string {
+    switch (countryCode.toUpperCase()) {
+      case "BRA":
+        return "assets/flags/brl.svg";
+      case "ARG":
+        return "assets/flags/ars.svg";
+      case "CHL":
+        return "assets/flags/clp.svg";
+      case "COL":
+        return "assets/flags/cop.svg";
+      case "MEX":
+        return "assets/flags/mxn.svg";
+      case "PER":
+        return "assets/flags/pen.svg";
+      case "USA":
+        return "assets/flags/usd.svg";
+      case "EUR":
+        return "assets/flags/eur.svg";
+      default:
+        return "assets/flags/usd.svg";
     }
   }
 
@@ -171,12 +154,13 @@ export class AppTableComponent {
   shouldShowCopyButton(columnKey: string | undefined): boolean {
     if (!columnKey) return false;
     const copyableFields = [
-      'id',
-      'email',
-      'document',
-      'phone',
-      'documento',
-      'telefone',
+      "id",
+      "email",
+      "document",
+      "phone",
+      "documento",
+      "telefone",
+      "companyid",
     ];
     return copyableFields.includes(columnKey.toLowerCase());
   }

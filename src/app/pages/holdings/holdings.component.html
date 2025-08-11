@@ -1,5 +1,6 @@
 <app-page-title [title]="'holdings' | locale"></app-page-title>
 
+<!-- Desktop Filters -->
 <form [formGroup]="filterForm" class="hidden lg:block bg-white mb-6">
   <div class="flex items-end justify-between">
     <div class="flex flex-wrap gap-3 items-end">
@@ -9,7 +10,7 @@
           fontSize="xs"
           formControlName="companyId"
           [options]="companyOptions"
-          placeholder="Selecione uma empresa"
+          placeholder="Selecione a empresa"
         ></app-select>
       </div>
 
@@ -33,14 +34,24 @@
         ></app-select>
       </div>
 
-      <div class="min-w-[250px]">
+      <div class="min-w-[150px]">
         <app-input
           type="text"
           [label]="'document' | locale"
           fontSize="xs"
-          placeholder="Número do documento"
+          placeholder="Documento"
           formControlName="document"
           (input)="onDocumentInput($event)"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[150px]">
+        <app-input
+          type="text"
+          [label]="'fullName' | locale"
+          fontSize="xs"
+          placeholder="Nome completo"
+          formControlName="fullName"
         ></app-input>
       </div>
     </div>
@@ -99,7 +110,7 @@
           fontSize="xs"
           formControlName="companyId"
           [options]="companyOptions"
-          placeholder="Selecione uma empresa"
+          placeholder="Selecione a empresa"
         ></app-select>
       </div>
 
@@ -128,9 +139,19 @@
           type="text"
           [label]="'document' | locale"
           fontSize="xs"
-          placeholder="Número do documento"
+          placeholder="Documento"
           formControlName="document"
           (input)="onDocumentInput($event)"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-input
+          type="text"
+          [label]="'fullName' | locale"
+          fontSize="xs"
+          placeholder="Nome completo"
+          formControlName="fullName"
         ></app-input>
       </div>
     </div>

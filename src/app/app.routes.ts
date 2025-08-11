@@ -37,7 +37,7 @@ export const routes: Routes = [
       { path: "holdings", component: HoldingsComponent },
       { path: "companies", component: CompaniesComponent },
       { path: "payins/details", component: PaymentDetailsComponent },
-      { path: "payouts/details", component: OrderDetailsComponent },
+      { path: "payouts/details/:id", component: OrderDetailsComponent },
       { path: "payins", component: PayinsComponent },
       { path: "payouts", component: PayoutsComponent },
       { path: "fees", component: FeesComponent },

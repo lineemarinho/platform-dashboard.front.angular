@@ -3,102 +3,80 @@
 
   <!-- Desktop Filters -->
   <div class="hidden lg:block mb-6">
-    <form
-      [formGroup]="filterForm"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7 gap-3"
-    >
-      <div class="min-w-0">
-        <app-input
-          type="text"
-          [label]="'code' | locale"
-          fontSize="xs"
-          placeholder="Código"
-          formControlName="code"
-        ></app-input>
-      </div>
+    <form [formGroup]="filterForm" class="flex items-end justify-between">
+      <div class="flex flex-wrap gap-3 items-end">
+        <div class="min-w-[100px]">
+          <app-input
+            type="date"
+            [label]="'startDate' | locale"
+            fontSize="xs"
+            width="100%"
+            formControlName="startDate"
+          ></app-input>
+        </div>
 
-      <div class="min-w-0">
-        <app-select
-          [label]="'status' | locale"
-          fontSize="xs"
-          formControlName="status"
-          [options]="[
-            { value: 'APPROVED', label: 'Aprovado' },
-            { value: 'PENDING', label: 'Pendente' },
-            { value: 'ERROR', label: 'Erro' },
-            { value: 'PROCESSING', label: 'Processando' }
-          ]"
-        ></app-select>
-      </div>
+        <div class="min-w-[120px]">
+          <app-input
+            type="date"
+            [label]="'endDate' | locale"
+            fontSize="xs"
+            formControlName="endDate"
+          ></app-input>
+        </div>
 
-      <div class="min-w-0">
-        <app-input
-          type="text"
-          [label]="'company' | locale"
-          fontSize="xs"
-          placeholder="Nome da empresa"
-          formControlName="company"
-        ></app-input>
-      </div>
+        <div class="min-w-[120px]">
+          <app-select
+            [label]="'searchBy' | locale"
+            fontSize="xs"
+            formControlName="searchBy"
+            [options]="searchByOptions"
+            placeholder="Selecione o campo"
+          ></app-select>
+        </div>
 
-      <div class="min-w-0">
-        <app-input
-          type="text"
-          [label]="'customer' | locale"
-          fontSize="xs"
-          placeholder="Nome do cliente"
-          formControlName="customer"
-        ></app-input>
-      </div>
+        <div class="min-w-[120px]">
+          <app-select
+            [label]="'status' | locale"
+            fontSize="xs"
+            formControlName="status"
+            [options]="statusOptions"
+            placeholder="Selecione o status"
+          ></app-select>
+        </div>
 
-      <div class="min-w-0">
-        <app-select
-          [label]="'paymentMethod' | locale"
-          fontSize="xs"
-          formControlName="paymentMethod"
-          [options]="[
-            { value: 'PIX', label: 'PIX' },
-            { value: 'BANK_TRANSFER', label: 'Transferência Bancária' },
-            { value: 'BOLETO', label: 'Boleto' }
-          ]"
-        ></app-select>
-      </div>
+        <div class="min-w-[120px]">
+          <app-input
+            type="text"
+            [label]="'idempotencyKey' | locale"
+            fontSize="xs"
+            placeholder="Chave de idempotência"
+            formControlName="idempotencyKey"
+          ></app-input>
+        </div>
 
-      <div class="min-w-0">
-        <app-input
-          type="text"
-          [label]="'financialPartner' | locale"
-          fontSize="xs"
-          placeholder="Parceiro financeiro"
-          formControlName="financialPartner"
-        ></app-input>
+        <div class="min-w-[120px]">
+          <app-input
+            type="text"
+            [label]="'e2eId' | locale"
+            fontSize="xs"
+            placeholder="E2E ID"
+            formControlName="e2eId"
+          ></app-input>
+        </div>
       </div>
-
-      <div class="min-w-0">
-        <app-select
-          [label]="'origin' | locale"
-          fontSize="xs"
-          formControlName="origin"
-          [options]="[
-            { value: 'PAYMENT', label: 'Pagamento' },
-            { value: 'REFUND', label: 'Reembolso' }
-          ]"
-        ></app-select>
+      <div class="flex gap-3 pt-4">
+        <app-button
+          type="outline"
+          [label]="'clear' | locale"
+          (click)="onClear()"
+        ></app-button>
+        <app-button
+          type="primary"
+          [label]="'filter' | locale"
+          (click)="onFilter()"
+        ></app-button>
       </div>
     </form>
-
-    <div class="flex gap-3 pt-4">
-      <app-button
-        type="outline"
-        [label]="'clear' | locale"
-        (click)="onClear()"
-      ></app-button>
-      <app-button
-        type="primary"
-        [label]="'filter' | locale"
-        (click)="onFilter()"
-      ></app-button>
-    </div>
   </div>
 
   <!-- Mobile Filters Toggle -->
@@ -116,12 +94,30 @@
     <form [formGroup]="filterForm" class="space-y-4">
       <div>
         <app-input
-          type="text"
-          [label]="'code' | locale"
+          type="date"
+          [label]="'startDate' | locale"
           fontSize="xs"
-          placeholder="Código"
-          formControlName="code"
+          formControlName="startDate"
         ></app-input>
+      </div>
+
+      <div>
+        <app-input
+          type="date"
+          [label]="'endDate' | locale"
+          fontSize="xs"
+          formControlName="endDate"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-select
+          [label]="'searchBy' | locale"
+          fontSize="xs"
+          formControlName="searchBy"
+          [options]="searchByOptions"
+          placeholder="Selecione o campo"
+        ></app-select>
       </div>
 
       <div>
@@ -129,68 +125,29 @@
           [label]="'status' | locale"
           fontSize="xs"
           formControlName="status"
-          [options]="[
-            { value: 'APPROVED', label: 'Aprovado' },
-            { value: 'PENDING', label: 'Pendente' },
-            { value: 'ERROR', label: 'Erro' },
-            { value: 'PROCESSING', label: 'Processando' }
-          ]"
+          [options]="statusOptions"
+          placeholder="Selecione o status"
         ></app-select>
       </div>
 
       <div>
         <app-input
           type="text"
-          [label]="'company' | locale"
+          [label]="'idempotencyKey' | locale"
           fontSize="xs"
-          placeholder="Nome da empresa"
-          formControlName="company"
+          placeholder="Chave de idempotência"
+          formControlName="idempotencyKey"
         ></app-input>
       </div>
 
       <div>
         <app-input
           type="text"
-          [label]="'customer' | locale"
+          [label]="'e2eId' | locale"
           fontSize="xs"
-          placeholder="Nome do cliente"
-          formControlName="customer"
+          placeholder="E2E ID"
+          formControlName="e2eId"
         ></app-input>
-      </div>
-
-      <div>
-        <app-select
-          [label]="'paymentMethod' | locale"
-          fontSize="xs"
-          formControlName="paymentMethod"
-          [options]="[
-            { value: 'PIX', label: 'PIX' },
-            { value: 'BANK_TRANSFER', label: 'Transferência Bancária' },
-            { value: 'BOLETO', label: 'Boleto' }
-          ]"
-        ></app-select>
-      </div>
-
-      <div>
-        <app-input
-          type="text"
-          [label]="'financialPartner' | locale"
-          fontSize="xs"
-          placeholder="Parceiro financeiro"
-          formControlName="financialPartner"
-        ></app-input>
-      </div>
-
-      <div>
-        <app-select
-          [label]="'origin' | locale"
-          fontSize="xs"
-          formControlName="origin"
-          [options]="[
-            { value: 'PAYMENT', label: 'Pagamento' },
-            { value: 'REFUND', label: 'Reembolso' }
-          ]"
-        ></app-select>
       </div>
     </form>
 
