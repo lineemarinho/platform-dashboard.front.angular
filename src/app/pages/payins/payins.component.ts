@@ -17,7 +17,6 @@ import {
   FilterCondition,
   FilterGroup,
 } from "../../shared/utils/filter-builder.util";
-import { StatusUtil } from "../../shared/utils/status.util";
 
 @Component({
   selector: "app-payins",
@@ -45,11 +44,17 @@ export class PayinsComponent implements OnInit {
   totalItems = 0;
   currentPage = 1;
   itemsPerPage = 10;
+  private isInitialLoad = true;
 
   tableColumns = [
     { key: "id", label: "ID", type: "id" as const },
     { key: "code", label: "Code", type: "id" as const },
-    { key: "status", label: "Status", type: "status" as const },
+    {
+      key: "status",
+      label: "Status",
+      type: "status" as const,
+      statusMapping: (status: string) => this.getStatusTypeForBadge(status),
+    },
     { key: "company", label: "Company", type: "text" as const },
     { key: "customer", label: "Customer", type: "text" as const },
     { key: "paymentMethod", label: "Payment Method", type: "text" as const },
@@ -72,8 +77,18 @@ export class PayinsComponent implements OnInit {
     { value: "financialPartner", label: "Parceiro financeiro" },
   ];
 
-  // Opções de status usando o StatusUtil
-  statusOptions = StatusUtil.getPaymentStatusOptions();
+  // Opções de status baseadas na API (em inglês e maiúsculo)
+  statusOptions = [
+    { value: "ANALYSIS", label: "Análise" },
+    { value: "CANCELED", label: "Cancelado" },
+    { value: "ERROR", label: "Erro" },
+    { value: "EXPIRED", label: "Expirado" },
+    { value: "INITIAL", label: "Inicial" },
+    { value: "PAID", label: "Pago" },
+    { value: "PARTIAL_REFUNDED", label: "Reembolso Parcial" },
+    { value: "PENDING", label: "Pendente" },
+    { value: "REFUNDED", label: "Reembolsado" },
+  ];
 
   constructor(
     private payinsService: PayinsService,
@@ -107,10 +122,13 @@ export class PayinsComponent implements OnInit {
       ? new Date(payin.createdAt).toLocaleDateString("pt-BR")
       : "N/A";
 
+    // Mapeia o status para exibição em português
+    const statusDisplay = this.getStatusDisplay(payin.status);
+
     return [
       payin.id,
       payin.code,
-      payin.status,
+      statusDisplay,
       payin.company?.name || "N/A",
       payin.customer?.fullName || "N/A",
       payin.paymentMethod,
@@ -126,6 +144,17 @@ export class PayinsComponent implements OnInit {
   }
 
   onFilter(): void {
+    console.log("=== FILTRO CLICADO ===");
+    console.log("isInitialLoad:", this.isInitialLoad);
+
+    // Evita chamadas desnecessárias se for o carregamento inicial
+    if (this.isInitialLoad) {
+      console.log("Carregamento inicial, ignorando filtro");
+      this.isInitialLoad = false;
+      return;
+    }
+
+    console.log("Aplicando filtros e carregando dados");
     this.currentPage = 1; // Reset para primeira página ao filtrar
     this.loadPayins();
   }
@@ -133,6 +162,7 @@ export class PayinsComponent implements OnInit {
   onClear(): void {
     this.filterForm.reset();
     this.currentPage = 1;
+    this.isInitialLoad = false; // Reset do flag para permitir nova busca
     this.loadPayins();
   }
 
@@ -238,6 +268,65 @@ export class PayinsComponent implements OnInit {
     return FilterBuilderUtil.buildFinalFilters(filters);
   }
 
+  /**
+   * Converte o status da API para exibição em português
+   */
+  private getStatusDisplay(status: string): string {
+    // Limpa o status (remove espaços e converte para maiúsculo)
+    const cleanStatus = status?.trim()?.toUpperCase();
+
+    const statusMap: { [key: string]: string } = {
+      ANALYSIS: "Análise",
+      CANCELED: "Cancelado",
+      ERROR: "Erro",
+      EXPIRED: "Expirado",
+      INITIAL: "Inicial",
+      PAID: "Pago",
+      PARTIAL_REFUNDED: "Reembolso Parcial",
+      PENDING: "Pendente",
+      REFUNDED: "Reembolsado",
+    };
+
+    return statusMap[cleanStatus] || status;
+  }
+
+  // Mapeia o status em português de volta para o tipo que o StatusUtil reconhece
+  private getStatusTypeForBadge(
+    statusPortuguese: string
+  ):
+    | "approved"
+    | "pending"
+    | "rejected"
+    | "cancelled"
+    | "processing"
+    | "completed"
+    | "active"
+    | "inactive" {
+    const statusMap: {
+      [key: string]:
+        | "approved"
+        | "pending"
+        | "rejected"
+        | "cancelled"
+        | "processing"
+        | "completed"
+        | "active"
+        | "inactive";
+    } = {
+      Análise: "processing",
+      Cancelado: "cancelled",
+      Erro: "rejected",
+      Expirado: "rejected",
+      Inicial: "pending",
+      Pago: "completed",
+      "Reembolso Parcial": "processing",
+      Pendente: "pending",
+      Reembolsado: "cancelled",
+    };
+
+    return statusMap[statusPortuguese] || "pending";
+  }
+
   loadPayins(): void {
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
@@ -252,11 +341,9 @@ export class PayinsComponent implements OnInit {
     // Agora passa os filtros para o serviço
     this.payinsService.getPayins(skip, take, apiFilters).subscribe({
       next: (response) => {
-        console.log("Dados recebidos:", response);
         this.payins.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log("Loading finalizado, dados:", this.payins());
       },
       error: (error) => {
         console.error("Erro ao carregar payins:", error);

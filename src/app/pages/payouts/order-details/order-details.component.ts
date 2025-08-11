@@ -3,10 +3,13 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PayoutsService } from "../../../core/services/payouts.service";
 import { ToastService } from "../../../core/services/toast.service";
+import { LoadingComponent } from "../../../shared/components";
+import { AppTableComponent } from "../../../shared/components/app-table/app-table.component";
 import {
   BreadcrumbComponent,
   BreadcrumbItem,
 } from "../../../shared/components/breadcrumb/breadcrumb.component";
+import { ErrorMessageComponent } from "../../../shared/components/error-message/error-message.component";
 import { InfoFieldComponent } from "../../../shared/components/info-field/info-field.component";
 import { LocalePipe } from "../../../shared/pipes/locale.pipe";
 
@@ -37,6 +40,10 @@ export interface PayoutDetail {
   additionalFee: string;
   fixedFee: string;
   variableFee: string;
+  transactions?: any[]; // Transações da API
+  providerRouterId: string;
+  providerRouterAccountCode: string;
+  providerRouterAccountDescription: string;
 }
 
 export interface TransactionRow {
@@ -52,7 +59,15 @@ export interface TransactionRow {
 @Component({
   selector: "app-order-details",
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, InfoFieldComponent, LocalePipe],
+  imports: [
+    CommonModule,
+    AppTableComponent,
+    BreadcrumbComponent,
+    ErrorMessageComponent,
+    LoadingComponent,
+    InfoFieldComponent,
+    LocalePipe,
+  ],
   templateUrl: "./order-details.component.html",
   styleUrls: ["./order-details.component.css"],
 })
@@ -62,6 +77,7 @@ export class OrderDetailsComponent implements OnInit {
   payerFields: any[] = [];
   recipientFields: any[] = [];
   feesFields: any[] = [];
+  providerRouterFields: any[] = [];
   transactionColumns: any[] = [];
   transactionRows: TransactionRow[] = [];
   breadcrumbItems: BreadcrumbItem[] = [];
@@ -123,39 +139,43 @@ export class OrderDetailsComponent implements OnInit {
    * Mapeia a resposta da API para o formato do componente
    */
   private mapApiResponseToPayoutDetail(apiResponse: any): PayoutDetail {
-    // Aqui você mapeia os campos da API para o formato do componente
-    // Ajuste conforme a estrutura real da API
+    // Mapeia os campos da API para o formato do componente
     return {
       id: apiResponse.id || "",
       code: apiResponse.code || "",
-      e2eOrder: apiResponse.e2eOrder || apiResponse.e2eId || "",
+      e2eOrder: apiResponse.financialPartnerOrderId || "",
       idempotencyKey: apiResponse.idempotencyKey || "",
-      status: apiResponse.status || "pending",
+      status: apiResponse.status?.toLowerCase() || "pending",
       paymentMethod: apiResponse.paymentMethod || "",
-      provider: apiResponse.provider || "",
+      provider: apiResponse.financialPartner || "",
       origin: apiResponse.origin || "",
       value: apiResponse.amount?.value ? `R$ ${apiResponse.amount.value}` : "",
-      clientValue: apiResponse.clientValue || "",
-      orderDescription: apiResponse.description || "",
-      payerCompany: apiResponse.payer?.company?.name || "",
-      payerDocument: apiResponse.payer?.document?.number || "",
-      payerType: apiResponse.payer?.document?.type || "",
-      recipientCompany: apiResponse.recipient?.company?.name || "",
-      recipientDocument: apiResponse.recipient?.document?.number || "",
-      recipientBirthDate: apiResponse.recipient?.birthDate || "",
-      recipientBank: apiResponse.recipient?.bank?.name || "",
-      recipientIspb: apiResponse.recipient?.bank?.ispb || "",
-      recipientAgency: apiResponse.recipient?.bank?.agency || "",
-      recipientAccount: apiResponse.recipient?.bank?.account || "",
-      recipientKeyType: apiResponse.recipient?.pixKey?.type || "",
-      recipientPixKey: apiResponse.recipient?.pixKey?.value || "",
-      additionalFee: apiResponse.fees?.additional
-        ? `R$ ${apiResponse.fees.additional}`
+      clientValue: apiResponse.amountClient
+        ? `R$ ${apiResponse.amountClient}`
         : "",
-      fixedFee: apiResponse.fees?.fixed ? `R$ ${apiResponse.fees.fixed}` : "",
-      variableFee: apiResponse.fees?.variable
-        ? `R$ ${apiResponse.fees.variable}`
-        : "",
+      orderDescription: apiResponse.additionalInfo || "",
+      payerCompany: apiResponse.senderAccount?.fullName || "",
+      payerDocument: apiResponse.senderAccount?.document?.number || "",
+      payerType: apiResponse.senderAccount?.document?.type || "",
+      recipientCompany: apiResponse.receiverAccount?.fullName || "",
+      recipientDocument: apiResponse.receiverAccount?.document?.number || "",
+      recipientBirthDate: "",
+      recipientBank: apiResponse.receiverAccount?.bank?.bankName || "",
+      recipientIspb: "",
+      recipientAgency:
+        apiResponse.receiverAccount?.bank?.account?.branchNumber || "",
+      recipientAccount:
+        apiResponse.receiverAccount?.bank?.account?.accountNumber || "",
+      recipientKeyType: "",
+      recipientPixKey: "",
+      additionalFee: apiResponse.feeAdd ? `R$ ${apiResponse.feeAdd}` : "",
+      fixedFee: apiResponse.feeFix ? `R$ ${apiResponse.feeFix}` : "",
+      variableFee: apiResponse.feeVar ? `R$ ${apiResponse.feeVar}` : "",
+      transactions: apiResponse.transactions || [],
+      providerRouterId: apiResponse.providerRouter?.id || "",
+      providerRouterAccountCode: apiResponse.providerRouter?.accountCode || "",
+      providerRouterAccountDescription:
+        apiResponse.providerRouter?.accountDescription || "",
     };
   }
 
@@ -202,25 +222,25 @@ export class OrderDetailsComponent implements OnInit {
 
     this.payerFields = [
       { label: "company", value: this.payment?.payerCompany },
-      { label: "document", value: this.payment?.payerDocument },
+      { label: "document", value: this.payment?.payerDocument, copy: true },
       { label: "payerType", value: this.payment?.payerType },
     ];
 
     this.recipientFields = [
       { label: "company", value: this.payment?.recipientCompany },
-      { label: "document", value: this.payment?.recipientDocument },
+      { label: "document", value: this.payment?.recipientDocument, copy: true },
       { label: "birthDate", value: this.payment?.recipientBirthDate },
 
       { label: "bank", value: this.payment?.recipientBank },
-      { label: "ispb", value: this.payment?.recipientIspb },
+      { label: "ispb", value: this.payment?.recipientIspb, copy: true },
       { label: "", value: "" },
 
-      { label: "agency", value: this.payment?.recipientAgency },
-      { label: "account", value: this.payment?.recipientAccount },
+      { label: "agency", value: this.payment?.recipientAgency, copy: true },
+      { label: "account", value: this.payment?.recipientAccount, copy: true },
       { label: "", value: "" },
 
       { label: "keyType", value: this.payment?.recipientKeyType },
-      { label: "pixKey", value: this.payment?.recipientPixKey },
+      { label: "pixKey", value: this.payment?.recipientPixKey, copy: true },
       { label: "", value: "" },
 
       { label: "divider", value: "divider" },
@@ -233,40 +253,73 @@ export class OrderDetailsComponent implements OnInit {
 
       { label: "divider", value: "divider" },
     ];
+
+    this.providerRouterFields = [
+      {
+        label: "providerRouterId",
+        value: this.payment?.providerRouterId,
+        copy: true,
+      },
+      {
+        label: "providerRouterAccountCode",
+        value: this.payment?.providerRouterAccountCode,
+        copy: true,
+      },
+      {
+        label: "providerRouterAccountDescription",
+        value: this.payment?.providerRouterAccountDescription,
+      },
+    ];
   }
 
   setupTransactionTable(): void {
     this.transactionColumns = [
-      { key: "referenceId", label: "referenceId" },
-      { key: "description", label: "description" },
-      { key: "account", label: "account" },
-      { key: "counterpartyAccount", label: "counterpartyAccount" },
-      { key: "currency", label: "currency" },
-      { key: "value", label: "value" },
-      { key: "createdAt", label: "createdAt" },
+      { key: "referenceId", label: "referenceId", type: "text" as const },
+      { label: "description", type: "text" as const },
+      { label: "account", type: "text" as const },
+      { label: "counterpartyAccount", type: "text" as const },
+      { label: "currency", type: "text" as const },
+      { label: "value", type: "money" as const },
+      { label: "createdAt", type: "date" as const },
     ];
 
-    this.transactionRows = [
-      {
-        referenceId: "REF-001",
-        description: "Pagamento principal",
-        account: "12345-6",
-        counterpartyAccount: "98765-4",
-        currency: "BRL",
-        value: "R$ 1.250,00",
-        createdAt: "2025-01-07 13:16",
-      },
-      {
-        referenceId: "REF-002",
-        description: "Taxa de processamento",
-        account: "12345-6",
-        counterpartyAccount: "Sistema",
-        currency: "BRL",
-        value: "R$ 2,50",
-        createdAt: "2025-01-07 13:16",
-      },
-    ];
+    // Usa as transações reais da API ou dados vazios se não houver
+    if (
+      this.payment &&
+      this.payment.transactions &&
+      this.payment.transactions.length > 0
+    ) {
+      this.transactionRows = this.payment.transactions.map(
+        (transaction: any) => ({
+          referenceId: transaction.referenceId || "N/A",
+          description: transaction.description || "N/A",
+          account: transaction.internalAccount?.holder || "N/A",
+          counterpartyAccount:
+            transaction.internalCounterpartyAccount?.holder || "N/A",
+          currency: transaction.currency || "N/A",
+          value: transaction.amount ? `R$ ${transaction.amount}` : "N/A",
+          createdAt: transaction.createdAt
+            ? new Date(transaction.createdAt).toLocaleDateString("pt-BR") +
+              " " +
+              new Date(transaction.createdAt).toLocaleTimeString("pt-BR")
+            : "N/A",
+        })
+      );
+    } else {
+      this.transactionRows = [];
+    }
   }
+
+  // Mapeia as transações para o formato esperado pelo app-table
+  mapTransactionToColumns = (transaction: TransactionRow) => [
+    transaction.referenceId,
+    transaction.description,
+    transaction.account,
+    transaction.counterpartyAccount,
+    transaction.currency,
+    transaction.value,
+    transaction.createdAt,
+  ];
 
   onBack(): void {
     this.router.navigate(["/payouts"]);

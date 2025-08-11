@@ -243,8 +243,13 @@ export default {
   clientValue: "Valor cliente",
   orderDescription: "Descrição do pedido",
   settledAt: "Liquidado em",
+  providerRouter: "Roteamento de Provedor",
   paidAt: "Pago em",
   compensatedAt: "Compensado em",
+  providerRouterId: "ID do Roteamento de Provedor",
+  providerRouterAccountCode: "Código da conta do roteamento de provedor",
+  providerRouterAccountDescription:
+    "Descrição da conta do roteamento de provedor",
   code: "Código",
   fees: "Taxas",
   additionalFee: "Taxa adicional",

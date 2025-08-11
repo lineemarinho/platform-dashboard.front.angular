@@ -18,6 +18,19 @@ export interface TableColumn {
     | "id"
     | "actions"
     | "country";
+  statusMapping?: (
+    status: string
+  ) =>
+    | "approved"
+    | "pending"
+    | "rejected"
+    | "cancelled"
+    | "processing"
+    | "paid"
+    | "failed"
+    | "completed"
+    | "active"
+    | "inactive"; // Mapeia o status para o tipo do StatusBadgeComponent
 }
 
 export interface ExpandedRowData {
@@ -105,6 +118,8 @@ export class AppTableComponent {
     | "pending"
     | "rejected"
     | "cancelled"
+    | "paid"
+    | "failed"
     | "processing"
     | "completed"
     | "active"

@@ -169,18 +169,14 @@
     </div>
   </div>
 
-  <!-- Debug: isLoading = {{ isLoading }} -->
+  @if (isLoading) {
   <app-loading
-    *ngIf="isLoading"
     message="Carregando payins..."
     variant="card"
     size="md"
   ></app-loading>
-
-  <!-- Debug: Dados carregados = {{ payins().length }} -->
-
+  } @if (!isLoading) {
   <app-table
-    *ngIf="!isLoading"
     [columns]="tableColumns"
     [rows]="tableRows"
     [columnMap]="mapRowToColumns"
@@ -188,9 +184,10 @@
     [showActions]="true"
   ></app-table>
 
+  @if (totalItems > 0) {
   <app-pagination
-    *ngIf="!isLoading && totalItems > 0"
     [paginationInfo]="paginationInfo"
     (pageChange)="onPageChange($event)"
   ></app-pagination>
+  } }
 </div>

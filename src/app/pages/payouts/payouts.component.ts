@@ -49,7 +49,12 @@ export class PayoutsComponent implements OnInit {
   tableColumns = [
     { key: "id", label: "ID", type: "id" as const },
     { key: "code", label: "Code", type: "id" as const },
-    { key: "status", label: "Status", type: "status" as const },
+    {
+      key: "status",
+      label: "Status",
+      type: "status" as const,
+      statusMapping: (status: string) => this.getStatusTypeForBadge(status),
+    },
     { key: "company", label: "Company", type: "text" as const },
     { key: "senderAccount", label: "Sender Account", type: "text" as const },
     {
@@ -207,6 +212,46 @@ export class PayoutsComponent implements OnInit {
     this.filterForm.reset();
     this.currentPage = 1;
     this.loadPayouts();
+  }
+
+  // Mapeia o status dos payouts para o tipo que o StatusBadgeComponent reconhece
+  private getStatusTypeForBadge(
+    status: string
+  ):
+    | "approved"
+    | "pending"
+    | "rejected"
+    | "cancelled"
+    | "processing"
+    | "completed"
+    | "active"
+    | "inactive" {
+    const statusMap: {
+      [key: string]:
+        | "approved"
+        | "pending"
+        | "rejected"
+        | "cancelled"
+        | "processing"
+        | "completed"
+        | "active"
+        | "inactive";
+    } = {
+      PAID: "completed",
+      PENDING: "pending",
+      PROCESSING: "processing",
+      COMPLETED: "completed",
+      CANCELLED: "cancelled",
+      FAILED: "rejected",
+      ERROR: "rejected",
+      REFUNDED: "cancelled",
+      PARTIAL_REFUNDED: "processing",
+      EXPIRED: "rejected",
+      ANALYSIS: "processing",
+      INITIAL: "pending",
+    };
+
+    return statusMap[status?.toUpperCase()] || "pending";
   }
 
   toggleMobileFilters(): void {

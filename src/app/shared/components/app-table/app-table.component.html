@@ -41,7 +41,7 @@
 
             <div *ngIf="columns[j]?.type === 'status'">
               <app-status-badge
-                [status]="getStatusType(cell)"
+                [status]="columns[j]?.statusMapping?.(cell) ?? getStatusType(cell)"
                 size="sm"
                 [showIcon]="true"
               >
@@ -78,6 +78,7 @@
             >
               <img
                 [src]="getCountryFlag(cell)"
+                aria-label="'Bandeira de ' + cell"
                 [alt]="'Bandeira de ' + cell"
                 [title]="cell"
                 class="w-5 h-5 rounded-sm"
@@ -228,7 +229,7 @@
         <div class="text-xs sm:text-sm text-gray-900">
           <div *ngIf="columns[j + 1]?.type === 'status'">
             <app-status-badge
-              [status]="getStatusType(cell)"
+              [status]="columns[j + 1]?.statusMapping?.(cell) ?? getStatusType(cell)"
               size="sm"
               [showIcon]="true"
             >
@@ -241,6 +242,7 @@
             <img
               [src]="getCurrencyIcon(cell)"
               [alt]="'Ícone da moeda ' + cell"
+              aria-label="'Ícone da moeda ' + cell"
               [title]="'Ícone da moeda ' + cell"
               class="w-4 h-4 mr-2"
             />

@@ -4,40 +4,30 @@
 ></app-breadcrumb>
 
 <!-- Loading -->
-<div *ngIf="isLoading" class="p-4 lg:p-6">
+@if (isLoading) {
+<div class="p-4 lg:p-6">
   <div class="flex items-center justify-center">
-    <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+    <div
+      class="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"
+    ></div>
   </div>
   <p class="text-center mt-4 text-gray-600">Carregando detalhes do payout...</p>
 </div>
+}
 
 <!-- Error -->
-<div *ngIf="error && !isLoading" class="p-4 lg:p-6">
-  <div class="bg-red-50 border border-red-200 rounded-md p-4">
-    <div class="flex">
-      <div class="flex-shrink-0">
-        <span class="material-icons text-red-400">error</span>
-      </div>
-      <div class="ml-3">
-        <h3 class="text-sm font-medium text-red-800">Erro ao carregar dados</h3>
-        <div class="mt-2 text-sm text-red-700">
-          <p>{{ error }}</p>
-        </div>
-        <div class="mt-4">
-          <button
-            (click)="onBack()"
-            class="bg-red-100 text-red-800 px-3 py-2 rounded-md text-sm font-medium hover:bg-red-200"
-          >
-            Voltar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+@if (error && !isLoading) {
+<app-error-message
+  [error]="error"
+  [title]="'Erro ao carregar dados'"
+  [showRetry]="false"
+  (retry)="onBack()"
+></app-error-message>
+}
 
 <!-- Content -->
-<div class="p-4 lg:p-6" *ngIf="payment && !isLoading">
+@if (payment && !isLoading) {
+<div class="p-4 lg:p-6">
   <div class="mb-6">
     <h1 class="text-xl font-bold text-gray-900">
       {{ "orderDetails" | locale }}
@@ -50,31 +40,25 @@
         {{ "holderData" | locale }}
       </h2>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <ng-container *ngFor="let field of holderFields">
-          <div
-            *ngIf="field.label === 'divider'"
-            class="col-span-3 border-b border-gray-200 my-4"
-          ></div>
-
-          <div *ngIf="field.label === ''"></div>
-
-          <app-info-field
-            *ngIf="field.label !== 'divider' && field.label !== ''"
-            [label]="field.label | locale"
-            [value]="field.value"
+        @for (field of holderFields; track field.label) { @if (field.label ===
+        'divider') {
+        <div class="col-span-3 border-b border-gray-200 my-4"></div>
+        } @if (field.label === '') {
+        <div></div>
+        } @if (field.label !== 'divider' && field.label !== '') {
+        <app-info-field [label]="field.label | locale" [value]="field.value">
+          @if (field.copy) {
+          <button
+            (click)="onCopyToClipboard(field.value, field.label)"
+            class="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+            title="Copiar"
+            type="button"
           >
-            <ng-container *ngIf="field.copy">
-              <button
-                (click)="onCopyToClipboard(field.value, field.label)"
-                class="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
-                title="Copiar"
-                type="button"
-              >
-                <span class="material-icons text-sm">content_copy</span>
-              </button>
-            </ng-container>
-          </app-info-field>
-        </ng-container>
+            <span class="material-icons text-sm">content_copy</span>
+          </button>
+          }
+        </app-info-field>
+        } }
       </div>
     </div>
 
@@ -83,12 +67,12 @@
         {{ "payer" | locale }}
       </h2>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <ng-container *ngFor="let field of payerFields">
-          <app-info-field
-            [label]="field.label | locale"
-            [value]="field.value"
-          ></app-info-field>
-        </ng-container>
+        @for (field of payerFields; track field.label) {
+        <app-info-field
+          [label]="field.label | locale"
+          [value]="field.value"
+        ></app-info-field>
+        }
       </div>
     </div>
 
@@ -97,20 +81,17 @@
         {{ "recipient" | locale }}
       </h2>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <ng-container *ngFor="let field of recipientFields">
-          <div
-            *ngIf="field.label === 'divider'"
-            class="col-span-3 border-b border-gray-200 my-4"
-          ></div>
-
-          <div *ngIf="field.label === ''"></div>
-
-          <app-info-field
-            *ngIf="field.label !== 'divider' && field.label !== ''"
-            [label]="field.label | locale"
-            [value]="field.value"
-          ></app-info-field>
-        </ng-container>
+        @for (field of recipientFields; track field.label) { @if (field.label
+        === 'divider') {
+        <div class="col-span-3 border-b border-gray-200 my-4"></div>
+        } @if (field.label === '') {
+        <div></div>
+        } @if (field.label !== 'divider' && field.label !== '') {
+        <app-info-field
+          [label]="field.label | locale"
+          [value]="field.value"
+        ></app-info-field>
+        } }
       </div>
     </div>
 
@@ -119,18 +100,37 @@
         {{ "fees" | locale }}
       </h2>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <ng-container *ngFor="let field of feesFields">
-          <div
-            *ngIf="field.label === 'divider'"
-            class="col-span-3 border-b border-gray-200 my-4"
-          ></div>
+        @for (field of feesFields; track field.label) { @if (field.label ===
+        'divider') {
+        <div class="col-span-3 border-b border-gray-200 my-4"></div>
+        } @if (field.label !== 'divider') {
+        <app-info-field
+          [label]="field.label | locale"
+          [value]="field.value"
+        ></app-info-field>
+        } }
+      </div>
+    </div>
 
-          <app-info-field
-            *ngIf="field.label !== 'divider'"
-            [label]="field.label | locale"
-            [value]="field.value"
-          ></app-info-field>
-        </ng-container>
+    <div class="bg-white">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">
+        {{ "providerRouter" | locale }}
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        @for (field of providerRouterFields; track field.label) {
+        <app-info-field [label]="field.label | locale" [value]="field.value">
+          @if (field.copy) {
+          <button
+            (click)="onCopyToClipboard(field.value, field.label)"
+            class="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+            title="Copiar"
+            type="button"
+          >
+            <span class="material-icons text-sm">content_copy</span>
+          </button>
+          }
+        </app-info-field>
+        }
       </div>
     </div>
 
@@ -138,49 +138,13 @@
       <h2 class="text-sm font-semibold text-gray-900 mb-4">
         {{ "orderTransactions" | locale }}
       </h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-white rounded-xl overflow-hidden">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                *ngFor="let column of transactionColumns"
-                class="px-6 py-5 text-left text-xs bg-[#E7EEEE] text-[#0A1535] font-medium"
-              >
-                {{ column.label | locale }}
-              </th>
-            </tr>
-          </thead>
-          <tbody
-            class="bg-white divide-y border border-[#E7EEEE] divide-[#E7EEEE]"
-          >
-            <tr *ngFor="let row of transactionRows" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ row.referenceId }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ row.description }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ row.account }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ row.counterpartyAccount }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ row.currency }}
-              </td>
-              <td
-                class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium"
-              >
-                {{ row.value }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ row.createdAt }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <app-table
+        [columns]="transactionColumns"
+        [rows]="transactionRows"
+        [columnMap]="mapTransactionToColumns"
+        [showActions]="false"
+      ></app-table>
     </div>
   </div>
 </div>
+}

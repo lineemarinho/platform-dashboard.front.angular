@@ -61,7 +61,13 @@ export class HoldingsComponent implements OnInit {
     { key: "document", label: "Documento", type: "text" as const },
     { key: "email", label: "Email", type: "text" as const },
     { key: "birthdate", label: "Data de nascimento", type: "date" as const },
-    { key: "active", label: "Status", type: "status" as const },
+    {
+      key: "active",
+      label: "Status",
+      type: "status" as const,
+      statusMapping: (status: string) =>
+        status === "Ativo" ? "active" : "inactive",
+    },
     { key: "phone", label: "Telefone", type: "text" as const },
     { key: "type", label: "Tipo", type: "text" as const },
     { key: "companyId", label: "ID Empresa", type: "id" as const },
