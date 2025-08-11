@@ -1,46 +1,35 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { PayinsService } from "../../../core/services/payins.service";
 import { ToastService } from "../../../core/services/toast.service";
+import {
+  LoadingComponent,
+  StatusBadgeComponent,
+} from "../../../shared/components";
+import { AppTableComponent } from "../../../shared/components/app-table/app-table.component";
 import {
   BreadcrumbComponent,
   BreadcrumbItem,
 } from "../../../shared/components/breadcrumb";
+import { ErrorMessageComponent } from "../../../shared/components/error-message/error-message.component";
 import { InfoFieldComponent } from "../../../shared/components/info-field/info-field.component";
+import { PayinApiResponse, PaymentDetail } from "../../../shared/interfaces";
 import { LocalePipe } from "../../../shared/pipes/locale.pipe";
-
-export interface PaymentDetail {
-  id: string;
-  code: string;
-  e2eOrder: string;
-  idempotencyKey: string;
-  status: "paid" | "pending" | "failed";
-  paymentMethod: string;
-  origin: string;
-  value: string;
-  clientValue: string;
-  orderDescription: string;
-  payerCompany: string;
-  payerDocument: string;
-  recipientCompany: string;
-  recipientDocument: string;
-  recipientBirthDate: string;
-  recipientBank: string;
-  recipientIspb: string;
-  recipientAgency: string;
-  recipientAccount: string;
-  recipientKeyType: string;
-  recipientPixKey: string;
-  additionalFee: string;
-  fixedFee: string;
-  variableFee: string;
-}
 
 @Component({
   selector: "app-payment-details",
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, InfoFieldComponent, LocalePipe],
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    ErrorMessageComponent,
+    InfoFieldComponent,
+    LocalePipe,
+    LoadingComponent,
+    AppTableComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: "./payment-details.component.html",
   styleUrls: ["./payment-details.component.css"],
 })
@@ -53,13 +42,30 @@ export class PaymentDetailsComponent implements OnInit {
   recipientFields: any[] = [];
   feesFields: any[] = [];
   additionalFields: any[] = [];
+  timelineFields: any[] = [];
   transactionFields: any[] = [];
   breadcrumbItems: BreadcrumbItem[] = [];
   isLoading = false;
   error: string | null = null;
 
+  transactionColumns = [
+    { key: "referenceId", label: "Reference ID", type: "id" as const },
+    { key: "description", label: "Descrição", type: "text" as const },
+    { key: "account", label: "Conta", type: "text" as const },
+    {
+      key: "counterpartyAccount",
+      label: "Conta Contraparte",
+      type: "text" as const,
+    },
+    { key: "currency", label: "Moeda", type: "text" as const },
+    { key: "amount", label: "Valor", type: "money" as const },
+    { key: "balance", label: "Saldo", type: "money" as const },
+    { key: "operationType", label: "Tipo Operação", type: "text" as const },
+    { key: "status", label: "Status", type: "status" as const },
+    { key: "createdAt", label: "Data Criação", type: "date" as const },
+  ];
+
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private payinsService: PayinsService,
     private toastService: ToastService
@@ -76,19 +82,15 @@ export class PaymentDetailsComponent implements OnInit {
   }
 
   private mapApiResponseToPaymentDetail(
-    apiResponse: any,
+    apiResponse: PayinApiResponse,
     paymentId: string
   ): PaymentDetail {
-    console.log("=== MAPEANDO RESPOSTA DA API ===");
-    console.log("API Response:", apiResponse);
-
-    // Mapeia os dados reais da API para o formato da interface
     const paymentDetail: PaymentDetail = {
       id: paymentId,
       code: apiResponse.code || "N/A",
-      e2eOrder: apiResponse.id || "N/A", // Usando ID como E2E Order
+      e2eOrder: apiResponse.id || "N/A",
       idempotencyKey: apiResponse.idempotencyKey || "N/A",
-      status: apiResponse.status?.toLowerCase() || "pending",
+      status: this.mapStatus(apiResponse.status),
       paymentMethod: apiResponse.paymentMethod || "N/A",
       origin: apiResponse.origin || "N/A",
       value: `${apiResponse.amount?.currency || "N/A"} R$ ${
@@ -110,8 +112,8 @@ export class PaymentDetailsComponent implements OnInit {
         ? new Date(apiResponse.customer.birth).toLocaleDateString("pt-BR")
         : "N/A",
       recipientBank: apiResponse.financialPartner || "N/A",
-      recipientIspb: "N/A", // Não disponível na API
-      recipientAgency: "N/A", // Não disponível na API
+      recipientIspb: "N/A",
+      recipientAgency: "N/A",
       recipientAccount: apiResponse.accountId || "N/A",
       recipientKeyType: apiResponse.customer?.email ? "E-mail" : "N/A",
       recipientPixKey: apiResponse.customer?.email || "N/A",
@@ -120,7 +122,6 @@ export class PaymentDetailsComponent implements OnInit {
       variableFee: `R$ ${apiResponse.feeVar || "0,00"}`,
     };
 
-    // Adiciona campos extras para uso interno (não na interface)
     (paymentDetail as any).paidAt = apiResponse.paidAt
       ? new Date(apiResponse.paidAt).toLocaleDateString("pt-BR")
       : "N/A";
@@ -136,6 +137,13 @@ export class PaymentDetailsComponent implements OnInit {
     (paymentDetail as any).updatedAt = apiResponse.updatedAt
       ? new Date(apiResponse.updatedAt).toLocaleDateString("pt-BR")
       : "N/A";
+
+    (paymentDetail as any).transactions = apiResponse.transactions || [];
+    (paymentDetail as any).customerEmail = apiResponse.customer?.email || "N/A";
+    (paymentDetail as any).customerPhone = apiResponse.customer?.phone || "N/A";
+    (paymentDetail as any).customerType = apiResponse.customer?.type || "N/A";
+    (paymentDetail as any).basePricePair = apiResponse.basePricePair || "0";
+    (paymentDetail as any).product = apiResponse.product || "N/A";
 
     return paymentDetail;
   }
@@ -160,14 +168,11 @@ export class PaymentDetailsComponent implements OnInit {
         console.log("Tipo da resposta:", typeof response);
         console.log("Keys da resposta:", Object.keys(response));
 
-        // Mapeia a resposta da API para o formato local
         this.payment = this.mapApiResponseToPaymentDetail(response, paymentId);
         this.setupFields();
         this.isLoading = false;
       },
       error: (error) => {
-        console.error("=== ERRO AO BUSCAR PAYIN ===");
-        console.error("Erro:", error);
         this.error = "Erro ao carregar detalhes do payin";
         this.isLoading = false;
         this.toastService.error("Erro ao carregar detalhes do payin");
@@ -213,8 +218,10 @@ export class PaymentDetailsComponent implements OnInit {
     this.payerFields = [
       { label: "fullName", value: this.payment?.payerCompany },
       { label: "document", value: this.payment?.payerDocument },
-      { label: "email", value: this.payment?.recipientPixKey }, // Email do customer
-      { label: "phone", value: "N/A" }, // Não disponível na interface atual
+      { label: "email", value: (this.payment as any)?.customerEmail },
+      { label: "phone", value: (this.payment as any)?.customerPhone },
+      { label: "type", value: (this.payment as any)?.customerType },
+      { label: "birthDate", value: this.payment?.recipientBirthDate },
     ];
 
     this.recipientFields = [
@@ -227,7 +234,7 @@ export class PaymentDetailsComponent implements OnInit {
       { label: "", value: "" },
 
       { label: "agency", value: this.payment?.recipientAgency },
-      { label: "account", value: this.payment?.recipientAccount },
+      { label: "account", value: this.payment?.recipientAccount, copy: true },
       { label: "", value: "" },
 
       { label: "keyType", value: this.payment?.recipientKeyType },
@@ -241,29 +248,117 @@ export class PaymentDetailsComponent implements OnInit {
       { label: "variableFee", value: this.payment?.variableFee },
     ];
 
-    // Campos adicionais da API
-    this.additionalFields = [
-      { label: "accountId", value: this.payment?.recipientAccount, copy: true },
-      { label: "financialPartner", value: this.payment?.recipientBank },
-      { label: "product", value: "PAYMENT" },
-      { label: "", value: "" },
-
-      { label: "additionalInfo", value: this.payment?.orderDescription },
-      { label: "basePricePair", value: "0" },
-      { label: "", value: "" },
-
-      { label: "paidAt", value: (this.payment as any)?.paidAt || "N/A" },
+    this.timelineFields = [
       { label: "createdAt", value: (this.payment as any)?.createdAt || "N/A" },
+      { label: "paidAt", value: (this.payment as any)?.paidAt || "N/A" },
       {
         label: "compensatedAt",
         value: (this.payment as any)?.compensatedAt || "N/A",
       },
-      { label: "", value: "" },
 
       { label: "settledAt", value: (this.payment as any)?.settledAt || "N/A" },
       { label: "updatedAt", value: (this.payment as any)?.updatedAt || "N/A" },
       { label: "", value: "" },
     ];
+
+    this.setupTransactionFields();
+  }
+
+  private setupTransactionFields(): void {
+    const transactions = (this.payment as any)?.transactions || [];
+
+    this.transactionFields = transactions.map((transaction: any) => ({
+      referenceId: transaction.referenceId || "N/A",
+      description: transaction.description || "N/A",
+      account: transaction.internalAccount?.holder || "N/A",
+      counterpartyAccount:
+        transaction.internalCounterpartyAccount?.holder || "N/A",
+      currency: transaction.currency || "N/A",
+      amount: transaction.amount || "N/A",
+      balance: transaction.balance || "N/A",
+      operationType: transaction.operationType || "N/A",
+      status: this.determineTransactionStatus(transaction),
+      createdAt: transaction.createdAt
+        ? new Date(transaction.createdAt).toLocaleDateString("pt-BR")
+        : "N/A",
+      companyId: transaction.companyId || "N/A",
+    }));
+  }
+
+  mapTransactionToColumns(transaction: any): any[] {
+    return [
+      transaction.referenceId,
+      transaction.description,
+      transaction.account,
+      transaction.counterpartyAccount,
+      transaction.currency,
+      `${transaction.currency} R$ ${transaction.amount}`,
+      `${transaction.currency} R$ ${transaction.balance}`,
+      transaction.operationType,
+      transaction.status,
+      transaction.createdAt,
+    ];
+  }
+
+  private mapStatus(status: string): "paid" | "pending" | "failed" {
+    const normalizedStatus = status?.toLowerCase();
+    switch (normalizedStatus) {
+      case "paid":
+        return "paid";
+      case "pending":
+        return "pending";
+      case "failed":
+        return "failed";
+      default:
+        return "pending";
+    }
+  }
+
+  private determineTransactionStatus(transaction: any): string {
+    // Determina o status baseado no tipo de operação e valores
+    if (
+      transaction.operationType === "PIX" &&
+      parseFloat(transaction.amount) > 0
+    ) {
+      return "paid";
+    } else if (
+      transaction.operationType === "-" &&
+      parseFloat(transaction.amount) < 0
+    ) {
+      return "completed";
+    } else if (
+      transaction.operationType === "PIX" &&
+      parseFloat(transaction.amount) === 0
+    ) {
+      return "pending";
+    } else {
+      return "completed";
+    }
+  }
+
+  mapStatusToStatusType(
+    status: string
+  ):
+    | "approved"
+    | "pending"
+    | "rejected"
+    | "cancelled"
+    | "processing"
+    | "completed"
+    | "active"
+    | "inactive" {
+    switch (status?.toLowerCase()) {
+      case "paid":
+        return "completed";
+      case "pending":
+        return "pending";
+      case "failed":
+        return "rejected";
+      case "completed":
+        return "completed";
+      default:
+        return "pending";
+    }
   }
 
   getStatusType(status: string): "success" | "warning" | "error" {
@@ -274,6 +369,8 @@ export class PaymentDetailsComponent implements OnInit {
         return "warning";
       case "failed":
         return "error";
+      case "completed":
+        return "success";
       default:
         return "warning";
     }

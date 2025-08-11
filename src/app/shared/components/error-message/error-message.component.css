@@ -1,0 +1,26 @@
+/* Estilos específicos do componente de erro */
+.error-message-container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects para o botão */
+.retry-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Transições suaves */
+.retry-button {
+  transition: all 0.2s ease-in-out;
+}

@@ -14,3 +14,4 @@ export * from './pix-key-type-selector';
 export * from './status-badge/status-badge.component';
 export * from './toast/toast.component';
 export * from './withdrawal-modal';
+export * from './error-message';
