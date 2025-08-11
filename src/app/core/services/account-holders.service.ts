@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
-import { AccountHolder, ApiResponse } from '../../shared/interfaces';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { AccountHolder, ApiResponse } from "../../shared/interfaces";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AccountHoldersService {
   private readonly baseUrl: string;
@@ -48,7 +48,7 @@ export class AccountHoldersService {
         (key) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
       )
-      .join('&');
+      .join("&");
 
     return this.http.get<ApiResponse<AccountHolder[]>>(
       `${this.baseUrl}/v1/account/holders/search?${queryString}`

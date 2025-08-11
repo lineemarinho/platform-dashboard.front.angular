@@ -1,5 +1,5 @@
-import { computed, Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { computed, Injectable, signal } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   AccountInfo,
   AuthenticationResult,
@@ -7,8 +7,8 @@ import {
   BrowserCacheLocation,
   InteractionRequiredAuthError,
   PublicClientApplication,
-} from '@azure/msal-browser';
-import { environment } from '../../environments/environment.dev';
+} from "@azure/msal-browser";
+import { environment } from "../../environments/environment";
 
 export interface User {
   id: string;
@@ -19,7 +19,7 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AuthService {
   private msalInstance!: PublicClientApplication;
@@ -96,7 +96,7 @@ export class AuthService {
 
       this._isInitialized.set(true);
     } catch (error) {
-      console.error('Error initializing MSAL:', error);
+      console.error("Error initializing MSAL:", error);
       this._isInitialized.set(true);
     }
   }
@@ -113,7 +113,7 @@ export class AuthService {
         }
       }
     } catch (error) {
-      console.error('Error checking auth state:', error);
+      console.error("Error checking auth state:", error);
     }
   }
 
@@ -133,12 +133,12 @@ export class AuthService {
       }
       if (
         error instanceof BrowserAuthError &&
-        error.errorCode === 'no_token_request_cache_error'
+        error.errorCode === "no_token_request_cache_error"
       ) {
         this.clearUserData();
         return null;
       }
-      console.error('Error acquiring token:', error);
+      console.error("Error acquiring token:", error);
       return null;
     }
   }
@@ -155,9 +155,9 @@ export class AuthService {
 
       const user: User = {
         id: account.localAccountId || account.homeAccountId,
-        name: account.name || tokenPayload.name || '',
-        email: account.username || tokenPayload.email || '',
-        company: tokenPayload.company || 'GOWD',
+        name: account.name || tokenPayload.name || "",
+        email: account.username || tokenPayload.email || "",
+        company: tokenPayload.company || "GOWD",
         roles: tokenPayload.roles || [],
       };
 
@@ -165,43 +165,43 @@ export class AuthService {
       this._user.set(user);
       this._isAuthenticated.set(true);
 
-      const originalUrl = sessionStorage.getItem('originalUrl');
+      const originalUrl = sessionStorage.getItem("originalUrl");
       if (originalUrl) {
-        sessionStorage.removeItem('originalUrl');
+        sessionStorage.removeItem("originalUrl");
         this.router.navigateByUrl(originalUrl);
       } else {
-        this.router.navigate(['/holdings']);
+        this.router.navigate(["/holdings"]);
       }
     } catch (error) {
-      console.error('Error processing user data:', error);
+      console.error("Error processing user data:", error);
       this.clearUserData();
     }
   }
 
   private decodeJwtToken(token: string): any {
     try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayload = decodeURIComponent(
         atob(base64)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
       );
       return JSON.parse(jsonPayload);
     } catch (error) {
-      console.error('Error decoding JWT token:', error);
+      console.error("Error decoding JWT token:", error);
       return {};
     }
   }
 
   private saveUserData(user: User, token: string): void {
     try {
-      const config = environment.azureAD.sessionStorage;
+      const config = environment.sessionStorage;
       sessionStorage.setItem(config.user, JSON.stringify(user));
-      sessionStorage.setItem('accessToken', token);
+      sessionStorage.setItem("accessToken", token);
     } catch (error) {
-      console.error('Error saving user data:', error);
+      console.error("Error saving user data:", error);
     }
   }
 
@@ -227,7 +227,7 @@ export class AuthService {
       const config = environment.azureAD.auth.gowd;
       const request = {
         scopes: [config.scope],
-        prompt: 'select_account',
+        prompt: "select_account",
       };
 
       const isMobile =
@@ -242,41 +242,41 @@ export class AuthService {
         this.handleAuthResponse(response);
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       this._isLoading.set(false);
 
       if (error instanceof BrowserAuthError) {
         switch (error.errorCode) {
-          case 'no_token_request_cache_error':
+          case "no_token_request_cache_error":
             this.clearUserData();
             setTimeout(() => {
               this.login();
             }, 1000);
             break;
-          case 'user_cancelled':
+          case "user_cancelled":
             break;
-          case 'popup_window_error':
+          case "popup_window_error":
             try {
               const config = environment.azureAD.auth.gowd;
               const request = {
                 scopes: [config.scope],
-                prompt: 'select_account',
+                prompt: "select_account",
               };
               await this.msalInstance.loginRedirect(request);
             } catch (redirectError) {
-              console.error('Redirect login also failed:', redirectError);
+              console.error("Redirect login also failed:", redirectError);
             }
             break;
           default:
             console.error(
-              'Browser auth error:',
+              "Browser auth error:",
               error.errorCode,
               error.errorMessage
             );
             break;
         }
       } else {
-        console.error('Generic login error:', error);
+        console.error("Generic login error:", error);
       }
     }
   }
@@ -301,32 +301,32 @@ export class AuthService {
       this._user.set(null);
       this._isAuthenticated.set(false);
 
-      this.router.navigate(['/login']);
+      this.router.navigate(["/login"]);
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       this.clearUserData();
       this._user.set(null);
       this._isAuthenticated.set(false);
-      this.router.navigate(['/login']);
+      this.router.navigate(["/login"]);
     }
   }
 
   private clearUserData(): void {
     try {
-      const config = environment.azureAD.sessionStorage;
+      const config = environment.sessionStorage;
       sessionStorage.removeItem(config.user);
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('originalUrl');
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("originalUrl");
 
       this.msalInstance.clearCache();
       localStorage.clear();
     } catch (error) {
-      console.error('Error clearing user data:', error);
+      console.error("Error clearing user data:", error);
     }
   }
 
   public getAccessTokenForAPI(): string | null {
-    return sessionStorage.getItem('accessToken');
+    return sessionStorage.getItem("accessToken");
   }
 
   public isTokenExpired(): boolean {
@@ -336,12 +336,12 @@ export class AuthService {
     try {
       const payload = this.decodeJwtToken(token);
       const currentTime = Math.floor(Date.now() / 1000);
-      const config = environment.azureAD.config;
+      const config = environment.config;
       const bufferTime = config.minutesToSubtractTokenExpireDate * 60;
 
       return payload.exp < currentTime + bufferTime;
     } catch (error) {
-      console.error('Error checking token expiration:', error);
+      console.error("Error checking token expiration:", error);
       return true;
     }
   }
@@ -363,7 +363,7 @@ export class AuthService {
             resolve(false);
           }
         } catch (error) {
-          console.error('Error refreshing token:', error);
+          console.error("Error refreshing token:", error);
           resolve(false);
         }
       } else {

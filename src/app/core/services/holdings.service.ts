@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
-import { AccountHoldersResponse } from '../../shared/interfaces';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { AccountHoldersResponse } from "../../shared/interfaces";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class HoldingsService {
   private readonly baseUrl: string;

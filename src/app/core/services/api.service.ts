@@ -1,22 +1,22 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
-import { AuthService } from './auth.service';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { AuthService } from "./auth.service";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ApiService {
   private readonly baseUrl: string;
   private readonly companyId: string;
-  private readonly version: string = 'v1';
+  private readonly version: string = "v1";
 
   constructor(private http: HttpClient, private authService: AuthService) {
     this.baseUrl =
       environment.azureAD.auth.gowd.api.host +
       environment.azureAD.auth.gowd.api.context;
-    this.companyId = '813a4ba0-32e6-5aa4-9699-e98f72abd0eb';
+    this.companyId = "813a4ba0-32e6-5aa4-9699-e98f72abd0eb";
   }
 
   protected get<TResponse>(
@@ -29,7 +29,7 @@ export class ApiService {
 
   protected post<TBody, TResponse>(
     body: TBody,
-    route: string = '',
+    route: string = "",
     queryParams: any = {}
   ): Observable<TResponse> {
     const url = this.buildUrl(route, queryParams);
@@ -38,7 +38,7 @@ export class ApiService {
 
   protected put<TBody, TResponse>(
     body: TBody,
-    route: string = '',
+    route: string = "",
     queryParams: any = {},
     customHeaders: any = {}
   ): Observable<TResponse> {
@@ -62,7 +62,7 @@ export class ApiService {
   }
 
   private buildUrl(route: string, queryParams: any = {}): string {
-    const fullRoute = route ? `/${route}` : '';
+    const fullRoute = route ? `/${route}` : "";
     const url = `${this.baseUrl}/${this.version}${fullRoute}`;
 
     if (Object.keys(queryParams).length === 0) {
@@ -77,7 +77,7 @@ export class ApiService {
         (key) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
       )
-      .join('&');
+      .join("&");
 
     return `${url}?${queryString}`;
   }
@@ -86,9 +86,9 @@ export class ApiService {
     const token = this.authService.getAccessTokenForAPI();
 
     return {
-      'Content-Type': 'application/json',
-      'Company-Id': this.companyId,
-      Authorization: token ? `Bearer ${token}` : 'Bearer 123123123',
+      "Content-Type": "application/json",
+      "Company-Id": this.companyId,
+      Authorization: token ? `Bearer ${token}` : "Bearer 123123123",
     };
   }
 

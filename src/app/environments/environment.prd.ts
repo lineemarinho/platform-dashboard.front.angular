@@ -1,25 +1,21 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
-  production: false,
+  production: true,
   env: "PRD",
   azureAD: {
     auth: {
       gowd: {
-        tenantId: "335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
+        tenantId: "e4ab64c0-e4d3-4eca-a68a-0a477395b430",
         domain: "gowd.com",
-        clientId: "c2527bae-4bed-453d-bfec-6cc4c19d3983",
+        clientId: "5d735a76-a09d-45bb-a10e-4ff1e738f03b",
         authority:
-          "https://login.microsoftonline.com/335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
-        redirectUri: "https://platform.gowd-dev.diffstech.com.br",
-        scope: "c2527bae-4bed-453d-bfec-6cc4c19d3983/.default",
+          "https://login.microsoftonline.com/e4ab64c0-e4d3-4eca-a68a-0a477395b430",
+        redirectUri: "https://platform.gowd.com",
+        scope: "5d735a76-a09d-45bb-a10e-4ff1e738f03b/.default",
         logo: "assets/images/logo-gowd.png",
         ico: "assets/images/favicon-gowd.ico",
         titlePage: "Gowd",
         api: {
-          host: "https://api-dev.diffstech.com.br",
+          host: "https://api-platform.gowd.com",
           context: "/platform-dashboard-bff",
         },
         key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz1M3BPryYOMNst4PzIh6\nXHj/sSIw/49ir1WEsH84oVK6CJyQys93zxwsTUOtZiGN9x2x89V6MgOjeQZ+bUHB\nMy84Dk8rISmmWHkQ4T3tTtbgEYtSmvseR9VyoF6zIeRRjyAVBq/AdP5tAoLoxUfd\nO2Rl0IgSZBnqizH2UEF9lweDrCkM985/ZL/PKIETgxVywj2NOwvGCk1fa2toczmP\nsnnu956vWGYe2k6uAP5KjTQbLGp8MtvOMCzntSNc6SfbsVzBhACyFYQTFOj4w1oz\nDZhtfQYI7sHFmZj6FBBG0mrb8zM/HUlb/Cp+zmL/Ykod3wMLvWYmrw4YkG66SATH\n4wIDAQAB\n-----END PUBLIC KEY-----",
@@ -27,67 +23,67 @@ export const environment = {
       zimba: {
         tenantId: "38524200-7dd6-4049-ac0b-79e57dc221ab",
         domain: "zimba.net",
-        clientId: "ab000ec1-0829-4366-bae2-a8f44f62dac7",
+        clientId: "20a91c13-fa57-47c9-a846-2aeab9d9e539",
         authority:
           "https://login.microsoftonline.com/38524200-7dd6-4049-ac0b-79e57dc221ab",
-        redirectUri: "https://platform-hml.zimba.net/",
-        scope: "ab000ec1-0829-4366-bae2-a8f44f62dac7/.default",
+        redirectUri: "https://platform.zimba.net",
+        scope: "20a91c13-fa57-47c9-a846-2aeab9d9e539/.default",
         logo: "assets/images/zimba.png",
         ico: "assets/images/favicon-zimba.ico",
-        titlePage: "HML - Zimba",
+        titlePage: "Zimba",
         api: {
-          host: "https://api-platform-hml.zimba.net",
+          host: "https://api-platform.zimba.net",
           context: "/platform-dashboard-bff",
         },
         key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz1M3BPryYOMNst4PzIh6\nXHj/sSIw/49ir1WEsH84oVK6CJyQys93zxwsTUOtZiGN9x2x89V6MgOjeQZ+bUHB\nMy84Dk8rISmmWHkQ4T3tTtbgEYtSmvseR9VyoF6zIeRRjyAVBq/AdP5tAoLoxUfd\nO2Rl0IgSZBnqizH2UEF9lweDrCkM985/ZL/PKIETgxVywj2NOwvGCk1fa2toczmP\nsnnu956vWGYe2k6uAP5KjTQbLGp8MtvOMCzntSNc6SfbsVzBhACyFYQTFOj4w1oz\nDZhtfQYI7sHFmZj6FBBG0mrb8zM/HUlb/Cp+zmL/Ykod3wMLvWYmrw4YkG66SATH\n4wIDAQAB\n-----END PUBLIC KEY-----",
       },
-      apoloPagDiffs: {
-        tenantId: "335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
+      apoloPag: {
+        tenantId: "d3cd7a7b-c3c0-45f9-8d59-dc5c9a18c72e",
         domain: "apolopag.com",
-        clientId: "a6c57d0f-b596-48f8-bf8a-e042485e5e0c",
+        clientId: "c3ba8222-7e20-4f84-a22e-3f9f4e9f0428",
         authority:
-          "https://login.microsoftonline.com/335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
-        redirectUri: "https://platform.apolopag-dev.diffstech.com.br",
-        scope: "a6c57d0f-b596-48f8-bf8a-e042485e5e0c/.default",
+          "https://login.microsoftonline.com/d3cd7a7b-c3c0-45f9-8d59-dc5c9a18c72e",
+        redirectUri: "https://platform.apolopag.com",
+        scope: "c3ba8222-7e20-4f84-a22e-3f9f4e9f0428/.default",
         logo: "assets/images/apoloPag.png",
         ico: "assets/images/favicon-apoloPag.ico",
-        titlePage: "DEV - ApoloPag Backoffice",
+        titlePage: "ApoloPag Backoffice",
         api: {
-          host: "https://api-dev.diffstech.com.br",
+          host: "https://api-platform.apolopag.com",
           context: "/platform-dashboard-bff",
         },
         key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz1M3BPryYOMNst4PzIh6\nXHj/sSIw/49ir1WEsH84oVK6CJyQys93zxwsTUOtZiGN9x2x89V6MgOjeQZ+bUHB\nMy84Dk8rISmmWHkQ4T3tTtbgEYtSmvseR9VyoF6zIeRRjyAVBq/AdP5tAoLoxUfd\nO2Rl0IgSZBnqizH2UEF9lweDrCkM985/ZL/PKIETgxVywj2NOwvGCk1fa2toczmP\nsnnu956vWGYe2k6uAP5KjTQbLGp8MtvOMCzntSNc6SfbsVzBhACyFYQTFOj4w1oz\nDZhtfQYI7sHFmZj6FBBG0mrb8zM/HUlb/Cp+zmL/Ykod3wMLvWYmrw4YkG66SATH\n4wIDAQAB\n-----END PUBLIC KEY-----",
       },
-      sulPaymentsDiffs: {
-        tenantId: "335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
+      sulPayments: {
+        tenantId: "74008298-8afd-438c-a319-ca8a6eb86e78",
         domain: "sulpayments.ch",
-        clientId: "c3d8b6ad-6b3a-4a28-9f08-1b48cabd9cec",
+        clientId: "16d350ed-32a7-4f31-a15c-30bf24b1fc7c",
         authority:
-          "https://login.microsoftonline.com/335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
-        redirectUri: "https://platform.sulpayments-dev.diffstech.com.br",
-        scope: "c3d8b6ad-6b3a-4a28-9f08-1b48cabd9cec/.default",
+          "https://login.microsoftonline.com/74008298-8afd-438c-a319-ca8a6eb86e78",
+        redirectUri: "https://platform.sulpayments.ch",
+        scope: "16d350ed-32a7-4f31-a15c-30bf24b1fc7c/.default",
         logo: "assets/images/sulPayments.png",
         ico: "assets/images/favicon-sulPayments.ico",
         titlePage: "Sulpayments Backoffice",
         api: {
-          host: "https://api-dev.diffstech.com.br",
+          host: "https://api-platform.sulpayments.ch",
           context: "/platform-dashboard-bff",
         },
         key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz1M3BPryYOMNst4PzIh6\nXHj/sSIw/49ir1WEsH84oVK6CJyQys93zxwsTUOtZiGN9x2x89V6MgOjeQZ+bUHB\nMy84Dk8rISmmWHkQ4T3tTtbgEYtSmvseR9VyoF6zIeRRjyAVBq/AdP5tAoLoxUfd\nO2Rl0IgSZBnqizH2UEF9lweDrCkM985/ZL/PKIETgxVywj2NOwvGCk1fa2toczmP\nsnnu956vWGYe2k6uAP5KjTQbLGp8MtvOMCzntSNc6SfbsVzBhACyFYQTFOj4w1oz\nDZhtfQYI7sHFmZj6FBBG0mrb8zM/HUlb/Cp+zmL/Ykod3wMLvWYmrw4YkG66SATH\n4wIDAQAB\n-----END PUBLIC KEY-----",
       },
       finSoft: {
-        tenantId: "335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
+        tenantId: "231cf536-0f5e-4d3a-a6c0-7034dd00c235",
         domain: "finsoft.com.cy",
-        clientId: "4c7042e4-09bb-416c-84db-3d84d8dbbba5",
+        clientId: "217f6321-fb2b-43ed-8324-9a5449f1c251",
         authority:
-          "https://login.microsoftonline.com/335f05ae-c8b2-44cf-be82-1c05dcd8e51c",
-        redirectUri: "https://platform.finsoft-dev.diffstech.com.br",
-        scope: "4c7042e4-09bb-416c-84db-3d84d8dbbba5/.default",
+          "https://login.microsoftonline.com/231cf536-0f5e-4d3a-a6c0-7034dd00c235",
+        redirectUri: "https://platform.finsoft.com.cy",
+        scope: "217f6321-fb2b-43ed-8324-9a5449f1c251/.default",
         logo: "assets/images/finSoft.png",
         ico: "assets/images/favicon-finSoft.ico",
         titlePage: "FinSoft",
         api: {
-          host: "https://api-dev.diffstech.com.br",
+          host: "https://api-platform.finsoft.com.cy",
           context: "/platform-dashboard-bff",
         },
         key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz1M3BPryYOMNst4PzIh6\nXHj/sSIw/49ir1WEsH84oVK6CJyQys93zxwsTUOtZiGN9x2x89V6MgOjeQZ+bUHB\nMy84Dk8rISmmWHkQ4T3tTtbgEYtSmvseR9VyoF6zIeRRjyAVBq/AdP5tAoLoxUfd\nO2Rl0IgSZBnqizH2UEF9lweDrCkM985/ZL/PKIETgxVywj2NOwvGCk1fa2toczmP\nsnnu956vWGYe2k6uAP5KjTQbLGp8MtvOMCzntSNc6SfbsVzBhACyFYQTFOj4w1oz\nDZhtfQYI7sHFmZj6FBBG0mrb8zM/HUlb/Cp+zmL/Ykod3wMLvWYmrw4YkG66SATH\n4wIDAQAB\n-----END PUBLIC KEY-----",
@@ -109,12 +105,3 @@ export const environment = {
     useHash: true,
   },
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
