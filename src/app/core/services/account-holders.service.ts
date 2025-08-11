@@ -1,19 +1,17 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
-import { AccountHolder, ApiResponse } from '../../shared/interfaces';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { AccountHolder, ApiResponse } from "../../shared/interfaces";
+import { getApiUrl } from "../../shared/utils/organization-auth.util";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AccountHoldersService {
   private readonly baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl =
-      environment.azureAD.auth.gowd.api.host +
-      environment.azureAD.auth.gowd.api.context;
+    this.baseUrl = getApiUrl();
   }
 
   getAccountHoldersList(
@@ -48,7 +46,7 @@ export class AccountHoldersService {
         (key) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
       )
-      .join('&');
+      .join("&");
 
     return this.http.get<ApiResponse<AccountHolder[]>>(
       `${this.baseUrl}/v1/account/holders/search?${queryString}`
