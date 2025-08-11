@@ -1,9 +1,43 @@
 <app-breadcrumb
   [items]="breadcrumbItems"
-  [backRoute]="'/payments/payouts'"
+  [backRoute]="'/payouts'"
 ></app-breadcrumb>
 
-<div class="p-4 lg:p-6" *ngIf="payment">
+<!-- Loading -->
+<div *ngIf="isLoading" class="p-4 lg:p-6">
+  <div class="flex items-center justify-center">
+    <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+  </div>
+  <p class="text-center mt-4 text-gray-600">Carregando detalhes do payout...</p>
+</div>
+
+<!-- Error -->
+<div *ngIf="error && !isLoading" class="p-4 lg:p-6">
+  <div class="bg-red-50 border border-red-200 rounded-md p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <span class="material-icons text-red-400">error</span>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-red-800">Erro ao carregar dados</h3>
+        <div class="mt-2 text-sm text-red-700">
+          <p>{{ error }}</p>
+        </div>
+        <div class="mt-4">
+          <button
+            (click)="onBack()"
+            class="bg-red-100 text-red-800 px-3 py-2 rounded-md text-sm font-medium hover:bg-red-200"
+          >
+            Voltar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="p-4 lg:p-6" *ngIf="payment && !isLoading">
   <div class="mb-6">
     <h1 class="text-xl font-bold text-gray-900">
       {{ "orderDetails" | locale }}

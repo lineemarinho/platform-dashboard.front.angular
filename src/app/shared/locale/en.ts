@@ -60,6 +60,7 @@ export default {
   country: "Country",
   refundId: "Refund ID",
   refundE2E: "Refund E2E",
+  paymentDetails: "Payment Details",
   orderE2E: "Order E2E",
   phone: "Phone",
   companyName: "Company Name",

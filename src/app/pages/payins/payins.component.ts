@@ -1,22 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { PayinsService } from '../../core/services/payins.service';
-import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
-import { AppInputComponent } from '../../shared/components/app-input/app-input.component';
-import { AppSelectComponent } from '../../shared/components/app-select/app-select.component';
-import { AppTableComponent } from '../../shared/components/app-table/app-table.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
-import { PageTitleComponent } from '../../shared/components/page-title/page-title.component';
-import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
-import { Payin } from '../../shared/interfaces';
-import { LocalePipe } from '../../shared/pipes';
-import { StatusUtil } from '../../shared/utils/status.util';
-import { FilterBuilderUtil, FilterCondition, FilterGroup } from '../../shared/utils/filter-builder.util';
+import { CommonModule } from "@angular/common";
+import { Component, OnInit, signal } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
+import { PayinsService } from "../../core/services/payins.service";
+import { AppButtonComponent } from "../../shared/components/app-button/app-button.component";
+import { AppInputComponent } from "../../shared/components/app-input/app-input.component";
+import { AppSelectComponent } from "../../shared/components/app-select/app-select.component";
+import { AppTableComponent } from "../../shared/components/app-table/app-table.component";
+import { LoadingComponent } from "../../shared/components/loading/loading.component";
+import { PageTitleComponent } from "../../shared/components/page-title/page-title.component";
+import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
+import { Payin } from "../../shared/interfaces";
+import { LocalePipe } from "../../shared/pipes";
+import {
+  FilterBuilderUtil,
+  FilterCondition,
+  FilterGroup,
+} from "../../shared/utils/filter-builder.util";
+import { StatusUtil } from "../../shared/utils/status.util";
 
 @Component({
-  selector: 'app-payins',
+  selector: "app-payins",
   standalone: true,
   imports: [
     CommonModule,
@@ -30,8 +34,8 @@ import { FilterBuilderUtil, FilterCondition, FilterGroup } from '../../shared/ut
     AppInputComponent,
     AppSelectComponent,
   ],
-  templateUrl: './payins.component.html',
-  styleUrl: './payins.component.css',
+  templateUrl: "./payins.component.html",
+  styleUrl: "./payins.component.css",
 })
 export class PayinsComponent implements OnInit {
   isLoading = false;
@@ -43,29 +47,29 @@ export class PayinsComponent implements OnInit {
   itemsPerPage = 10;
 
   tableColumns = [
-    { key: 'id', label: 'ID', type: 'id' as const },
-    { key: 'code', label: 'Code', type: 'id' as const },
-    { key: 'status', label: 'Status', type: 'status' as const },
-    { key: 'company', label: 'Company', type: 'text' as const },
-    { key: 'customer', label: 'Customer', type: 'text' as const },
-    { key: 'paymentMethod', label: 'Payment Method', type: 'text' as const },
-    { key: 'amount', label: 'Amount', type: 'money' as const },
+    { key: "id", label: "ID", type: "id" as const },
+    { key: "code", label: "Code", type: "id" as const },
+    { key: "status", label: "Status", type: "status" as const },
+    { key: "company", label: "Company", type: "text" as const },
+    { key: "customer", label: "Customer", type: "text" as const },
+    { key: "paymentMethod", label: "Payment Method", type: "text" as const },
+    { key: "amount", label: "Amount", type: "money" as const },
     {
-      key: 'financialPartner',
-      label: 'Financial Partner',
-      type: 'text' as const,
+      key: "financialPartner",
+      label: "Financial Partner",
+      type: "text" as const,
     },
-    { key: 'origin', label: 'Origin', type: 'text' as const },
-    { key: 'createdAt', label: 'Created At', type: 'date' as const },
+    { key: "origin", label: "Origin", type: "text" as const },
+    { key: "createdAt", label: "Created At", type: "date" as const },
   ];
 
   // Opções para Search By
   searchByOptions = [
-    { value: 'code', label: 'Código' },
-    { value: 'company', label: 'Empresa' },
-    { value: 'customer', label: 'Cliente' },
-    { value: 'paymentMethod', label: 'Método de pagamento' },
-    { value: 'financialPartner', label: 'Parceiro financeiro' },
+    { value: "code", label: "Código" },
+    { value: "company", label: "Empresa" },
+    { value: "customer", label: "Cliente" },
+    { value: "paymentMethod", label: "Método de pagamento" },
+    { value: "financialPartner", label: "Parceiro financeiro" },
   ];
 
   // Opções de status usando o StatusUtil
@@ -77,12 +81,12 @@ export class PayinsComponent implements OnInit {
     private router: Router
   ) {
     this.filterForm = this.formBuilder.group({
-      startDate: [''],
-      endDate: [''],
-      searchBy: [''],
-      status: [''],
-      idempotencyKey: [''],
-      e2eId: [''],
+      startDate: [""],
+      endDate: [""],
+      searchBy: [""],
+      status: [""],
+      idempotencyKey: [""],
+      e2eId: [""],
     });
   }
 
@@ -94,40 +98,31 @@ export class PayinsComponent implements OnInit {
     return this.payins();
   }
 
+  get viewDetailsHandler() {
+    return (payin: Payin) => this.onViewDetails(payin);
+  }
+
   mapRowToColumns = (payin: Payin) => {
     const createdAt = payin.createdAt
-      ? new Date(payin.createdAt).toLocaleDateString('pt-BR')
-      : 'N/A';
-
-    console.log('Payin createdAt:', payin.createdAt, 'Formatted:', createdAt);
+      ? new Date(payin.createdAt).toLocaleDateString("pt-BR")
+      : "N/A";
 
     return [
       payin.id,
       payin.code,
       payin.status,
-      payin.company?.name || 'N/A',
-      payin.customer?.fullName || 'N/A',
+      payin.company?.name || "N/A",
+      payin.customer?.fullName || "N/A",
       payin.paymentMethod,
-      `${payin.amount?.currency || 'N/A'} ${payin.amount?.value || 'N/A'}`,
-      payin.financialPartner || 'N/A',
-      payin.origin || 'N/A',
+      `${payin.amount?.currency || "N/A"} ${payin.amount?.value || "N/A"}`,
+      payin.financialPartner || "N/A",
+      payin.origin || "N/A",
       createdAt,
     ];
   };
 
   onViewDetails(payin: Payin): void {
-    console.log('=== onViewDetails chamado ===');
-    console.log('Payin:', payin);
-    console.log('Navegando para: /payins/details');
-
-    this.router.navigate(['/payins/details']).then(
-      (success) => {
-        console.log('Navegação bem-sucedida:', success);
-      },
-      (error) => {
-        console.error('Erro na navegação:', error);
-      }
-    );
+    this.router.navigate(["/payins/details", payin.id]);
   }
 
   onFilter(): void {
@@ -157,13 +152,13 @@ export class PayinsComponent implements OnInit {
 
   hasActiveFilters(): boolean {
     return Object.values(this.filterForm.value).some(
-      (value) => value !== '' && value !== null
+      (value) => value !== "" && value !== null
     );
   }
 
   getActiveFiltersCount(): number {
     return Object.values(this.filterForm.value).filter(
-      (value) => value !== '' && value !== null
+      (value) => value !== "" && value !== null
     ).length;
   }
 
@@ -194,8 +189,8 @@ export class PayinsComponent implements OnInit {
     // Filtros de data
     if (formValue.startDate || formValue.endDate) {
       const dateFilters = FilterBuilderUtil.buildDateRangeFilter(
-        'createdAt',
-        'createdAt',
+        "createdAt",
+        "createdAt",
         formValue.startDate,
         formValue.endDate
       );
@@ -203,28 +198,40 @@ export class PayinsComponent implements OnInit {
     }
 
     // Filtro por campo de busca
-    if (formValue.searchBy && formValue.searchBy !== '') {
+    if (formValue.searchBy && formValue.searchBy !== "") {
       // Aqui você pode implementar lógica específica baseada no campo selecionado
       // Por exemplo, se searchBy for 'code', buscar no campo 'code'
-      const searchFilter = FilterBuilderUtil.buildTextFilter(formValue.searchBy, formValue.searchBy);
+      const searchFilter = FilterBuilderUtil.buildTextFilter(
+        formValue.searchBy,
+        formValue.searchBy
+      );
       if (searchFilter) filters.push(searchFilter);
     }
 
     // Filtro por status
     if (formValue.status) {
-      const statusFilter = FilterBuilderUtil.buildSelectFilter('status', formValue.status);
+      const statusFilter = FilterBuilderUtil.buildSelectFilter(
+        "status",
+        formValue.status
+      );
       if (statusFilter) filters.push(statusFilter);
     }
 
     // Filtro por chave de idempotência
     if (formValue.idempotencyKey) {
-      const idempotencyFilter = FilterBuilderUtil.buildTextFilter('idempotencyKey', formValue.idempotencyKey);
+      const idempotencyFilter = FilterBuilderUtil.buildTextFilter(
+        "idempotencyKey",
+        formValue.idempotencyKey
+      );
       if (idempotencyFilter) filters.push(idempotencyFilter);
     }
 
     // Filtro por E2E ID
     if (formValue.e2eId) {
-      const e2eFilter = FilterBuilderUtil.buildTextFilter('e2eId', formValue.e2eId);
+      const e2eFilter = FilterBuilderUtil.buildTextFilter(
+        "e2eId",
+        formValue.e2eId
+      );
       if (e2eFilter) filters.push(e2eFilter);
     }
 
@@ -238,7 +245,7 @@ export class PayinsComponent implements OnInit {
 
     // Constrói os filtros no formato da API
     const apiFilters = this.buildApiFilters();
-    
+
     console.log("Parâmetros:", { skip, take });
     console.log("Filtros construídos:", apiFilters);
 

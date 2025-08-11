@@ -3,13 +3,21 @@ import { Component, Input, TemplateRef } from "@angular/core";
 import { ToastService } from "../../../core/services/toast.service";
 import { TranslationService } from "../../../core/services/translation.service";
 import { LocalePipe } from "../../pipes/locale.pipe";
-import { StatusBadgeComponent } from "../status-badge/status-badge.component";
 import { StatusUtil } from "../../utils/status.util";
+import { StatusBadgeComponent } from "../status-badge/status-badge.component";
 
 export interface TableColumn {
   key: string;
   label: string;
-  type?: "text" | "status" | "currency" | "money" | "date" | "id" | "actions" | "country";
+  type?:
+    | "text"
+    | "status"
+    | "currency"
+    | "money"
+    | "date"
+    | "id"
+    | "actions"
+    | "country";
 }
 
 export interface ExpandedRowData {
@@ -90,12 +98,29 @@ export class AppTableComponent {
     return this.columnMap(row);
   }
 
-  getStatusType(status: string): 'approved' | 'pending' | 'rejected' | 'cancelled' | 'processing' | 'completed' | 'active' | 'inactive' {
+  getStatusType(
+    status: string
+  ):
+    | "approved"
+    | "pending"
+    | "rejected"
+    | "cancelled"
+    | "processing"
+    | "completed"
+    | "active"
+    | "inactive" {
     return StatusUtil.getStatusType(status);
   }
 
   getStatusClass(status: string): string {
     return StatusUtil.getStatusClass(status);
+  }
+
+  handleViewDetails(row: any, event: Event): void {
+    if (this.onViewDetails) {
+      event.stopPropagation();
+      this.onViewDetails(row);
+    }
   }
 
   getCurrencyIcon(currency: string): string {

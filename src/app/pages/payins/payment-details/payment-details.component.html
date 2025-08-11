@@ -1,10 +1,54 @@
 <div class="min-h-screen">
   <app-breadcrumb
     [items]="breadcrumbItems"
-    [backRoute]="'/payments/payins'"
+    [backRoute]="'/payins'"
   ></app-breadcrumb>
 
-  <div class="p-4 lg:p-6" *ngIf="payment">
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="p-4 lg:p-6">
+    <div class="flex items-center justify-center min-h-[400px]">
+      <div class="text-center">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"
+        ></div>
+        <p class="text-gray-600">Carregando detalhes do payin...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !isLoading" class="p-4 lg:p-6">
+    <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+      <div class="text-red-600 mb-4">
+        <svg
+          class="w-12 h-12 mx-auto"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"
+          ></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-red-800 mb-2">
+        Erro ao carregar dados
+      </h3>
+      <p class="text-red-600">{{ error }}</p>
+      <button
+        (click)="ngOnInit()"
+        class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+      >
+        Tentar novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-4 lg:p-6" *ngIf="payment && !isLoading">
     <div class="mb-6">
       <h1 class="text-xl font-bold text-gray-900">
         {{ "paymentDetails" | locale }}
@@ -95,6 +139,26 @@
           </ng-container>
 
           <div></div>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-200"></div>
+
+      <div class="bg-white py-2">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          Informações Adicionais
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of additionalFields">
+            <div *ngIf="field.label === ''"></div>
+
+            <app-info-field
+              *ngIf="field.label !== ''"
+              [label]="field.label"
+              [value]="field.value"
+              [showCopy]="field.copy"
+            ></app-info-field>
+          </ng-container>
         </div>
       </div>
     </div>

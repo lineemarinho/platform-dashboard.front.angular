@@ -104,6 +104,10 @@ export class PayoutsComponent implements OnInit {
     return this.payouts();
   }
 
+  get viewDetailsHandler() {
+    return (payout: Payout) => this.onViewDetails(payout);
+  }
+
   mapRowToColumns = (payout: Payout) => {
     const createdAt = payout.createdAt
       ? new Date(payout.createdAt).toLocaleDateString("pt-BR")
@@ -127,7 +131,11 @@ export class PayoutsComponent implements OnInit {
   };
 
   onViewDetails(payout: Payout): void {
-    console.log("Ver detalhes do payout:", payout);
+    if (!payout || !payout.id) {
+      console.error("Payout ou ID inválido:", payout);
+      return;
+    }
+
     // Navega para a tela de detalhes com o ID do payout
     this.router.navigate(["/payouts/details", payout.id]);
   }
@@ -252,7 +260,7 @@ export class PayoutsComponent implements OnInit {
 
     // Constrói os filtros no formato da API
     const apiFilters = this.buildApiFilters();
-    
+
     console.log("Parâmetros:", { skip, take });
     console.log("Filtros construídos:", apiFilters);
 

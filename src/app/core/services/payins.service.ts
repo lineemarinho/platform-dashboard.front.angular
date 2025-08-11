@@ -1,12 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.dev';
-import { PayinsResponse } from '../../shared/interfaces';
-import { FilterBuilderUtil } from '../../shared/utils/filter-builder.util';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment.dev";
+import { PayinsResponse } from "../../shared/interfaces";
+import { FilterBuilderUtil } from "../../shared/utils/filter-builder.util";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class PayinsService {
   private readonly baseUrl: string;
@@ -36,6 +36,17 @@ export class PayinsService {
     console.log("=== ENVIANDO PAYLOAD PAYINS PARA API ===");
     console.log("Payload:", payload);
 
-    return this.http.post<PayinsResponse>(`${this.baseUrl}/v1/payin/order`, payload);
+    return this.http.post<PayinsResponse>(
+      `${this.baseUrl}/v1/payin/order`,
+      payload
+    );
+  }
+
+  getPayinById(id: string): Observable<any> {
+    console.log("=== BUSCANDO PAYIN POR ID ===");
+    console.log("ID:", id);
+    console.log("URL:", `${this.baseUrl}/v1/payin/order/${id}`);
+
+    return this.http.get<any>(`${this.baseUrl}/v1/payin/order/${id}`);
   }
 }
