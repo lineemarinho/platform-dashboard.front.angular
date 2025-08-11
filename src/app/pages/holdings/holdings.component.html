@@ -3,52 +3,17 @@
 <form [formGroup]="filterForm" class="hidden lg:block bg-white mb-6">
   <div class="flex items-end justify-between">
     <div class="flex flex-wrap gap-3 items-end">
-      <div class="min-w-[200px]">
-        <app-input
-          type="text"
-          [label]="'fullName' | locale"
-          fontSize="xs"
-          placeholder="Nome completo"
-          formControlName="fullName"
-        ></app-input>
-      </div>
-
-      <div class="min-w-[200px]">
-        <app-input
-          type="text"
-          [label]="'document' | locale"
-          fontSize="xs"
-          placeholder="CNPJ"
-          formControlName="document"
-        ></app-input>
-      </div>
-
-      <div class="min-w-[200px]">
+      <div class="min-w-[150px]">
         <app-select
-          [label]="'country' | locale"
+          [label]="'company' | locale"
           fontSize="xs"
-          formControlName="country"
-          [options]="[
-            { value: 'BRA', label: 'Brasil' },
-            { value: 'ARG', label: 'Argentina' },
-            { value: 'CHL', label: 'Chile' }
-          ]"
+          formControlName="companyId"
+          [options]="companyOptions"
+          placeholder="Selecione uma empresa"
         ></app-select>
       </div>
 
-      <div class="min-w-[200px]">
-        <app-select
-          [label]="'type' | locale"
-          fontSize="xs"
-          formControlName="type"
-          [options]="[
-            { value: 'HOLDING', label: 'Holding' },
-            { value: 'SUBSIDIARY', label: 'Subsidiária' }
-          ]"
-        ></app-select>
-      </div>
-
-      <div class="min-w-[200px]">
+      <div class="min-w-[150px]">
         <app-input
           type="email"
           [label]="'email' | locale"
@@ -58,16 +23,25 @@
         ></app-input>
       </div>
 
-      <div class="min-w-[200px]">
+      <div class="min-w-[150px]">
         <app-select
-          [label]="'status' | locale"
+          [label]="'documentType' | locale"
           fontSize="xs"
-          formControlName="active"
-          [options]="[
-            { value: 'true', label: 'Ativo' },
-            { value: 'false', label: 'Inativo' }
-          ]"
+          formControlName="documentType"
+          [options]="documentTypes"
+          placeholder="Tipo de documento"
         ></app-select>
+      </div>
+
+      <div class="min-w-[250px]">
+        <app-input
+          type="text"
+          [label]="'document' | locale"
+          fontSize="xs"
+          placeholder="Número do documento"
+          formControlName="document"
+          (input)="onDocumentInput($event)"
+        ></app-input>
       </div>
     </div>
 
@@ -120,47 +94,12 @@
   >
     <div class="grid grid-cols-1 gap-4">
       <div>
-        <app-input
-          type="text"
-          [label]="'fullName' | locale"
-          fontSize="xs"
-          placeholder="Nome completo"
-          formControlName="fullName"
-        ></app-input>
-      </div>
-
-      <div>
-        <app-input
-          type="text"
-          [label]="'document' | locale"
-          fontSize="xs"
-          placeholder="CNPJ"
-          formControlName="document"
-        ></app-input>
-      </div>
-
-      <div>
         <app-select
-          [label]="'country' | locale"
+          [label]="'company' | locale"
           fontSize="xs"
-          formControlName="country"
-          [options]="[
-            { value: 'BRA', label: 'Brasil' },
-            { value: 'ARG', label: 'Argentina' },
-            { value: 'CHL', label: 'Chile' }
-          ]"
-        ></app-select>
-      </div>
-
-      <div>
-        <app-select
-          [label]="'type' | locale"
-          fontSize="xs"
-          formControlName="type"
-          [options]="[
-            { value: 'HOLDING', label: 'Holding' },
-            { value: 'SUBSIDIARY', label: 'Subsidiária' }
-          ]"
+          formControlName="companyId"
+          [options]="companyOptions"
+          placeholder="Selecione uma empresa"
         ></app-select>
       </div>
 
@@ -176,14 +115,23 @@
 
       <div>
         <app-select
-          [label]="'status' | locale"
+          [label]="'documentType' | locale"
           fontSize="xs"
-          formControlName="active"
-          [options]="[
-            { value: 'true', label: 'Ativo' },
-            { value: 'false', label: 'Inativo' }
-          ]"
+          formControlName="documentType"
+          [options]="documentTypes"
+          placeholder="Tipo de documento"
         ></app-select>
+      </div>
+
+      <div>
+        <app-input
+          type="text"
+          [label]="'document' | locale"
+          fontSize="xs"
+          placeholder="Número do documento"
+          formControlName="document"
+          (input)="onDocumentInput($event)"
+        ></app-input>
       </div>
     </div>
 

@@ -26,6 +26,7 @@ export default {
   confirmTransfer: 'Confirmar transferência',
   confirm: 'Confirmar',
   document: 'Documento',
+  documentType: 'Tipo de documento',
   message: 'Mensagem',
   enterMessage: 'Digite uma mensagem',
   paymentMethod: 'Método de pagamento',
