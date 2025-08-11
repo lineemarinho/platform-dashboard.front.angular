@@ -52,13 +52,17 @@ export class HoldingsComponent implements OnInit {
   }));
 
   tableColumns = [
-    { key: "fullName", label: "Nome Completo", type: "text" as const },
-    { key: "document", label: "Documento", type: "text" as const },
-    { key: "email", label: "Email", type: "text" as const },
-    { key: "country", label: "País", type: "text" as const },
-    { key: "type", label: "Tipo", type: "text" as const },
-    { key: "status", label: "Status", type: "status" as const },
-    { key: "createdAt", label: "Data de Criação", type: "date" as const },
+    { key: "fullName", label: "fullName" as const, type: "text" as const },
+    { key: "document", label: "document" as const, type: "text" as const },
+    { key: "email", label: "email" as const, type: "text" as const },
+    { key: "birthdate", label: "birthDate" as const, type: "date" as const },
+    { key: "active", label: "status" as const, type: "status" as const },
+    { key: "phone", label: "phone" as const, type: "text" as const },
+    { key: "type", label: "type" as const, type: "text" as const },
+    { key: "companyId", label: "companyId" as const, type: "text" as const },
+    { key: "country", label: "country" as const, type: "text" as const },
+    { key: "createdAt", label: "createdAt" as const, type: "date" as const },
+    { key: "updatedAt", label: "updatedAt" as const, type: "date" as const },
   ];
 
   constructor(
@@ -157,11 +161,19 @@ export class HoldingsComponent implements OnInit {
     accountHolder.fullName,
     `${accountHolder.document.type}: ${accountHolder.document.number}`,
     accountHolder.email,
-    accountHolder.country,
-    accountHolder.type,
+    accountHolder.birthdate
+      ? new Date(accountHolder.birthdate).toLocaleDateString("pt-BR")
+      : "N/A",
     accountHolder.active ? "Ativo" : "Inativo",
+    accountHolder.phone || "N/A",
+    accountHolder.type,
+    accountHolder.companyId,
+    accountHolder.country,
     accountHolder.createdAt
       ? new Date(accountHolder.createdAt).toLocaleDateString("pt-BR")
+      : "N/A",
+    accountHolder.updatedAt
+      ? new Date(accountHolder.updatedAt).toLocaleDateString("pt-BR")
       : "N/A",
   ];
 
