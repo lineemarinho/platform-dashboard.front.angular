@@ -82,7 +82,11 @@
   </div>
 
   <!-- Navigation Menu -->
-  <nav class="flex-1 py-4">
+  <nav
+    class="flex-1 py-4"
+    [class.overflow-y-auto]="!isCollapsed() && !isMobile()"
+    [class.overflow-hidden]="isCollapsed() || isMobile()"
+  >
     <div class="space-y-1 px-2">
       <div *ngFor="let item of navigationItems()" class="relative">
         <button

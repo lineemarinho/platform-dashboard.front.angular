@@ -39,6 +39,34 @@
   transform: translateX(4px);
 }
 
+/* Scrollbar control */
+nav.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+nav.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+nav.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+nav.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+nav.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Hide scrollbar when not needed */
+nav.overflow-hidden {
+  overflow: hidden !important;
+}
+
 /* Mobile specific styles */
 @media (max-width: 1023px) {
   .mobile-header {
