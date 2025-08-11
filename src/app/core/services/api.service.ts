@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment";
+import { getApiUrl } from "../../shared/utils/organization-auth.util";
 import { AuthService } from "./auth.service";
 
 @Injectable({
@@ -13,9 +13,7 @@ export class ApiService {
   private readonly version: string = "v1";
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    this.baseUrl =
-      environment.azureAD.auth.gowd.api.host +
-      environment.azureAD.auth.gowd.api.context;
+    this.baseUrl = getApiUrl();
     this.companyId = "813a4ba0-32e6-5aa4-9699-e98f72abd0eb";
   }
 

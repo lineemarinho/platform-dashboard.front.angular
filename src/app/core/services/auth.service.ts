@@ -9,6 +9,7 @@ import {
   PublicClientApplication,
 } from "@azure/msal-browser";
 import { environment } from "../../environments/environment";
+import { authOrganizationSettings } from "../../shared/utils/organization-auth.util";
 
 export interface User {
   id: string;
@@ -39,7 +40,7 @@ export class AuthService {
 
   private async initializeMsal(): Promise<void> {
     try {
-      const config = environment.azureAD.auth.gowd;
+      const config = authOrganizationSettings();
 
       this.msalInstance = new PublicClientApplication({
         auth: {
@@ -119,7 +120,7 @@ export class AuthService {
 
   private async getAccessToken(account: AccountInfo): Promise<string | null> {
     try {
-      const config = environment.azureAD.auth.gowd;
+      const config = authOrganizationSettings();
       const request = {
         scopes: [config.scope],
         account: account,
@@ -224,7 +225,7 @@ export class AuthService {
     try {
       this.clearUserData();
 
-      const config = environment.azureAD.auth.gowd;
+      const config = authOrganizationSettings();
       const request = {
         scopes: [config.scope],
         prompt: "select_account",
@@ -257,7 +258,7 @@ export class AuthService {
             break;
           case "popup_window_error":
             try {
-              const config = environment.azureAD.auth.gowd;
+              const config = authOrganizationSettings();
               const request = {
                 scopes: [config.scope],
                 prompt: "select_account",
