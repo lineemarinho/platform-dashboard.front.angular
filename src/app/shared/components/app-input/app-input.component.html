@@ -1,0 +1,29 @@
+<div class="relative">
+  <label
+    *ngIf="label"
+    [for]="inputId"
+    class="block text-xs font-medium text-gray-700 mb-1"
+    >{{ label }}</label
+  >
+  <input
+    [id]="inputId"
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [attr.aria-label]="label || placeholder"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 {{
+      brandConfig.primary
+    }} focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed bg-white text-{{
+      fontSize
+    }}"
+  />
+  <span
+    *ngIf="icon"
+    class="material-icons text-gray-400 dark:text-slate-400 absolute right-3 top-3 transform -translate-y-1/2 text-sm"
+  >
+    {{ icon }}
+  </span>
+</div>

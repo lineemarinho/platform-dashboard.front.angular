@@ -1,0 +1,49 @@
+/* Responsive breadcrumb */
+@media (max-width: 640px) {
+  .breadcrumb-container {
+    padding: 0.75rem 1rem;
+  }
+  
+  .breadcrumb-text {
+    font-size: 0.75rem;
+  }
+  
+  .breadcrumb-icon {
+    font-size: 0.875rem;
+  }
+}
+
+/* Hover effects */
+.breadcrumb-item:hover {
+  color: #374151;
+}
+
+.breadcrumb-item:active {
+  transform: scale(0.95);
+}
+
+/* Focus styles for accessibility */
+.breadcrumb-item:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth transitions */
+.breadcrumb-item {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Truncate long text */
+.breadcrumb-text {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb-text {
+    max-width: 120px;
+  }
+} 

@@ -1,0 +1,145 @@
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 receipt-backdrop flex items-center justify-center z-50 p-4"
+>
+  <div
+    class="bg-white rounded-xs w-[550px] max-h-[90vh] overflow-y-auto receipt-content receipt-scroll"
+  >
+    <div class="p-4 bg-slate-900">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <img src="assets/images/logo-gowd.svg" alt="GOWD Logo" class="h-6" />
+        </div>
+        <button
+          (click)="onClose()"
+          class="text-white hover:text-gray-50 transition-colors"
+        >
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <h1 class="text-sm text-white font-bold mt-4">
+        {{ "transferReceipt" | locale }}
+      </h1>
+    </div>
+
+    <div class="p-6 space-y-6" *ngIf="receiptData">
+      <div class="space-y-3">
+        <h2 class="font-bold text-xs">{{ "destination" | locale }}</h2>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{
+            "transferValue" | locale
+          }}</span>
+          <span class="font-bold text-xs">{{
+            formatCurrency(receiptData.transferValue)
+          }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{
+            "transactionDateTime" | locale
+          }}</span>
+          <span class="font-bold text-xs">{{
+            formatDate(receiptData.transactionDate)
+          }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{
+            "beneficiary" | locale
+          }}</span>
+          <span class="font-bold text-xs">{{ receiptData.beneficiary }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "key" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.key }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "bank" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.bank }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "reason" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.reason }}</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <h2 class="font-bold text-xs">{{ "origin" | locale }}</h2>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "name" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.originName }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "agency" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.originAgency }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "account" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.originAccount }}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-xs">{{ "bank" | locale }}</span>
+          <span class="font-bold text-xs">{{ receiptData.originBank }}</span>
+        </div>
+      </div>
+
+      <div
+        class="flex justify-center items-baseline gap-2 pt-4 border-t border-gray-200"
+      >
+        <div class="grid justify-center text-center items-baseline">
+          <span class="text-gray-600 text-xs">{{
+            "transactionId" | locale
+          }}</span>
+          <span class="text-xs break-all">{{ receiptData.transactionId }}</span>
+        </div>
+
+        <div class="grid justify-center text-center items-baseline">
+          <span class="text-gray-600 text-xs">{{
+            "authenticationCode" | locale
+          }}</span>
+          <span class="text-xs break-all">{{
+            receiptData.authenticationCode
+          }}</span>
+        </div>
+      </div>
+
+      <div
+        class="pt-4 border-t border-gray-200 text-sm text-gray-600 space-y-3"
+      >
+        <div class="text-xs text-center">
+          {{ "receiptInstructions" | locale }}
+        </div>
+
+        <div class="space-y-1">
+          <div class="grid justify-center text-center">
+            <span class="text-xs">{{ "capitalsMetropolitan" | locale }}</span>
+            <span class="font-bold text-xs">3803 8546</span>
+          </div>
+          <div class="grid justify-center text-center">
+            <span class="text-xs"
+              >{{ "customerService" | locale }}
+              {{ "serviceHours" | locale }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-gray-200">
+      <button
+        (click)="onClose()"
+        class="w-full bg-slate-800 text-white py-2 px-4 rounded-xs hover:bg-slate-700 transition-colors"
+      >
+        {{ "close" | locale }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div
+  class="min-h-screen bg-slate-900 flex flex-col items-center justify-center"
+>
+  <div class="mb-8 flex items-center login-content">
+    <img
+      src="assets/images/logo-gowd.svg"
+      alt="GOWD Logo"
+      class="h-8 w-auto mr-3"
+    />
+  </div>
+
+  <div class="text-center mb-12 login-content">
+    <h2 class="text-white text-2xl font-semibold mb-2">
+      {{ "welcomeBack" | locale }}
+    </h2>
+    <p class="text-white text-lg opacity-90">
+      {{ "loginWithAzureDescription" | locale }}
+    </p>
+  </div>
+
+  <div *ngIf="errorMessage()" class="mb-6 login-content">
+    <div
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+    >
+      <span class="block sm:inline">{{ errorMessage() }}</span>
+      <button
+        (click)="clearError()"
+        class="absolute top-0 bottom-0 right-0 px-4 py-3"
+      >
+        <span class="material-icons text-red-500">close</span>
+      </button>
+    </div>
+  </div>
+
+  <button
+    class="bg-amber-600 cursor-pointer text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center transition-all duration-200 login-content disabled:opacity-50 disabled:cursor-not-allowed"
+    (click)="loginWithAzure()"
+    [disabled]="isLoading() || !isInitialized()"
+  >
+    <span *ngIf="!isLoading() && isInitialized()">{{
+      "loginWithAzure" | locale
+    }}</span>
+    <span *ngIf="isLoading()">{{ "loggingIn" | locale }}</span>
+    <span *ngIf="!isInitialized()">Inicializando...</span>
+    <span class="material-icons ml-2" *ngIf="!isLoading() && isInitialized()"
+      >arrow_forward</span
+    >
+    <span class="material-icons ml-2 animate-spin" *ngIf="isLoading()"
+      >refresh</span
+    >
+  </button>
+</div>

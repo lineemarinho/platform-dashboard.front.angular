@@ -1,0 +1,232 @@
+<app-page-title [title]="'refunds' | locale"></app-page-title>
+
+<!-- Desktop Filters -->
+<div class="hidden lg:block mb-6">
+  <form
+    [formGroup]="filterForm"
+    class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4"
+  >
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'orderId' | locale"
+        fontSize="xs"
+        placeholder="Order ID"
+        formControlName="orderId"
+      ></app-input>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'company' | locale"
+        fontSize="xs"
+        placeholder="Company"
+        formControlName="company"
+      ></app-input>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-select
+        [label]="'provider' | locale"
+        fontSize="xs"
+        formControlName="provider"
+        [options]="[
+          { value: 'PIX_JD', label: 'PIX JD' },
+          { value: 'PIX_ITAU', label: 'PIX Itaú' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-select
+        [label]="'channel' | locale"
+        fontSize="xs"
+        formControlName="channel"
+        [options]="[
+          { value: 'MED', label: 'MED' },
+          { value: 'WEB', label: 'WEB' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'requester' | locale"
+        fontSize="xs"
+        placeholder="Requester"
+        formControlName="requester"
+      ></app-input>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-select
+        [label]="'status' | locale"
+        fontSize="xs"
+        formControlName="status"
+        [options]="[
+          { value: 'PROCESSING', label: 'Processing' },
+          { value: 'COMPLETED', label: 'Completed' },
+          { value: 'FAILED', label: 'Failed' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'reason' | locale"
+        fontSize="xs"
+        placeholder="Reason"
+        formControlName="reason"
+      ></app-input>
+    </div>
+  </form>
+
+  <div class="flex gap-3 pt-4">
+    <app-button
+      type="outline"
+      [label]="'clear' | locale"
+      (click)="onClear()"
+    ></app-button>
+    <app-button
+      type="primary"
+      [label]="'filter' | locale"
+      (click)="onFilter()"
+    ></app-button>
+  </div>
+</div>
+
+<!-- Mobile Filters Toggle -->
+<div class="lg:hidden mb-4">
+  <app-button
+    type="outline"
+    [label]="'filters' | locale"
+    (click)="toggleMobileFilters()"
+    customClass="w-full"
+  ></app-button>
+</div>
+
+<!-- Mobile Filters -->
+<div *ngIf="isMobileFiltersOpen" class="lg:hidden mb-6">
+  <form [formGroup]="filterForm" class="space-y-4">
+    <div>
+      <app-input
+        type="text"
+        [label]="'orderId' | locale"
+        fontSize="xs"
+        placeholder="Order ID"
+        formControlName="orderId"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'company' | locale"
+        fontSize="xs"
+        placeholder="Company"
+        formControlName="company"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-select
+        [label]="'provider' | locale"
+        fontSize="xs"
+        formControlName="provider"
+        [options]="[
+          { value: 'PIX_JD', label: 'PIX JD' },
+          { value: 'PIX_ITAU', label: 'PIX Itaú' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div>
+      <app-select
+        [label]="'channel' | locale"
+        fontSize="xs"
+        formControlName="channel"
+        [options]="[
+          { value: 'MED', label: 'MED' },
+          { value: 'WEB', label: 'WEB' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'requester' | locale"
+        fontSize="xs"
+        placeholder="Requester"
+        formControlName="requester"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-select
+        [label]="'status' | locale"
+        fontSize="xs"
+        formControlName="status"
+        [options]="[
+          { value: 'PROCESSING', label: 'Processing' },
+          { value: 'COMPLETED', label: 'Completed' },
+          { value: 'FAILED', label: 'Failed' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'reason' | locale"
+        fontSize="xs"
+        placeholder="Reason"
+        formControlName="reason"
+      ></app-input>
+    </div>
+  </form>
+
+  <div class="flex gap-3 pt-2">
+    <app-button
+      type="outline"
+      customClass="w-full"
+      [label]="'clear' | locale"
+      (click)="onClearAndClose()"
+      class="flex-1"
+    ></app-button>
+    <app-button
+      type="primary"
+      customClass="w-full"
+      [label]="'filter' | locale"
+      (click)="onFilterAndClose()"
+      class="flex-1"
+    ></app-button>
+  </div>
+</div>
+
+<!-- Debug: isLoading = {{ isLoading }} -->
+<app-loading
+  *ngIf="isLoading"
+  message="Carregando refunds..."
+  variant="card"
+  size="md"
+></app-loading>
+
+<!-- Debug: Dados carregados = {{ refunds().length }} -->
+
+<app-table
+  *ngIf="!isLoading"
+  [columns]="tableColumns"
+  [rows]="tableRows"
+  [columnMap]="mapRowToColumns"
+  [onViewDetails]="onViewDetails"
+></app-table>
+
+<app-pagination
+  *ngIf="!isLoading && totalItems > 0"
+  [paginationInfo]="paginationInfo"
+  (pageChange)="onPageChange($event)"
+></app-pagination>

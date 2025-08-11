@@ -1,0 +1,118 @@
+<app-breadcrumb
+  [items]="breadcrumbItems"
+  [backRoute]="'/withdrawals'"
+></app-breadcrumb>
+
+<div class="p-4 lg:p-6" *ngIf="withdrawal">
+  <div class="mb-6">
+    <h1 class="text-xl font-bold text-gray-900">
+      {{ "withdrawalDetails" | locale }}
+    </h1>
+  </div>
+
+  <div class="space-y-6">
+    <div class="bg-white">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <ng-container *ngFor="let field of companyFields">
+          <div
+            *ngIf="field.label === 'divider'"
+            class="col-span-3 border-b border-gray-200 my-4"
+          ></div>
+
+          <div *ngIf="field.label === ''"></div>
+
+          <app-info-field
+            *ngIf="field.label !== 'divider' && field.label !== ''"
+            [label]="field.label | locale"
+            [value]="field.value"
+          >
+            <ng-container *ngIf="field.copy">
+              <button
+                (click)="onCopyToClipboard(field.value, field.label)"
+                class="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Copiar"
+                type="button"
+              >
+                <span class="material-icons text-sm">content_copy</span>
+              </button>
+            </ng-container>
+          </app-info-field>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="bg-white">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">
+        {{ "request" | locale }}
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <ng-container *ngFor="let field of requestFields">
+          <div
+            *ngIf="field.label === 'divider'"
+            class="col-span-3 border-b border-gray-200 my-4"
+          ></div>
+
+          <div *ngIf="field.label === ''"></div>
+
+          <app-info-field
+            *ngIf="field.label !== 'divider' && field.label !== ''"
+            [label]="field.label | locale"
+            [value]="field.value"
+          ></app-info-field>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="bg-white">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">
+        {{ "approval" | locale }}
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <ng-container *ngFor="let field of approvalFields">
+          <div
+            *ngIf="field.label === 'divider'"
+            class="col-span-3 border-b border-gray-200 my-4"
+          ></div>
+
+          <div *ngIf="field.label === ''"></div>
+
+          <app-info-field
+            *ngIf="field.label !== 'divider' && field.label !== ''"
+            [label]="field.label | locale"
+            [value]="field.value"
+          ></app-info-field>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="bg-white">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">
+        {{ "timeline" | locale }}
+      </h2>
+      <div class="relative">
+        <div class="absolute top-6 left-0 right-0 h-0.5 bg-gray-200"></div>
+
+        <div class="relative flex justify-between items-start">
+          <div
+            *ngFor="let item of withdrawal.timeline; let i = index"
+            class="flex flex-col items-center relative z-10"
+          >
+            <div
+              class="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+              [class]="getTimelineStepClass(item.status)"
+            >
+              <span class="material-icons text-white text-lg">check</span>
+            </div>
+
+            <div class="text-center">
+              <h3 class="text-sm font-semibold text-gray-900 mb-1">
+                {{ item.title | locale }}
+              </h3>
+              <p class="text-xs text-gray-500">{{ item.date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

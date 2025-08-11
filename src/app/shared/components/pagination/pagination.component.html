@@ -1,0 +1,59 @@
+<div
+  class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-lg border border-gray-200"
+>
+  <div *ngIf="showInfo" class="text-sm text-gray-700">
+    <span>
+      Mostrando {{ startItem }} a {{ endItem }} de
+      {{ paginationInfo.totalItems }} resultados
+    </span>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button
+      [disabled]="!paginationInfo.hasPreviousPage"
+      (click)="onFirstPage()"
+      class="pagination-nav-button"
+    >
+      <div class="material-icons">first_page</div>
+    </button>
+
+    <button
+      [disabled]="!paginationInfo.hasPreviousPage"
+      (click)="onPreviousPage()"
+      class="pagination-nav-button"
+    >
+      <div class="material-icons">chevron_left</div>
+    </button>
+
+    <div *ngIf="showPageNumbers" class="flex items-center gap-1">
+      <button
+        *ngFor="let page of pageNumbers"
+        (click)="onPageChange(page)"
+        class="px-3 py-1 text-sm font-medium rounded-md transition-colors"
+        [class]="
+          page === paginationInfo.currentPage
+            ? 'bg-amber-600 text-white'
+            : 'text-gray-700 hover:bg-gray-100 border border-gray-200'
+        "
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <button
+      [disabled]="!paginationInfo.hasNextPage"
+      (click)="onNextPage()"
+      class="pagination-nav-button"
+    >
+      <div class="material-icons">chevron_right</div>
+    </button>
+
+    <button
+      [disabled]="!paginationInfo.hasNextPage"
+      (click)="onLastPage()"
+      class="pagination-nav-button"
+    >
+      <div class="material-icons">last_page</div>
+    </button>
+  </div>
+</div>

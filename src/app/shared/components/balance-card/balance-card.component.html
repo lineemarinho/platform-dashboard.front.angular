@@ -1,0 +1,38 @@
+<div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <img
+        [src]="getFlagIcon(balance.flag)"
+        [alt]="balance.currency"
+        [title]="balance.currency"
+        class="w-6 h-6"
+      />
+      <div>
+        <p class="text-sm text-gray-600">{{ "availableBalance" | locale }}</p>
+        <p class="text-lg font-semibold text-gray-900">
+          {{ getCurrencySymbol(balance.currency) }}
+          {{ balance.amount.toLocaleString() }}
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        (click)="onStatementClick()"
+        class="text-slate-600 underline hover:text-slate-800 text-sm font-medium transition-colors"
+        type="button"
+      >
+        {{ "viewStatement" | locale }}
+      </button>
+    </div>
+  </div>
+
+  <button
+    *ngIf="balance.canWithdraw"
+    (click)="onWithdrawalClick()"
+    class="w-full font-bold text-sm bg-white border border-slate-200 text-slate-600 hover:text-white py-2 px-4 rounded-md hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
+    type="button"
+  >
+    <span class="material-icons text-sm">check</span>
+    {{ "requestWithdrawal" | locale }}
+  </button>
+</div>

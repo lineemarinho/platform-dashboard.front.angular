@@ -1,0 +1,13 @@
+.account-holders-container {
+  padding: 20px;
+}
+
+.account-holders-container h1 {
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.account-holders-container p {
+  color: #666;
+  font-size: 16px;
+}

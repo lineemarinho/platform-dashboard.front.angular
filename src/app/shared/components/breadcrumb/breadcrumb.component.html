@@ -1,0 +1,40 @@
+<div class="bg-white border-b border-gray-200 px-4 lg:px-6 pb-5">
+  <div class="flex items-center gap-2 text-sm">
+    <button
+      *ngIf="showBackButton"
+      (click)="onBack()"
+      class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors"
+      title="Voltar"
+    >
+      <span class="material-icons text-lg">arrow_back</span>
+    </button>
+
+    <ng-container *ngFor="let item of items; let last = last">
+      <button
+        *ngIf="item.route && !item.active"
+        (click)="onItemClick(item)"
+        class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors"
+        [title]="item.label | locale"
+      >
+        <span *ngIf="item.icon" class="material-icons text-sm">{{
+          item.icon
+        }}</span>
+        <span>{{ item.label | locale }}</span>
+      </button>
+
+      <span
+        *ngIf="item.active || !item.route"
+        class="flex items-center gap-1 text-gray-400"
+      >
+        <span *ngIf="item.icon" class="material-icons text-sm">{{
+          item.icon
+        }}</span>
+        <span>{{ item.label | locale }}</span>
+      </span>
+
+      <span *ngIf="!last" class="material-icons text-xs text-gray-400">
+        chevron_right
+      </span>
+    </ng-container>
+  </div>
+</div>

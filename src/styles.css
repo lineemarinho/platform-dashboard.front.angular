@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  padding: 0;
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode styles */
+.dark material-icons {
+  color: #f8fafc !important;
+}
+.dark h1 {
+  color: #f8fafc;
+}
+.dark main {
+  background-color: #0c1426;
+  color: #f8fafc;
+}
+.dark label {
+  color: #f8fafc;
+}
+.dark input,
+.dark select {
+  background-color: #0c1426;
+  border-color: #475569;
+  color: #f8fafc;
+}
+
+.dark input::placeholder {
+  color: #94a3b8;
+}
+
+.dark footer {
+  background-color: #0c1426;
+}
+
+.dark footer p {
+  color: #94a3b8;
+}

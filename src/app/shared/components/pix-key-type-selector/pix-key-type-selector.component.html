@@ -1,0 +1,40 @@
+<div class="space-y-6">
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+    <button
+      *ngFor="let keyType of keyTypes; let i = index"
+      (click)="onKeyTypeSelect(i)"
+      class="flex items-center gap-1 px-3 py-2 rounded-lg border-2 transition-all duration-200"
+      [class.border-slate-800]="selectedIndex === i"
+      [class.border-gray-200]="selectedIndex !== i"
+      [class.bg-slate-800]="selectedIndex === i"
+      [class.bg-white]="selectedIndex !== i"
+    >
+      <span
+        class="material-icons text-xl"
+        [class.text-slate-100]="selectedIndex === i"
+        [class.text-gray-400]="selectedIndex !== i"
+      >
+        {{ keyType.icon }}
+      </span>
+      <span
+        class="text-xs text-center"
+        [class.text-slate-100]="selectedIndex === i"
+        [class.text-gray-800]="selectedIndex !== i"
+      >
+        {{ keyType.label | locale }}
+      </span>
+    </button>
+  </div>
+
+  <div>
+    <app-input
+      type="text"
+      [label]="'pixKey' | locale"
+      [formControl]="keyInputControl"
+      [placeholder]="currentKeyType.placeholder"
+      (input)="onKeyInput($event)"
+      class="w-full"
+      fontSize="sm"
+    ></app-input>
+  </div>
+</div>

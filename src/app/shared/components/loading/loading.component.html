@@ -1,0 +1,31 @@
+<div
+  [ngClass]="{
+    'bg-white rounded-lg border border-gray-200 p-8': variant === 'card',
+    'flex items-center justify-center': variant === 'default',
+    'inline-flex items-center': variant === 'inline'
+  }"
+>
+  <div class="flex items-center gap-3">
+    <span
+      *ngIf="showSpinner"
+      class="material-icons animate-spin text-amber-600"
+      [ngClass]="{
+        'text-sm': size === 'sm',
+        'text-base': size === 'md',
+        'text-lg': size === 'lg'
+      }"
+    >
+      refresh
+    </span>
+    <span
+      class="text-gray-600"
+      [ngClass]="{
+        'text-sm': size === 'sm',
+        'text-base': size === 'md',
+        'text-lg': size === 'lg'
+      }"
+    >
+      {{ message }}
+    </span>
+  </div>
+</div>

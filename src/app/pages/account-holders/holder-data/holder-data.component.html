@@ -1,0 +1,139 @@
+<app-breadcrumb
+  [items]="breadcrumbItems"
+  [backRoute]="'/account-holders'"
+></app-breadcrumb>
+
+<div class="p-4 lg:p-6" *ngIf="holder">
+  <div class="mb-6">
+    <h1 class="text-xl font-bold text-gray-900">
+      {{ "holderData" | locale }}
+    </h1>
+  </div>
+
+  <div class="mb-6">
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex space-x-8">
+        <button
+          (click)="setActiveTab('personal')"
+          class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
+          [class]="
+            activeTab === 'personal'
+              ? 'border-slate-500 text-slate-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          "
+        >
+          {{ "personalInformation" | locale }}
+        </button>
+        <button
+          (click)="setActiveTab('bank')"
+          class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
+          [class]="
+            activeTab === 'bank'
+              ? 'border-slate-500 text-slate-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          "
+        >
+          {{ "bankAccounts" | locale }}
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div *ngIf="activeTab === 'personal'">
+      <div class="bg-white mb-6">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "holderData" | locale }}
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of personalFields">
+            <div
+              *ngIf="field.label === 'divider'"
+              class="col-span-3 border-b border-gray-200 my-4"
+            ></div>
+
+            <div *ngIf="field.label === ''"></div>
+
+            <app-info-field
+              *ngIf="field.label !== 'divider' && field.label !== ''"
+              [label]="field.label | locale"
+              [value]="field.value"
+            >
+              <ng-container *ngIf="field.copy">
+                <button
+                  (click)="onCopyToClipboard(field.value, field.label)"
+                  class="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Copiar"
+                  type="button"
+                >
+                  <span class="material-icons text-sm">content_copy</span>
+                </button>
+              </ng-container>
+            </app-info-field>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="bg-white">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "address" | locale }}
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of addressFields">
+            <div
+              *ngIf="field.label === 'divider'"
+              class="col-span-3 border-b border-gray-200 my-4"
+            ></div>
+
+            <div *ngIf="field.label === ''"></div>
+
+            <app-info-field
+              *ngIf="field.label !== 'divider' && field.label !== ''"
+              [label]="field.label | locale"
+              [value]="field.value"
+            ></app-info-field>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'bank'">
+      <div class="bg-white mb-6">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">Gateway</h2>
+
+        <div class="mb-4">
+          <app-account-filter-tab
+            [filters]="gatewayFilters"
+            [selectedFilter]="selectedAccountType"
+            (onFilterSelect)="onFilterSelect($event)"
+            (onEditNickname)="onEditFilterNickname($event)"
+          ></app-account-filter-tab>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <app-balance-card
+            *ngFor="let balance of gatewayBalances"
+            [balance]="balance"
+            (onEditNickname)="onEditNickname($event)"
+            (onRequestWithdrawal)="onRequestWithdrawal($event)"
+            (onViewStatement)="onViewStatement($event)"
+          ></app-balance-card>
+        </div>
+      </div>
+    </div>
+
+    <app-edit-nickname-modal
+      [isOpen]="isEditNicknameModalOpen"
+      [data]="editNicknameData"
+      (onClose)="onCloseEditNicknameModal()"
+      (onSave)="onSaveNickname($event)"
+    ></app-edit-nickname-modal>
+
+    <app-withdrawal-modal
+      [isOpen]="isWithdrawalModalOpen"
+      [data]="withdrawalData"
+      (onClose)="onCloseWithdrawalModal()"
+      (onRequest)="onRequestWithdrawalSubmit($event)"
+    ></app-withdrawal-modal>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<header class="sm:bg-white border-b bg-slate-900 border-gray-200 px-6 py-3">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <!-- Mobile Menu Button -->
+      <button
+        class="lg:hidden p-2 text-white rounded-lg hover:bg-gray-100 transition-colors"
+        (click)="toggleSidebar()"
+        title="Menu"
+      >
+        <span class="material-icons text-white text-xl">menu</span>
+      </button>
+      <div class="flex items-center gap-2 sm:hidden">
+        <img src="assets/images/logo-gowd.svg" alt="Logo" class="h-8" />
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      Olá, Aline!
+      <!-- Language Selector -->
+      <div class="relative">
+        <button
+          (click)="toggleLanguageMenu()"
+          class="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors"
+          [title]="'Select language'"
+        >
+          <div class="w-6 h-6 rounded-xs overflow-hidden">
+            <img
+              alt="Flag"
+              [src]="currentLocaleInfo?.flag"
+              [alt]="currentLocaleInfo?.name"
+              [title]="currentLocaleInfo?.name"
+              class="w-full rounded-full h-full"
+            />
+          </div>
+          <span class="material-icons text-gray-600">expand_more</span>
+        </button>
+
+        <div
+          *ngIf="showLanguageMenu"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200"
+        >
+          <div class="py-1">
+            <button
+              *ngFor="let locale of availableLocales"
+              (click)="selectLanguage(locale.code)"
+              class="flex items-center gap-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              [class.bg-gray-100]="locale.code === currentLocale"
+            >
+              <div class="w-5 h-5 rounded-xs overflow-hidden">
+                <img
+                  [src]="locale.flag"
+                  [alt]="locale.name"
+                  [title]="locale.name"
+                  alt="Flag"
+                  class="w-full rounded-full h-full"
+                />
+              </div>
+              <span>{{ locale.name }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

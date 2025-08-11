@@ -1,0 +1,102 @@
+<div class="min-h-screen">
+  <app-breadcrumb
+    [items]="breadcrumbItems"
+    [backRoute]="'/payments/payins'"
+  ></app-breadcrumb>
+
+  <div class="p-4 lg:p-6" *ngIf="payment">
+    <div class="mb-6">
+      <h1 class="text-xl font-bold text-gray-900">
+        {{ "paymentDetails" | locale }}
+      </h1>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-white">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "holderData" | locale }}
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of holderFields">
+            <div
+              *ngIf="field.label === 'divider'"
+              class="col-span-3 border-b border-gray-200 my-4"
+            ></div>
+
+            <div *ngIf="field.label === ''"></div>
+
+            <app-info-field
+              *ngIf="field.label !== 'divider' && field.label !== ''"
+              [label]="field.label | locale"
+              [value]="field.value"
+              [showCopy]="field.copy"
+            >
+            </app-info-field>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-200"></div>
+      <div class="bg-white py-2">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "orderDescription" | locale }}
+        </h2>
+        <p class="text-sm text-gray-700">{{ payment.orderDescription }}</p>
+      </div>
+
+      <div class="border-b border-gray-200"></div>
+
+      <div class="bg-white py-2">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "payer" | locale }}
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of payerFields">
+            <app-info-field
+              [label]="field.label | locale"
+              [value]="field.value"
+            ></app-info-field>
+          </ng-container>
+
+          <div></div>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-200"></div>
+      <div class="bg-white py-2">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "recipient" | locale }}
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of recipientFields">
+            <div *ngIf="field.label === ''"></div>
+
+            <app-info-field
+              *ngIf="field.label !== ''"
+              [label]="field.label | locale"
+              [value]="field.value"
+            ></app-info-field>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-200"></div>
+
+      <div class="bg-white py-2">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">
+          {{ "fees" | locale }}
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ng-container *ngFor="let field of feesFields">
+            <app-info-field
+              [label]="field.label | locale"
+              [value]="field.value"
+            ></app-info-field>
+          </ng-container>
+
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

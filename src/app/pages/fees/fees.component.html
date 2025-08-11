@@ -1,0 +1,212 @@
+<app-page-title [title]="'fees' | locale"></app-page-title>
+
+<!-- Desktop Filters -->
+<div class="hidden lg:block mb-6">
+  <form
+    [formGroup]="filterForm"
+    class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4"
+  >
+    <div class="min-w-[200px]">
+      <app-select
+        [label]="'type' | locale"
+        fontSize="xs"
+        formControlName="type"
+        [options]="[
+          { value: 'PAYIN', label: 'PayIn' },
+          { value: 'PAYOUT', label: 'PayOut' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'description' | locale"
+        fontSize="xs"
+        placeholder="Descrição"
+        formControlName="description"
+      ></app-input>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-select
+        [label]="'status' | locale"
+        fontSize="xs"
+        formControlName="status"
+        [options]="[
+          { value: 'ACTIVE', label: 'Ativo' },
+          { value: 'INACTIVE', label: 'Inativo' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-select
+        [label]="'currency' | locale"
+        fontSize="xs"
+        formControlName="currency"
+        [options]="[
+          { value: 'BRL', label: 'Real' },
+          { value: 'PEN', label: 'Sol' },
+          { value: 'USD', label: 'Dólar' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'operationType' | locale"
+        fontSize="xs"
+        placeholder="Tipo de operação"
+        formControlName="operationType"
+      ></app-input>
+    </div>
+
+    <div class="min-w-[200px]">
+      <app-input
+        type="text"
+        [label]="'companyName' | locale"
+        fontSize="xs"
+        placeholder="Nome da empresa"
+        formControlName="companyName"
+      ></app-input>
+    </div>
+  </form>
+
+  <div class="flex gap-3 pt-4">
+    <app-button
+      type="outline"
+      [label]="'clear' | locale"
+      (click)="onClear()"
+    ></app-button>
+    <app-button
+      type="primary"
+      [label]="'filter' | locale"
+      (click)="onFilter()"
+    ></app-button>
+  </div>
+</div>
+
+<!-- Mobile Filters Toggle -->
+<div class="lg:hidden mb-4">
+  <app-button
+    type="outline"
+    [label]="'filters' | locale"
+    (click)="toggleMobileFilters()"
+    customClass="w-full"
+  ></app-button>
+</div>
+
+<!-- Mobile Filters -->
+<div *ngIf="isMobileFiltersOpen" class="lg:hidden mb-6">
+  <form [formGroup]="filterForm" class="space-y-4">
+    <div>
+      <app-select
+        [label]="'type' | locale"
+        fontSize="xs"
+        formControlName="type"
+        [options]="[
+          { value: 'PAYIN', label: 'PayIn' },
+          { value: 'PAYOUT', label: 'PayOut' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'description' | locale"
+        fontSize="xs"
+        placeholder="Descrição"
+        formControlName="description"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-select
+        [label]="'status' | locale"
+        fontSize="xs"
+        formControlName="status"
+        [options]="[
+          { value: 'ACTIVE', label: 'Ativo' },
+          { value: 'INACTIVE', label: 'Inativo' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div>
+      <app-select
+        [label]="'currency' | locale"
+        fontSize="xs"
+        formControlName="currency"
+        [options]="[
+          { value: 'BRL', label: 'Real' },
+          { value: 'PEN', label: 'Sol' },
+          { value: 'USD', label: 'Dólar' }
+        ]"
+      ></app-select>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'operationType' | locale"
+        fontSize="xs"
+        placeholder="Tipo de operação"
+        formControlName="operationType"
+      ></app-input>
+    </div>
+
+    <div>
+      <app-input
+        type="text"
+        [label]="'companyName' | locale"
+        fontSize="xs"
+        placeholder="Nome da empresa"
+        formControlName="companyName"
+      ></app-input>
+    </div>
+  </form>
+
+  <div class="flex gap-3 pt-2">
+    <app-button
+      type="outline"
+      customClass="w-full"
+      [label]="'clear' | locale"
+      (click)="onClearAndClose()"
+      class="flex-1"
+    ></app-button>
+    <app-button
+      type="primary"
+      customClass="w-full"
+      [label]="'filter' | locale"
+      (click)="onFilterAndClose()"
+      class="flex-1"
+    ></app-button>
+  </div>
+</div>
+
+<!-- Debug: isLoading = {{ isLoading }} -->
+<app-loading
+  *ngIf="isLoading"
+  message="Carregando taxas..."
+  variant="card"
+  size="md"
+></app-loading>
+
+<!-- Debug: Dados carregados = {{ fees().length }} -->
+
+<app-table
+  *ngIf="!isLoading"
+  [columns]="tableColumns"
+  [rows]="tableRows"
+  [columnMap]="mapRowToColumns"
+  [onViewDetails]="onViewDetails"
+></app-table>
+
+<app-pagination
+  *ngIf="!isLoading && totalItems > 0"
+  [paginationInfo]="paginationInfo"
+  (pageChange)="onPageChange($event)"
+></app-pagination>

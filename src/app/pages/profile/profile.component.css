@@ -1,0 +1,31 @@
+.profile-container {
+  padding: 20px;
+}
+
+.profile-container h1 {
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.profile-container p {
+  color: #666;
+  font-size: 16px;
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+  .profile-container {
+    padding: 16px;
+  }
+}
+
+/* Input focus improvements */
+.profile-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button hover improvements */
+.profile-button:hover {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}

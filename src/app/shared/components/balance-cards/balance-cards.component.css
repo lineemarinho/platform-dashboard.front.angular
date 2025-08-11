@@ -1,0 +1,18 @@
+/* Estilos específicos para os cards de saldo */
+.balance-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.balance-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Melhorar a aparência dos ícones */
+.currency-icon {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo da barra de progresso */
+.progress-bar {
+  background: linear-gradient(to right, #f97316, #ea580c);
+}

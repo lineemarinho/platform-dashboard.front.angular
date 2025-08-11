@@ -1,0 +1,224 @@
+<div>
+  <app-page-title [title]="'withdrawals' | locale"></app-page-title>
+
+  <form [formGroup]="filterForm" class="hidden lg:block bg-white mb-6">
+    <div class="flex items-end justify-between">
+      <div class="flex flex-wrap gap-3 items-end">
+        <div class="min-w-[140px]">
+          <app-input
+            type="date"
+            placeholder="00/00/2025"
+            [label]="'startDate' | locale"
+            fontSize="xs"
+            formControlName="startDate"
+          ></app-input>
+        </div>
+
+        <div class="min-w-[140px]">
+          <app-input
+            type="date"
+            [label]="'endDate' | locale"
+            fontSize="xs"
+            placeholder="00/00/2025"
+            formControlName="endDate"
+          ></app-input>
+        </div>
+
+        <div class="min-w-[160px]">
+          <app-select
+            [label]="'sortBy' | locale"
+            fontSize="xs"
+            [options]="sortOptions"
+            [placeholder]="'selectSortBy' | locale"
+            formControlName="sortBy"
+          ></app-select>
+        </div>
+
+        <div class="min-w-[140px]">
+          <app-select
+            [label]="'status' | locale"
+            fontSize="xs"
+            [options]="statusOptions"
+            [placeholder]="'selectStatus' | locale"
+            formControlName="status"
+          ></app-select>
+        </div>
+
+        <div class="min-w-[160px]">
+          <app-input
+            type="text"
+            [label]="'document' | locale"
+            fontSize="xs"
+            placeholder="Digite o documento"
+            formControlName="document"
+          ></app-input>
+        </div>
+
+        <div class="min-w-[180px]">
+          <app-select
+            [label]="'paymentMethod' | locale"
+            fontSize="xs"
+            [options]="paymentMethodOptions"
+            [placeholder]="'selectPaymentMethod' | locale"
+            formControlName="paymentMethod"
+          ></app-select>
+        </div>
+
+        <div class="min-w-[160px]">
+          <app-input
+            type="text"
+            [label]="'e2eId' | locale"
+            fontSize="xs"
+            placeholder="Digite o E2E ID"
+            formControlName="e2eId"
+          ></app-input>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <app-button
+          type="outline"
+          [label]="'clear' | locale"
+          (click)="onClear()"
+        ></app-button>
+        <app-button
+          type="primary"
+          [label]="'filter' | locale"
+          (click)="onFilter()"
+        ></app-button>
+      </div>
+    </div>
+  </form>
+
+  <div class="lg:hidden bg-white mb-6 rounded-lg border border-gray-200">
+    <div class="p-4 border-b border-gray-200">
+      <button
+        (click)="toggleMobileFilters()"
+        class="flex items-center justify-between w-full text-left"
+      >
+        <div class="flex items-center gap-2">
+          <span class="material-icons text-gray-600">filter_list</span>
+          <span class="font-medium text-gray-900">{{
+            "filters" | locale
+          }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            *ngIf="hasActiveFilters()"
+            class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+          >
+            {{ getActiveFiltersCount() }}
+          </span>
+          <span
+            class="material-icons text-gray-600 transition-transform duration-200"
+            [class.rotate-180]="isMobileFiltersOpen"
+          >
+            expand_more
+          </span>
+        </div>
+      </button>
+    </div>
+
+    <form
+      [formGroup]="filterForm"
+      *ngIf="isMobileFiltersOpen"
+      class="p-4 space-y-4"
+    >
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <app-input
+            type="date"
+            placeholder="00/00/2025"
+            [label]="'startDate' | locale"
+            fontSize="xs"
+            formControlName="startDate"
+          ></app-input>
+        </div>
+
+        <div>
+          <app-input
+            type="date"
+            [label]="'endDate' | locale"
+            fontSize="xs"
+            placeholder="00/00/2025"
+            formControlName="endDate"
+          ></app-input>
+        </div>
+
+        <div>
+          <app-select
+            [label]="'sortBy' | locale"
+            fontSize="xs"
+            [options]="sortOptions"
+            [placeholder]="'selectSortBy' | locale"
+            formControlName="sortBy"
+          ></app-select>
+        </div>
+
+        <div>
+          <app-select
+            [label]="'status' | locale"
+            fontSize="xs"
+            [options]="statusOptions"
+            [placeholder]="'selectStatus' | locale"
+            formControlName="status"
+          ></app-select>
+        </div>
+
+        <div>
+          <app-input
+            type="text"
+            [label]="'document' | locale"
+            fontSize="xs"
+            placeholder="Digite o documento"
+            formControlName="document"
+          ></app-input>
+        </div>
+
+        <div>
+          <app-select
+            [label]="'paymentMethod' | locale"
+            fontSize="xs"
+            [options]="paymentMethodOptions"
+            [placeholder]="'selectPaymentMethod' | locale"
+            formControlName="paymentMethod"
+          ></app-select>
+        </div>
+
+        <div>
+          <app-input
+            type="text"
+            [label]="'e2eId' | locale"
+            fontSize="xs"
+            placeholder="Digite o E2E ID"
+            formControlName="e2eId"
+          ></app-input>
+        </div>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <app-button
+          type="outline"
+          [label]="'clear' | locale"
+          (click)="onClear()"
+          class="flex-1"
+        ></app-button>
+        <app-button
+          type="primary"
+          [label]="'filter' | locale"
+          (click)="onFilter(); toggleMobileFilters()"
+          class="flex-1"
+        ></app-button>
+      </div>
+    </form>
+  </div>
+
+  <div class="bg-white mt-6 dark:bg-slate-900 rounded-lg">
+    <app-table
+      [columns]="tableColumns"
+      [rows]="tableRows"
+      [columnMap]="mapRowToColumns"
+      [onViewDetails]="onViewDetails"
+    ></app-table>
+  </div>
+</div>

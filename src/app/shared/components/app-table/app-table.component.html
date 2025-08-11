@@ -1,0 +1,281 @@
+<div class="hidden lg:block overflow-x-auto max-w-full">
+  <table class="w-full bg-white rounded-xl overflow-hidden">
+    <thead class="bg-gray-50">
+      <tr>
+        <th
+          *ngFor="let column of columns"
+          class="px-3 py-5 text-left text-xs bg-[#E7EEEE] text-[#0A1535] font-medium"
+        >
+          {{ column.label }}
+        </th>
+        <th
+          *ngIf="showActions"
+          class="px-3 py-3 text-left bg-[#E7EEEE] text-xs font-medium text-[#0A1535]"
+        >
+          {{ "actions" | locale }}
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y border border-[#E7EEEE] divide-[#E7EEEE]">
+      <ng-container *ngFor="let row of rows; let i = index">
+        <tr class="hover:bg-gray-50">
+          <td
+            *ngFor="let cell of getRowData(row); let j = index"
+            class="px-3 py-4 text-xs sm:text-sm"
+          >
+            <div
+              *ngIf="columns[j]?.type === 'id'"
+              class="flex text-xs sm:text-sm items-center"
+            >
+              <span class="mr-2 text-gray-900">{{ formatId(cell) }}</span>
+              <button
+                (click)="copyToClipboard(cell)"
+                class="text-gray-400 hover:text-gray-600 text-xs sm:text-sm"
+                title="Copy to clipboard"
+              >
+                <span class="text-xs sm:text-sm material-icons"
+                  >content_copy</span
+                >
+              </button>
+            </div>
+
+            <div *ngIf="columns[j]?.type === 'status'">
+              <app-status-badge
+                [status]="getStatusType(cell)"
+                size="sm"
+                [showIcon]="true"
+              >
+              </app-status-badge>
+            </div>
+
+            <div
+              *ngIf="columns[j]?.type === 'currency'"
+              class="flex items-center"
+            >
+              <img
+                [src]="getCurrencyIcon(cell)"
+                [alt]="'Ícone da moeda ' + cell"
+                [title]="cell"
+                class="w-5 h-5 mr-2"
+              />
+              <span class="text-gray-900">{{ cell }}</span>
+            </div>
+
+            <div
+              *ngIf="columns[j]?.type === 'money'"
+              class="text-green-600 font-medium"
+            >
+              {{ cell }}
+            </div>
+
+            <div
+              *ngIf="columns[j]?.type === 'date'"
+              class="text-gray-900"
+            >
+              <span class="text-xs">{{ cell }}</span>
+            </div>
+
+            <div
+              *ngIf="!columns[j]?.type || columns[j]?.type === 'text'"
+              class="text-gray-900"
+            >
+              <div class="flex items-start gap-2">
+                <span class="flex-1 min-w-0 break-words text-xs">{{
+                  cell
+                }}</span>
+                <button
+                  *ngIf="shouldShowCopyButton(columns[j]?.key)"
+                  (click)="copyToClipboard(cell)"
+                  class="text-gray-400 hover:text-gray-600 text-xs sm:text-sm flex-shrink-0 flex items-center justify-center mt-0.5"
+                  title="Copy to clipboard"
+                >
+                  <span class="text-xs sm:text-sm material-icons"
+                    >content_copy</span
+                  >
+                </button>
+              </div>
+            </div>
+          </td>
+
+          <td *ngIf="showActions" class="px-3 py-4 text-xs sm:text-sm text-gray-500">
+            <div class="flex items-center gap-2">
+              <button
+                *ngIf="hasExpandedData()"
+                (click)="toggleExpansion(i)"
+                class="text-gray-400 hover:text-gray-600 transition-transform duration-200"
+                [class.rotate-180]="isExpanded(i)"
+                title="Expand details"
+              >
+                <span class="material-icons">expand_more</span>
+              </button>
+              <button
+                *ngIf="onViewDetails"
+                (click)="onViewDetails(row); $event.stopPropagation()"
+                class="text-gray-400 hover:text-gray-600"
+                title="View details"
+              >
+                <span class="material-icons">description</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="isExpanded(i)" class="bg-gray-50">
+          <td [attr.colspan]="columns.length + 1" class="px-6 py-4">
+            <div class="bg-white rounded-lg p-4">
+              <ng-container
+                *ngIf="expandedContentTemplate; else defaultExpandedContent"
+              >
+                <ng-container
+                  *ngTemplateOutlet="
+                    expandedContentTemplate;
+                    context: { $implicit: row, data: getExpandedData(row) }
+                  "
+                ></ng-container>
+              </ng-container>
+
+              <ng-template #defaultExpandedContent>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div
+                    *ngFor="let detail of getExpandedData(row) | keyvalue"
+                    class="flex flex-col"
+                  >
+                    <span class="text-xs font-medium text-gray-500 mb-1">
+                      {{ detail.key | locale }}
+                    </span>
+                    <span class="text-xs sm:text-sm text-gray-900">
+                      {{ detail.value }}
+                    </span>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<div class="lg:hidden space-y-4">
+  <div
+    *ngFor="let row of rows; let i = index"
+    class="bg-white rounded-lg border border-gray-200 p-4 space-y-3"
+  >
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="flex flex-col">
+          <span class="text-xs font-medium text-gray-500 mb-1">ID</span>
+          <div class="flex items-center gap-2">
+            <span class="text-xs sm:text-sm font-medium text-gray-900">
+              {{ formatId(getRowData(row)[0]) }}
+            </span>
+            <button
+              (click)="copyToClipboard(getRowData(row)[0])"
+              class="text-gray-400 hover:text-gray-600 flex items-center justify-center"
+              title="Copy to clipboard"
+            >
+              <span class="material-icons text-xs sm:text-sm"
+                >content_copy</span
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          *ngIf="onViewDetails"
+          (click)="onViewDetails(row); $event.stopPropagation()"
+          class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg transition-colors flex items-center gap-1 shadow-sm"
+          title="View details"
+        >
+          <span class="material-icons text-lg">description</span>
+          <span class="text-xs font-medium hidden sm:inline">Ver detalhes</span>
+        </button>
+        <button
+          *ngIf="hasExpandedData()"
+          (click)="toggleExpansion(i)"
+          class="text-gray-400 hover:text-gray-600 transition-transform duration-200 p-1"
+          [class.rotate-180]="isExpanded(i)"
+          title="Expand details"
+        >
+          <span class="material-icons">expand_more</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div
+        *ngFor="let cell of getRowData(row).slice(1); let j = index"
+        class="flex flex-col"
+      >
+        <span class="text-xs font-medium text-gray-500 mb-1">
+          {{ columns[j + 1].label || "" | locale }}
+        </span>
+        <div class="text-xs sm:text-sm text-gray-900">
+          <div *ngIf="columns[j + 1]?.type === 'status'">
+            <app-status-badge
+              [status]="getStatusType(cell)"
+              size="sm"
+              [showIcon]="true"
+            >
+            </app-status-badge>
+          </div>
+          <div
+            *ngIf="columns[j + 1]?.type === 'currency'"
+            class="flex items-center"
+          >
+            <img
+              [src]="getCurrencyIcon(cell)"
+              [alt]="'Ícone da moeda ' + cell"
+              [title]="cell"
+              class="w-4 h-4 mr-2"
+            />
+            <span class="break-words">{{ cell }}</span>
+          </div>
+          <div
+            *ngIf="columns[j + 1]?.type === 'money'"
+            class="text-green-600 font-medium break-words"
+          >
+            {{ cell }}
+          </div>
+          <div
+            *ngIf="columns[j + 1]?.type === 'date'"
+            class="text-gray-900"
+          >
+            {{ cell }}
+          </div>
+          <div *ngIf="!columns[j + 1]?.type || columns[j + 1]?.type === 'text'">
+            <div class="flex items-start gap-1">
+              <span class="flex-1 min-w-0 break-words">{{ cell }}</span>
+              <button
+                *ngIf="shouldShowCopyButton(columns[j + 1]?.key)"
+                (click)="copyToClipboard(cell)"
+                class="text-gray-400 hover:text-gray-600 text-xs flex-shrink-0 flex items-center justify-center mt-0.5"
+                title="Copy to clipboard"
+              >
+                <span class="material-icons text-xs">content_copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isExpanded(i)" class="border-t border-gray-200 pt-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div
+          *ngFor="let detail of getExpandedData(row) | keyvalue"
+          class="flex flex-col"
+        >
+          <span class="text-xs font-medium text-gray-500 mb-1">
+            {{ detail.key | locale }}
+          </span>
+          <span class="text-xs sm:text-sm text-gray-900 break-words">
+            {{ detail.value }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

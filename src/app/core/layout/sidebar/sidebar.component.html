@@ -1,0 +1,122 @@
+<!-- Mobile Overlay -->
+<div
+  *ngIf="!isCollapsed() && isMobile()"
+  class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+  (click)="closeSidebar()"
+></div>
+
+<aside
+  [class]="
+    brandConfig.primary +
+    ' ' +
+    brandConfig.text +
+    ' transition-all duration-300 ease-in-out min-h-screen flex flex-col'
+  "
+  [class.fixed]="isMobile()"
+  [class.relative]="!isMobile()"
+  [class.z-50]="isMobile()"
+  [class.w-48]="!isCollapsed() && !isMobile()"
+  [class.w-16]="isCollapsed() && !isMobile()"
+  [class.w-screen]="!isCollapsed() && isMobile()"
+  [class.w-0]="isCollapsed() && isMobile()"
+  [class.opacity-0]="isCollapsed() && isMobile()"
+  [class.pointer-events-none]="isCollapsed() && isMobile()"
+>
+  <!-- Desktop Header -->
+  <div
+    *ngIf="!isMobile()"
+    class="flex items-center justify-between p-4 border-b border-slate-700"
+  >
+    <div class="flex items-center gap-2">
+      <img src="assets/images/logo-gowd.svg" alt="Logo" class="h-8" />
+    </div>
+    <button
+      (click)="toggleSidebar()"
+      class="p-1 rounded-md hover:bg-white/10 transition-colors"
+      [title]="isCollapsed() ? 'Expandir menu' : 'Recolher menu'"
+    >
+      <span
+        class="material-icons text-xs transition-transform"
+        [class.rotate-180]="isCollapsed()"
+      >
+        {{ isCollapsed() ? "chevron_right" : "chevron_left" }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Mobile Header -->
+  <div
+    *ngIf="isMobile()"
+    class="flex items-center justify-between p-4 border-b border-slate-700 mobile-header"
+  >
+    <div class="flex items-center gap-3">
+      <img src="assets/images/logo-gowd.svg" alt="Logo" class="h-8" />
+    </div>
+    <button
+      (click)="closeSidebar()"
+      class="p-2 rounded-md hover:bg-white/10 transition-colors"
+      title="Fechar menu"
+    >
+      <span class="material-icons text-white">close</span>
+    </button>
+  </div>
+
+  <!-- User Info (Mobile Only) -->
+  <div
+    *ngIf="isMobile() && !isCollapsed()"
+    class="p-4 border-b border-slate-700 mobile-user-section"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-lg user-avatar"
+      >
+        {{ getUserInitials() }}
+      </div>
+      <div class="flex-1">
+        <div class="font-medium text-white">{{ userName }}</div>
+        <div class="text-sm text-slate-300">
+          {{ user()?.email || "usuário@gowd.com" }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="flex-1 py-4">
+    <div class="space-y-1 px-2">
+      <div *ngFor="let item of navigationItems()" class="relative">
+        <button
+          class="flex items-center gap-3 w-full p-3 rounded-lg text-left transition-colors group nav-item"
+          [class]="
+            item.active
+              ? brandConfig.secondary + ' text-white shadow-sm'
+              : 'text-slate-400 hover:bg-white/10 hover:text-white'
+          "
+          (click)="navigateTo(item.path)"
+          [title]="isCollapsed() && !isMobile() ? (item.label | locale) : ''"
+        >
+          <span class="material-icons text-lg flex-shrink-0">{{
+            item.icon
+          }}</span>
+          <span
+            *ngIf="!isCollapsed() || isMobile()"
+            class="font-medium text-sm truncate"
+            >{{ item.label | locale }}</span
+          >
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Logout Button -->
+  <div class="p-4 border-t border-slate-700">
+    <button
+      (click)="logout()"
+      class="flex items-center gap-3 w-full p-3 rounded-lg text-left text-slate-400 hover:bg-white/10 hover:text-white transition-colors"
+      [title]="isCollapsed() && !isMobile() ? 'Sair' : ''"
+    >
+      <span class="material-icons text-lg flex-shrink-0">logout</span>
+      <span *ngIf="!isCollapsed() || isMobile()" class="font-medium">Sair</span>
+    </button>
+  </div>
+</aside>

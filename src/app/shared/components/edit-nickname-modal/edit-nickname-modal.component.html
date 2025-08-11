@@ -1,0 +1,59 @@
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 flex items-center justify-center modal-backdrop"
+  (click)="onBackdropClick($event)"
+  style="z-index: 99999;"
+>
+  <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-lg font-semibold text-gray-900">
+        {{ "editAccountNickname" | locale }}
+      </h2>
+      <button
+        (click)="onCloseClick()"
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+        type="button"
+      >
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <form [formGroup]="form" class="space-y-4">
+      <div>
+        <app-input
+          [label]="'type' | locale"
+          formControlName="type"
+          [disabled]="true"
+          fontSize="sm"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-input
+          [label]="'nickname' | locale"
+          formControlName="nickname"
+          fontSize="sm"
+          placeholder="Digite o apelido"
+        ></app-input>
+      </div>
+
+      <div class="flex gap-3 pt-4">
+        <app-button
+          type="outline"
+          customClass="w-full"
+          [label]="'cancel' | locale"
+          (click)="onCloseClick()"
+          class="flex-1"
+        ></app-button>
+        <app-button
+          type="primary"
+          width="full"
+          customClass="w-full"
+          [label]="'changeNickname' | locale"
+          (click)="onSaveClick()"
+          class="flex-1"
+        ></app-button>
+      </div>
+    </form>
+  </div>
+</div>

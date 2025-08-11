@@ -1,0 +1,33 @@
+/* Estilos específicos para o componente de paginação */
+.pagination-container {
+  /* Estilos base já definidos no template */
+}
+
+/* Classe para os botões de navegação da paginação */
+.pagination-nav-button {
+  @apply px-2 py-1 text-xs border border-gray-200 rounded-md bg-white text-gray-700 font-medium transition-colors;
+}
+
+.pagination-nav-button:hover:not(:disabled) {
+  @apply bg-gray-50 border-gray-300;
+}
+
+.pagination-nav-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Responsividade para telas muito pequenas */
+@media (max-width: 480px) {
+  .pagination-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pagination-info {
+    text-align: center;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+  }
+}

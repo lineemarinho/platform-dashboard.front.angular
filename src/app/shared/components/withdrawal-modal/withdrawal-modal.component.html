@@ -1,0 +1,94 @@
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 flex items-center justify-center modal-backdrop"
+  (click)="onBackdropClick($event)"
+  style="z-index: 99999"
+>
+  <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-lg font-semibold text-gray-900">
+        {{ "requestWithdrawal" | locale }}
+      </h2>
+      <button
+        (click)="onCloseClick()"
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+        type="button"
+      >
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <div class="flex justify-center mb-6">
+      <div class="flex bg-gray-100 rounded-lg p-1">
+        <button
+          *ngFor="let type of data?.availableTypes"
+          (click)="selectedType = type"
+          class="px-4 py-2 text-sm font-medium rounded-md transition-colors"
+          [class]="
+            selectedType === type
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+          "
+          type="button"
+        >
+          {{ type }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center gap-3 mb-6 rounded-lg">
+      <img
+        [src]="getFlagIcon(data?.flag || '')"
+        [alt]="data?.currency || ''"
+        [title]="data?.currency || ''"
+        class="w-6 h-6"
+      />
+      <div class="flex flex-col items-center">
+        <p class="text-sm text-gray-600">{{ "availableBalance" | locale }}</p>
+        <p class="text-lg font-semibold text-gray-900">
+          {{ getCurrencySymbol(data?.currency || "") }}
+          {{ data?.amount?.toLocaleString() }}
+        </p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" class="space-y-4">
+      <div>
+        <app-input
+          [label]="'value' | locale"
+          formControlName="value"
+          fontSize="sm"
+          [placeholder]="getCurrencySymbol(data?.currency || '') + ' 100,00'"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-input
+          [label]="'description' | locale"
+          formControlName="description"
+          fontSize="sm"
+          placeholder="Solicitação de saque - Figma"
+        ></app-input>
+      </div>
+
+      <div class="flex gap-3 pt-4">
+        <app-button
+          width="full"
+          customClass="w-full"
+          type="outline"
+          [label]="'cancel' | locale"
+          (click)="onCloseClick()"
+          class="flex-1"
+        ></app-button>
+        <app-button
+          type="primary"
+          width="full"
+          customClass="w-full"
+          [label]="'requestWithdrawal' | locale"
+          (click)="onRequestClick()"
+          class="flex-1"
+        ></app-button>
+      </div>
+    </form>
+  </div>
+</div>

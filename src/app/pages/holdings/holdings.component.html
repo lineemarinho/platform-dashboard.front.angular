@@ -1,0 +1,231 @@
+<app-page-title [title]="'holdings' | locale"></app-page-title>
+
+<form [formGroup]="filterForm" class="hidden lg:block bg-white mb-6">
+  <div class="flex items-end justify-between">
+    <div class="flex flex-wrap gap-3 items-end">
+      <div class="min-w-[200px]">
+        <app-input
+          type="text"
+          [label]="'fullName' | locale"
+          fontSize="xs"
+          placeholder="Nome completo"
+          formControlName="fullName"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[200px]">
+        <app-input
+          type="text"
+          [label]="'document' | locale"
+          fontSize="xs"
+          placeholder="CNPJ"
+          formControlName="document"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[200px]">
+        <app-select
+          [label]="'country' | locale"
+          fontSize="xs"
+          formControlName="country"
+          [options]="[
+            { value: 'BRA', label: 'Brasil' },
+            { value: 'ARG', label: 'Argentina' },
+            { value: 'CHL', label: 'Chile' }
+          ]"
+        ></app-select>
+      </div>
+
+      <div class="min-w-[200px]">
+        <app-select
+          [label]="'type' | locale"
+          fontSize="xs"
+          formControlName="type"
+          [options]="[
+            { value: 'HOLDING', label: 'Holding' },
+            { value: 'SUBSIDIARY', label: 'Subsidiária' }
+          ]"
+        ></app-select>
+      </div>
+
+      <div class="min-w-[200px]">
+        <app-input
+          type="email"
+          [label]="'email' | locale"
+          fontSize="xs"
+          placeholder="Email"
+          formControlName="email"
+        ></app-input>
+      </div>
+
+      <div class="min-w-[200px]">
+        <app-select
+          [label]="'status' | locale"
+          fontSize="xs"
+          formControlName="active"
+          [options]="[
+            { value: 'true', label: 'Ativo' },
+            { value: 'false', label: 'Inativo' }
+          ]"
+        ></app-select>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <app-button
+        type="outline"
+        [label]="'clear' | locale"
+        (click)="onClear()"
+      ></app-button>
+      <app-button
+        type="primary"
+        [label]="'filter' | locale"
+        (click)="onFilter()"
+      ></app-button>
+    </div>
+  </div>
+</form>
+
+<div class="lg:hidden bg-white mb-6 rounded-lg border border-gray-200">
+  <div class="p-4 border-b border-gray-200">
+    <button
+      (click)="toggleMobileFilters()"
+      class="flex items-center justify-between w-full text-left"
+    >
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-gray-600">filter_list</span>
+        <span class="font-medium text-gray-900">{{ "filters" | locale }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span
+          *ngIf="hasActiveFilters()"
+          class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+        >
+          {{ getActiveFiltersCount() }}
+        </span>
+        <span
+          class="material-icons text-gray-600 transition-transform duration-200"
+          [class.rotate-180]="isMobileFiltersOpen"
+        >
+          expand_more
+        </span>
+      </div>
+    </button>
+  </div>
+
+  <form
+    [formGroup]="filterForm"
+    *ngIf="isMobileFiltersOpen"
+    class="p-4 space-y-4"
+  >
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <app-input
+          type="text"
+          [label]="'fullName' | locale"
+          fontSize="xs"
+          placeholder="Nome completo"
+          formControlName="fullName"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-input
+          type="text"
+          [label]="'document' | locale"
+          fontSize="xs"
+          placeholder="CNPJ"
+          formControlName="document"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-select
+          [label]="'country' | locale"
+          fontSize="xs"
+          formControlName="country"
+          [options]="[
+            { value: 'BRA', label: 'Brasil' },
+            { value: 'ARG', label: 'Argentina' },
+            { value: 'CHL', label: 'Chile' }
+          ]"
+        ></app-select>
+      </div>
+
+      <div>
+        <app-select
+          [label]="'type' | locale"
+          fontSize="xs"
+          formControlName="type"
+          [options]="[
+            { value: 'HOLDING', label: 'Holding' },
+            { value: 'SUBSIDIARY', label: 'Subsidiária' }
+          ]"
+        ></app-select>
+      </div>
+
+      <div>
+        <app-input
+          type="email"
+          [label]="'email' | locale"
+          fontSize="xs"
+          placeholder="Email"
+          formControlName="email"
+        ></app-input>
+      </div>
+
+      <div>
+        <app-select
+          [label]="'status' | locale"
+          fontSize="xs"
+          formControlName="active"
+          [options]="[
+            { value: 'true', label: 'Ativo' },
+            { value: 'false', label: 'Inativo' }
+          ]"
+        ></app-select>
+      </div>
+    </div>
+
+    <div class="flex gap-3 pt-2">
+      <app-button
+        type="outline"
+        customClass="w-full"
+        [label]="'clear' | locale"
+        (click)="onClearAndClose()"
+        class="flex-1"
+      ></app-button>
+      <app-button
+        type="primary"
+        customClass="w-full"
+        [label]="'filter' | locale"
+        (click)="onFilterAndClose()"
+        class="flex-1"
+      ></app-button>
+    </div>
+  </form>
+</div>
+
+<!-- Debug: isLoading = {{ isLoading }} -->
+<app-loading
+  *ngIf="isLoading"
+  message="Carregando titulares..."
+  variant="card"
+  size="md"
+></app-loading>
+
+<!-- Debug: Dados carregados = {{ holdings().length }} -->
+
+<app-table
+  *ngIf="!isLoading"
+  [columns]="tableColumns"
+  [rows]="tableRows"
+  [columnMap]="mapRowToColumns"
+  [showActions]="false"
+></app-table>
+
+<app-pagination
+  *ngIf="!isLoading && totalItems > 0"
+  [paginationInfo]="paginationInfo"
+  (pageChange)="onPageChange($event)"
+></app-pagination>

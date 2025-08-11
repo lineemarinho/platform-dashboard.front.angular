@@ -1,0 +1,68 @@
+<div class="bg-white px-2 border-b pb-2 border-gray-200 mb-6 lg:mb-8">
+  <div
+    class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 lg:gap-0"
+  >
+    <app-page-title [title]="title"></app-page-title>
+
+    <div class="flex items-center justify-between lg:gap-10">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:gap-10 gap-4 text-sm"
+      >
+        <div class="flex gap-2">
+          <span class="text-xl lg:text-2xl">🇧🇷</span>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1">
+              <span class="text-gray-600 text-xs">{{
+                "availableBalance" | locale
+              }}</span>
+            </div>
+            <span
+              class="font-medium text-sm flex items-center gap-1 lg:text-base"
+              >{{ displayBalance }}
+              <button
+                (click)="toggleBalanceVisibility()"
+                class="text-gray-400 hover:text-gray-600 transition-colors"
+                [title]="isBalanceVisible ? 'Ocultar saldo' : 'Mostrar saldo'"
+              >
+                <span class="material-icons text-xs">
+                  {{ isBalanceVisible ? "visibility" : "visibility_off" }}
+                </span>
+              </button></span
+            >
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-600 text-xs">{{ "agency" | locale }}</span>
+          <span class="font-medium text-sm lg:text-base">{{
+            accountInfo.agency
+          }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-600 text-xs">{{ "account" | locale }}</span>
+          <span class="font-medium text-xs lg:text-sm">{{
+            accountInfo.account
+          }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-600 text-xs">ISPB</span>
+          <span class="font-medium text-sm lg:text-base">{{
+            accountInfo.ispb
+          }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-600 text-xs">{{ "bank" | locale }}</span>
+          <span class="font-medium text-sm lg:text-base">{{
+            accountInfo.bank
+          }}</span>
+        </div>
+      </div>
+
+      <div
+        class="w-8 h-8 lg:w-6 lg:h-6 rounded-lg lg:rounded-tr-lg flex items-center justify-center cursor-pointer transition-colors hover:bg-gray-100"
+        (click)="onCopyAccountInfo()"
+      >
+        <span class="material-icons text-sm">content_copy</span>
+      </div>
+    </div>
+  </div>
+</div>
