@@ -2,13 +2,13 @@
   <router-outlet></router-outlet>
 </div>
 
-<div *ngIf="!isLoginLayout()" class="flex min-h-screen w-full">
-  <app-sidebar></app-sidebar>
+<div *ngIf="!isLoginLayout()" class="flex min-h-screen w-full overflow-hidden">
+  <app-sidebar class="flex-shrink-0"></app-sidebar>
 
-  <div class="flex-1 flex flex-col">
+  <div class="flex-1 flex flex-col overflow-hidden">
     <app-top-header></app-top-header>
 
-    <main class="flex-1 p-2 sm:p-4 lg:p-6 bg-white overflow-x-auto">
+    <main class="flex-1 p-2 sm:p-4 lg:p-6 bg-white overflow-hidden">
       <router-outlet></router-outlet>
     </main>
 

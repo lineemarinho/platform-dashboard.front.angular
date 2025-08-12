@@ -5,6 +5,28 @@ aside {
   overflow: hidden !important;
 }
 
+/* Tooltip styles for collapsed sidebar */
+aside[class*="w-16"] button[title]:not([title=""]) {
+  position: relative;
+}
+
+aside[class*="w-16"] button[title]:not([title=""]):hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-left: 8px;
+  pointer-events: none;
+}
+
 /* Allow text to wrap properly in navigation */
 .nav-item span:not(.material-icons) {
   word-wrap: break-word;
