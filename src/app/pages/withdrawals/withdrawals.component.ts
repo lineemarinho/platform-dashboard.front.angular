@@ -17,17 +17,6 @@ import {
 import { PageTitleComponent } from "../../shared/components/page-title/page-title.component";
 import { LocalePipe } from "../../shared/pipes/locale.pipe";
 
-interface WithdrawalRow {
-  id: string;
-  fullName: string;
-  status: string;
-  operationType: string;
-  currency: string;
-  requestedValue: string;
-  value: string;
-  createdAt: string;
-}
-
 @Component({
   selector: "app-withdrawals",
   templateUrl: "./withdrawals.component.html",
