@@ -20,7 +20,6 @@ export class RefundsService {
     take: number = 10,
     filters?: any
   ): Observable<RefundsResponse> {
-    // Se não houver filtros, usa o formato simples
     if (!filters || filters.length === 0) {
       return this.http.post<RefundsResponse>(
         `${this.baseUrl}/v1/payin/order/refund/list`,
@@ -31,11 +30,7 @@ export class RefundsService {
       );
     }
 
-    // Se houver filtros, usa o formato completo da API
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
-
-    console.log("=== ENVIANDO PAYLOAD PARA API REFUNDS ===");
-    console.log("Payload:", payload);
 
     return this.http.post<RefundsResponse>(
       `${this.baseUrl}/v1/payin/order/refund/list`,

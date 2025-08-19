@@ -47,8 +47,8 @@ export class PayinsComponent implements OnInit {
   private isInitialLoad = true;
 
   tableColumns = [
-    { key: "id", label: "ID", type: "id" as const },
-    { key: "code", label: "Code", type: "id" as const },
+    { key: "id", label: "ID", type: "text" as const },
+    { key: "code", label: "Code", type: "text" as const },
     {
       key: "status",
       label: "Status",
@@ -58,17 +58,16 @@ export class PayinsComponent implements OnInit {
     { key: "company", label: "Company", type: "text" as const },
     { key: "customer", label: "Customer", type: "text" as const },
     { key: "paymentMethod", label: "Payment Method", type: "text" as const },
-    { key: "amount", label: "Amount", type: "money" as const },
+    { key: "amount", label: "Amount", type: "text" as const },
     {
       key: "financialPartner",
       label: "Financial Partner",
       type: "text" as const,
     },
     { key: "origin", label: "Origin", type: "text" as const },
-    { key: "createdAt", label: "Created At", type: "date" as const },
+    { key: "createdAt", label: "Created At", type: "text" as const },
   ];
 
-  // Opções para Search By
   searchByOptions = [
     { value: "code", label: "Código" },
     { value: "company", label: "Empresa" },
@@ -77,7 +76,6 @@ export class PayinsComponent implements OnInit {
     { value: "financialPartner", label: "Parceiro financeiro" },
   ];
 
-  // Opções de status baseadas na API (em inglês e maiúsculo)
   statusOptions = [
     { value: "ANALYSIS", label: "Análise" },
     { value: "CANCELED", label: "Cancelado" },
@@ -118,24 +116,17 @@ export class PayinsComponent implements OnInit {
   }
 
   mapRowToColumns = (payin: Payin) => {
-    const createdAt = payin.createdAt
-      ? new Date(payin.createdAt).toLocaleDateString("pt-BR")
-      : "N/A";
-
-    // Mapeia o status para exibição em português
-    const statusDisplay = this.getStatusDisplay(payin.status);
-
     return [
       payin.id,
       payin.code,
-      statusDisplay,
+      this.getStatusDisplay(payin.status),
       payin.company?.name || "N/A",
       payin.customer?.fullName || "N/A",
       payin.paymentMethod,
-      `${payin.amount?.currency || "N/A"} ${payin.amount?.value || "N/A"}`,
+      `${payin.amount?.currency || ""} ${payin.amount?.value || "N/A"}`.trim(),
       payin.financialPartner || "N/A",
       payin.origin || "N/A",
-      createdAt,
+      payin.createdAt || "N/A",
     ];
   };
 
@@ -144,25 +135,19 @@ export class PayinsComponent implements OnInit {
   }
 
   onFilter(): void {
-    console.log("=== FILTRO CLICADO ===");
-    console.log("isInitialLoad:", this.isInitialLoad);
-
-    // Evita chamadas desnecessárias se for o carregamento inicial
     if (this.isInitialLoad) {
-      console.log("Carregamento inicial, ignorando filtro");
       this.isInitialLoad = false;
       return;
     }
 
-    console.log("Aplicando filtros e carregando dados");
-    this.currentPage = 1; // Reset para primeira página ao filtrar
+    this.currentPage = 1;
     this.loadPayins();
   }
 
   onClear(): void {
     this.filterForm.reset();
     this.currentPage = 1;
-    this.isInitialLoad = false; // Reset do flag para permitir nova busca
+    this.isInitialLoad = false;
     this.loadPayins();
   }
 
@@ -209,14 +194,10 @@ export class PayinsComponent implements OnInit {
     this.loadPayins();
   }
 
-  /**
-   * Constrói os filtros no formato da API
-   */
   private buildApiFilters(): (FilterCondition | FilterGroup)[] {
     const formValue = this.filterForm.value;
     const filters: (FilterCondition | FilterGroup)[] = [];
 
-    // Filtros de data
     if (formValue.startDate || formValue.endDate) {
       const dateFilters = FilterBuilderUtil.buildDateRangeFilter(
         "createdAt",
@@ -227,10 +208,7 @@ export class PayinsComponent implements OnInit {
       filters.push(...dateFilters);
     }
 
-    // Filtro por campo de busca
     if (formValue.searchBy && formValue.searchBy !== "") {
-      // Aqui você pode implementar lógica específica baseada no campo selecionado
-      // Por exemplo, se searchBy for 'code', buscar no campo 'code'
       const searchFilter = FilterBuilderUtil.buildTextFilter(
         formValue.searchBy,
         formValue.searchBy
@@ -238,7 +216,6 @@ export class PayinsComponent implements OnInit {
       if (searchFilter) filters.push(searchFilter);
     }
 
-    // Filtro por status
     if (formValue.status) {
       const statusFilter = FilterBuilderUtil.buildSelectFilter(
         "status",
@@ -247,7 +224,6 @@ export class PayinsComponent implements OnInit {
       if (statusFilter) filters.push(statusFilter);
     }
 
-    // Filtro por chave de idempotência
     if (formValue.idempotencyKey) {
       const idempotencyFilter = FilterBuilderUtil.buildTextFilter(
         "idempotencyKey",
@@ -256,7 +232,6 @@ export class PayinsComponent implements OnInit {
       if (idempotencyFilter) filters.push(idempotencyFilter);
     }
 
-    // Filtro por E2E ID
     if (formValue.e2eId) {
       const e2eFilter = FilterBuilderUtil.buildTextFilter(
         "e2eId",
@@ -268,11 +243,7 @@ export class PayinsComponent implements OnInit {
     return FilterBuilderUtil.buildFinalFilters(filters);
   }
 
-  /**
-   * Converte o status da API para exibição em português
-   */
   private getStatusDisplay(status: string): string {
-    // Limpa o status (remove espaços e converte para maiúsculo)
     const cleanStatus = status?.trim()?.toUpperCase();
 
     const statusMap: { [key: string]: string } = {
@@ -290,7 +261,6 @@ export class PayinsComponent implements OnInit {
     return statusMap[cleanStatus] || status;
   }
 
-  // Mapeia o status em português de volta para o tipo que o StatusUtil reconhece
   private getStatusTypeForBadge(
     statusPortuguese: string
   ):
@@ -332,13 +302,8 @@ export class PayinsComponent implements OnInit {
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    // Constrói os filtros no formato da API
     const apiFilters = this.buildApiFilters();
 
-    console.log("Parâmetros:", { skip, take });
-    console.log("Filtros construídos:", apiFilters);
-
-    // Agora passa os filtros para o serviço
     this.payinsService.getPayins(skip, take, apiFilters).subscribe({
       next: (response) => {
         this.payins.set(response.data);

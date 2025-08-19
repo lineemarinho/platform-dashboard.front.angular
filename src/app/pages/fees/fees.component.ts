@@ -1,20 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { FeesService } from '../../core/services/fees.service';
-import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
-import { AppInputComponent } from '../../shared/components/app-input/app-input.component';
-import { AppSelectComponent } from '../../shared/components/app-select/app-select.component';
-import { AppTableComponent } from '../../shared/components/app-table/app-table.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
-import { PageTitleComponent } from '../../shared/components/page-title/page-title.component';
-import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
-import { Fee } from '../../shared/interfaces';
-import { LocalePipe } from '../../shared/pipes';
+import { CommonModule } from "@angular/common";
+import { Component, OnInit, signal } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
+import { FeesService } from "../../core/services/fees.service";
+import { AppButtonComponent } from "../../shared/components/app-button/app-button.component";
+import { AppInputComponent } from "../../shared/components/app-input/app-input.component";
+import { AppSelectComponent } from "../../shared/components/app-select/app-select.component";
+import { AppTableComponent } from "../../shared/components/app-table/app-table.component";
+import { LoadingComponent } from "../../shared/components/loading/loading.component";
+import { PageTitleComponent } from "../../shared/components/page-title/page-title.component";
+import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
+import { Fee } from "../../shared/interfaces";
+import { LocalePipe } from "../../shared/pipes";
 
 @Component({
-  selector: 'app-fees',
+  selector: "app-fees",
   standalone: true,
   imports: [
     CommonModule,
@@ -28,8 +28,8 @@ import { LocalePipe } from '../../shared/pipes';
     AppInputComponent,
     AppSelectComponent,
   ],
-  templateUrl: './fees.component.html',
-  styleUrl: './fees.component.css',
+  templateUrl: "./fees.component.html",
+  styleUrl: "./fees.component.css",
 })
 export class FeesComponent implements OnInit {
   isLoading = false;
@@ -41,15 +41,15 @@ export class FeesComponent implements OnInit {
   itemsPerPage = 10;
 
   tableColumns = [
-    { key: 'id', label: 'ID', type: 'id' as const },
-    { key: 'type', label: 'Type', type: 'text' as const },
-    { key: 'description', label: 'Description', type: 'text' as const },
-    { key: 'status', label: 'Status', type: 'status' as const },
-    { key: 'currency', label: 'Currency', type: 'text' as const },
-    { key: 'operationType', label: 'Operation Type', type: 'text' as const },
-    { key: 'companyName', label: 'Company', type: 'text' as const },
-    { key: 'startDatetime', label: 'Start Date', type: 'date' as const },
-    { key: 'endDatetime', label: 'End Date', type: 'date' as const },
+    { key: "id", label: "ID", type: "id" as const },
+    { key: "type", label: "Type", type: "text" as const },
+    { key: "description", label: "Description", type: "text" as const },
+    { key: "status", label: "Status", type: "status" as const },
+    { key: "currency", label: "Currency", type: "text" as const },
+    { key: "operationType", label: "Operation Type", type: "text" as const },
+    { key: "companyName", label: "Company", type: "text" as const },
+    { key: "startDatetime", label: "Start Date", type: "date" as const },
+    { key: "endDatetime", label: "End Date", type: "date" as const },
   ];
 
   constructor(
@@ -58,12 +58,12 @@ export class FeesComponent implements OnInit {
     private router: Router
   ) {
     this.filterForm = this.formBuilder.group({
-      type: [''],
-      description: [''],
-      status: [''],
-      currency: [''],
-      operationType: [''],
-      companyName: [''],
+      type: [""],
+      description: [""],
+      status: [""],
+      currency: [""],
+      operationType: [""],
+      companyName: [""],
     });
   }
 
@@ -82,14 +82,13 @@ export class FeesComponent implements OnInit {
     fee.status,
     fee.currency,
     fee.operationType,
-    fee.companyName || 'N/A',
-    new Date(fee.startDatetime).toLocaleDateString('pt-BR'),
-    new Date(fee.endDatetime).toLocaleDateString('pt-BR'),
+    fee.companyName || "N/A",
+    new Date(fee.startDatetime).toLocaleDateString("pt-BR"),
+    new Date(fee.endDatetime).toLocaleDateString("pt-BR"),
   ];
 
   onViewDetails(fee: Fee): void {
-    console.log('Ver detalhes da taxa:', fee);
-    // Implementar navegação para detalhes
+    console.log("Ver detalhes da taxa:", fee);
   }
 
   onFilter(): void {
@@ -119,13 +118,13 @@ export class FeesComponent implements OnInit {
 
   hasActiveFilters(): boolean {
     return Object.values(this.filterForm.value).some(
-      (value) => value !== '' && value !== null
+      (value) => value !== "" && value !== null
     );
   }
 
   getActiveFiltersCount(): number {
     return Object.values(this.filterForm.value).filter(
-      (value) => value !== '' && value !== null
+      (value) => value !== "" && value !== null
     ).length;
   }
 
@@ -147,23 +146,19 @@ export class FeesComponent implements OnInit {
   }
 
   loadFees(): void {
-    console.log('Iniciando carregamento de fees...');
+    console.log("Iniciando carregamento de fees...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    console.log('Parâmetros:', { skip, take });
-
     this.feesService.getFees(skip, take).subscribe({
       next: (response) => {
-        console.log('Dados recebidos:', response);
         this.fees.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log('Loading finalizado, dados:', this.fees());
       },
       error: (error) => {
-        console.error('Erro ao carregar fees:', error);
+        console.error("Erro ao carregar fees:", error);
         this.isLoading = false;
       },
     });

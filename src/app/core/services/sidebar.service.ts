@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class SidebarService {
   private isCollapsedSubject = new BehaviorSubject<boolean>(false);
@@ -21,12 +21,12 @@ export class SidebarService {
 
   toggleSidebar(): void {
     console.log(
-      'Service toggle. Current collapsed:',
+      "Service toggle. Current collapsed:",
       this.isCollapsedSubject.value
     );
     this.isCollapsedSubject.next(!this.isCollapsedSubject.value);
     console.log(
-      'Service toggle. New collapsed:',
+      "Service toggle. New collapsed:",
       this.isCollapsedSubject.value
     );
   }
@@ -41,7 +41,6 @@ export class SidebarService {
 
   setMobile(isMobile: boolean): void {
     this.isMobileSubject.next(isMobile);
-    // Se mudou para mobile e o sidebar está aberto, fecha ele
     if (isMobile && !this.isCollapsed) {
       this.closeSidebar();
     }

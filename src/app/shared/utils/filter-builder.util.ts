@@ -24,15 +24,12 @@ export interface ApiFilterRequest {
   skip: number;
   take: number;
   requireTotalCount: boolean;
-  filter: any[]; // Mudou para any[] para aceitar o formato array da API
+  filter: any[];
   sort: any;
   group: any;
 }
 
 export class FilterBuilderUtil {
-  /**
-   * Constrói um filtro simples
-   */
   static buildFilter(
     field: string,
     operator: FilterCondition["operator"],
@@ -41,27 +38,18 @@ export class FilterBuilderUtil {
     return { field, operator, value };
   }
 
-  /**
-   * Constrói um grupo de filtros com operador AND
-   */
   static buildAndGroup(
     conditions: (FilterCondition | FilterGroup)[]
   ): FilterGroup {
     return { conditions, operator: "and" };
   }
 
-  /**
-   * Constrói um grupo de filtros com operador OR
-   */
   static buildOrGroup(
     conditions: (FilterCondition | FilterGroup)[]
   ): FilterGroup {
     return { conditions, operator: "or" };
   }
 
-  /**
-   * Constrói a requisição completa de filtro para a API
-   */
   static buildApiRequest(
     skip: number,
     take: number,
@@ -70,9 +58,8 @@ export class FilterBuilderUtil {
     sort: any = null,
     group: any = null
   ): ApiFilterRequest {
-    // Converte os filtros para o formato array da API
     const apiFilters = this.convertToApiFormat(filters);
-    
+
     return {
       skip,
       take,
@@ -83,41 +70,29 @@ export class FilterBuilderUtil {
     };
   }
 
-  /**
-   * Converte filtros do formato objeto para o formato array da API
-   */
-  private static convertToApiFormat(filters: (FilterCondition | FilterGroup)[]): any[] {
-    return filters.map(filter => {
+  private static convertToApiFormat(
+    filters: (FilterCondition | FilterGroup)[]
+  ): any[] {
+    return filters.map((filter) => {
       if (this.isFilterCondition(filter)) {
-        // Filtro simples: [field, operator, value]
         return [filter.field, filter.operator, filter.value];
       } else {
-        // Grupo de filtros: [conditions, operator]
         const convertedConditions = this.convertToApiFormat(filter.conditions);
         return [convertedConditions, filter.operator];
       }
     });
   }
 
-  /**
-   * Constrói filtros para campos de texto com operador 'contains'
-   */
   static buildTextFilter(field: string, value: string): FilterCondition | null {
     if (!value || value.trim() === "") return null;
     return this.buildFilter(field, "contains", value.trim());
   }
 
-  /**
-   * Constrói filtros para campos de seleção com operador '='
-   */
   static buildSelectFilter(field: string, value: any): FilterCondition | null {
     if (!value || value === "") return null;
     return this.buildFilter(field, "=", value);
   }
 
-  /**
-   * Constrói filtros para datas
-   */
   static buildDateRangeFilter(
     startField: string,
     endField: string,
@@ -137,9 +112,6 @@ export class FilterBuilderUtil {
     return filters;
   }
 
-  /**
-   * Constrói filtros para documentos (tipo + número)
-   */
   static buildDocumentFilter(
     documentType: string,
     documentNumber: string
@@ -157,9 +129,6 @@ export class FilterBuilderUtil {
     return filters;
   }
 
-  /**
-   * Filtra valores vazios e constrói a lista final de filtros
-   */
   static buildFinalFilters(
     filters: (FilterCondition | FilterGroup)[]
   ): (FilterCondition | FilterGroup)[] {
@@ -175,9 +144,6 @@ export class FilterBuilderUtil {
     });
   }
 
-  /**
-   * Verifica se é uma condição de filtro
-   */
   private static isFilterCondition(
     filter: FilterCondition | FilterGroup
   ): filter is FilterCondition {

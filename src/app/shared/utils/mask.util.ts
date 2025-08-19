@@ -4,7 +4,6 @@ export class MaskUtil {
   static applyDocumentMask(value: string, documentType: string): string {
     if (!value) return value;
 
-    // Remove tudo que não é número
     const numbers = value.replace(/\D/g, "");
 
     switch (documentType) {
@@ -15,7 +14,7 @@ export class MaskUtil {
       case DocumentType.RG:
         return this.applyRGMask(numbers);
       case DocumentType.PASSPORT:
-        return numbers; // Passaporte não tem máscara específica
+        return numbers;
       default:
         return numbers;
     }

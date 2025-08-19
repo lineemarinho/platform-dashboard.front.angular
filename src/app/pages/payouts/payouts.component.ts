@@ -73,7 +73,6 @@ export class PayoutsComponent implements OnInit {
     { key: "createdAt", label: "Created At", type: "date" as const },
   ];
 
-  // Opções para Search By
   searchByOptions = [
     { value: "code", label: "Código" },
     { value: "company", label: "Empresa" },
@@ -83,7 +82,6 @@ export class PayoutsComponent implements OnInit {
     { value: "financialPartner", label: "Parceiro financeiro" },
   ];
 
-  // Opções de status usando o StatusUtil
   statusOptions = StatusUtil.getPaymentStatusOptions();
 
   constructor(
@@ -141,23 +139,18 @@ export class PayoutsComponent implements OnInit {
       return;
     }
 
-    // Navega para a tela de detalhes com o ID do payout
     this.router.navigate(["/payouts/details", payout.id]);
   }
 
   onFilter(): void {
-    this.currentPage = 1; // Reset para primeira página ao filtrar
+    this.currentPage = 1;
     this.loadPayouts();
   }
 
-  /**
-   * Constrói os filtros no formato da API
-   */
   private buildApiFilters(): (FilterCondition | FilterGroup)[] {
     const formValue = this.filterForm.value;
     const filters: (FilterCondition | FilterGroup)[] = [];
 
-    // Filtros de data
     if (formValue.startDate || formValue.endDate) {
       const dateFilters = FilterBuilderUtil.buildDateRangeFilter(
         "createdAt",
@@ -168,9 +161,7 @@ export class PayoutsComponent implements OnInit {
       filters.push(...dateFilters);
     }
 
-    // Filtro por campo de busca
     if (formValue.searchBy && formValue.searchBy !== "") {
-      // Aqui você pode implementar lógica específica baseada no campo selecionado
       const searchFilter = FilterBuilderUtil.buildTextFilter(
         formValue.searchBy,
         formValue.searchBy
@@ -178,7 +169,6 @@ export class PayoutsComponent implements OnInit {
       if (searchFilter) filters.push(searchFilter);
     }
 
-    // Filtro por status
     if (formValue.status) {
       const statusFilter = FilterBuilderUtil.buildSelectFilter(
         "status",
@@ -187,7 +177,6 @@ export class PayoutsComponent implements OnInit {
       if (statusFilter) filters.push(statusFilter);
     }
 
-    // Filtro por chave de idempotência
     if (formValue.idempotencyKey) {
       const idempotencyFilter = FilterBuilderUtil.buildTextFilter(
         "idempotencyKey",
@@ -196,7 +185,6 @@ export class PayoutsComponent implements OnInit {
       if (idempotencyFilter) filters.push(idempotencyFilter);
     }
 
-    // Filtro por E2E ID
     if (formValue.e2eId) {
       const e2eFilter = FilterBuilderUtil.buildTextFilter(
         "e2eId",
@@ -214,7 +202,6 @@ export class PayoutsComponent implements OnInit {
     this.loadPayouts();
   }
 
-  // Mapeia o status dos payouts para o tipo que o StatusBadgeComponent reconhece
   private getStatusTypeForBadge(
     status: string
   ):
@@ -303,13 +290,8 @@ export class PayoutsComponent implements OnInit {
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    // Constrói os filtros no formato da API
     const apiFilters = this.buildApiFilters();
 
-    console.log("Parâmetros:", { skip, take });
-    console.log("Filtros construídos:", apiFilters);
-
-    // Agora passa os filtros para o serviço
     this.payoutsService.getPayouts(skip, take, apiFilters).subscribe({
       next: (response) => {
         console.log("Dados recebidos:", response);

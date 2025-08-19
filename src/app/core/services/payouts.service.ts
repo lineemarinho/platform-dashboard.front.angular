@@ -20,7 +20,6 @@ export class PayoutsService {
     take: number = 10,
     filters?: any
   ): Observable<PayoutsResponse> {
-    // Se não houver filtros, usa o formato simples
     if (!filters || filters.length === 0) {
       return this.http.post<PayoutsResponse>(
         `${this.baseUrl}/v1/payout/order`,
@@ -31,11 +30,7 @@ export class PayoutsService {
       );
     }
 
-    // Se houver filtros, usa o formato completo da API
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
-
-    console.log("=== ENVIANDO PAYLOAD PARA API PAYOUTS ===");
-    console.log("Payload:", payload);
 
     return this.http.post<PayoutsResponse>(
       `${this.baseUrl}/v1/payout/order`,

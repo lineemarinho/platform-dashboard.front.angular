@@ -145,12 +145,10 @@ export class StatusUtil {
       }));
   }
 
-  // Método para mapear valores booleanos para status
   static mapBooleanToStatus(value: boolean): string {
     return value ? "active" : "inactive";
   }
 
-  // Método para mapear status para valores booleanos
   static mapStatusToBoolean(status: string): boolean {
     return ["active", "approved", "completed"].includes(status.toLowerCase());
   }

@@ -40,7 +40,7 @@ export interface PayoutDetail {
   additionalFee: string;
   fixedFee: string;
   variableFee: string;
-  transactions?: any[]; // Transações da API
+  transactions?: any[];
   providerRouterId: string;
   providerRouterAccountCode: string;
   providerRouterAccountDescription: string;
@@ -115,12 +115,8 @@ export class OrderDetailsComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
 
-    console.log("=== CARREGANDO DETALHES DO PAYOUT ===");
-    console.log("ID:", payoutId);
-
     this.payoutsService.getPayoutDetails(payoutId).subscribe({
       next: (response) => {
-        console.log("Dados recebidos da API:", response);
         this.payment = this.mapApiResponseToPayoutDetail(response);
         this.setupFields();
         this.setupTransactionTable();
@@ -135,11 +131,7 @@ export class OrderDetailsComponent implements OnInit {
     });
   }
 
-  /**
-   * Mapeia a resposta da API para o formato do componente
-   */
   private mapApiResponseToPayoutDetail(apiResponse: any): PayoutDetail {
-    // Mapeia os campos da API para o formato do componente
     return {
       id: apiResponse.id || "",
       code: apiResponse.code || "",
@@ -283,7 +275,6 @@ export class OrderDetailsComponent implements OnInit {
       { label: "createdAt", type: "date" as const },
     ];
 
-    // Usa as transações reais da API ou dados vazios se não houver
     if (
       this.payment &&
       this.payment.transactions &&
@@ -310,7 +301,6 @@ export class OrderDetailsComponent implements OnInit {
     }
   }
 
-  // Mapeia as transações para o formato esperado pelo app-table
   mapTransactionToColumns = (transaction: TransactionRow) => [
     transaction.referenceId,
     transaction.description,

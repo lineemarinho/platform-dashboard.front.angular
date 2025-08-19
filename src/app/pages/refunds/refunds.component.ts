@@ -11,7 +11,11 @@ import { PageTitleComponent } from "../../shared/components/page-title/page-titl
 import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
 import { Refund } from "../../shared/interfaces";
 import { LocalePipe } from "../../shared/pipes";
-import { FilterBuilderUtil, FilterCondition, FilterGroup } from "../../shared/utils/filter-builder.util";
+import {
+  FilterBuilderUtil,
+  FilterCondition,
+  FilterGroup,
+} from "../../shared/utils/filter-builder.util";
 
 @Component({
   selector: "app-refunds",
@@ -94,11 +98,10 @@ export class RefundsComponent implements OnInit {
 
   onViewDetails(refund: Refund): void {
     console.log("Ver detalhes do refund:", refund);
-    // Implementar navegação para detalhes
   }
 
   onFilter(): void {
-    this.currentPage = 1; // Reset para primeira página ao filtrar
+    this.currentPage = 1;
     this.loadRefunds();
   }
 
@@ -151,45 +154,49 @@ export class RefundsComponent implements OnInit {
     this.loadRefunds();
   }
 
-  /**
-   * Constrói os filtros no formato da API
-   */
   private buildApiFilters(): (FilterCondition | FilterGroup)[] {
     const formValue = this.filterForm.value;
     const filters: (FilterCondition | FilterGroup)[] = [];
 
-    // Filtros de data
     if (formValue.startDate || formValue.endDate) {
       const dateFilters = FilterBuilderUtil.buildDateRangeFilter(
-        'createdAt',
-        'createdAt',
+        "createdAt",
+        "createdAt",
         formValue.startDate,
         formValue.endDate
       );
       filters.push(...dateFilters);
     }
 
-    // Filtro por ID do reembolso
     if (formValue.refundId) {
-      const refundIdFilter = FilterBuilderUtil.buildTextFilter('id', formValue.refundId);
+      const refundIdFilter = FilterBuilderUtil.buildTextFilter(
+        "id",
+        formValue.refundId
+      );
       if (refundIdFilter) filters.push(refundIdFilter);
     }
 
-    // Filtro por E2E do reembolso
     if (formValue.refundE2E) {
-      const refundE2EFilter = FilterBuilderUtil.buildTextFilter('e2eId', formValue.refundE2E);
+      const refundE2EFilter = FilterBuilderUtil.buildTextFilter(
+        "e2eId",
+        formValue.refundE2E
+      );
       if (refundE2EFilter) filters.push(refundE2EFilter);
     }
 
-    // Filtro por ID do pedido
     if (formValue.orderId) {
-      const orderIdFilter = FilterBuilderUtil.buildTextFilter('orderId', formValue.orderId);
+      const orderIdFilter = FilterBuilderUtil.buildTextFilter(
+        "orderId",
+        formValue.orderId
+      );
       if (orderIdFilter) filters.push(orderIdFilter);
     }
 
-    // Filtro por E2E do pedido
     if (formValue.orderE2E) {
-      const orderE2EFilter = FilterBuilderUtil.buildTextFilter('order.e2eId', formValue.orderE2E);
+      const orderE2EFilter = FilterBuilderUtil.buildTextFilter(
+        "order.e2eId",
+        formValue.orderE2E
+      );
       if (orderE2EFilter) filters.push(orderE2EFilter);
     }
 
@@ -197,25 +204,17 @@ export class RefundsComponent implements OnInit {
   }
 
   loadRefunds(): void {
-    console.log("Iniciando carregamento de refunds...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    // Constrói os filtros no formato da API
     const apiFilters = this.buildApiFilters();
-    
-    console.log("Parâmetros:", { skip, take });
-    console.log("Filtros construídos:", apiFilters);
 
-    // Agora passa os filtros para o serviço
     this.refundsService.getRefunds(skip, take, apiFilters).subscribe({
       next: (response) => {
-        console.log("Dados recebidos:", response);
         this.refunds.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log("Loading finalizado, dados:", this.refunds());
       },
       error: (error) => {
         console.error("Erro ao carregar refunds:", error);

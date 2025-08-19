@@ -1,9 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AppButtonComponent } from '../app-button/app-button.component';
-import { AppInputComponent } from '../app-input/app-input.component';
-import { LocalePipe } from '../../pipes/locale.pipe';
+import { CommonModule } from "@angular/common";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { LocalePipe } from "../../pipes/locale.pipe";
+import { AppButtonComponent } from "../app-button/app-button.component";
+import { AppInputComponent } from "../app-input/app-input.component";
 
 export interface EditNicknameData {
   type: string;
@@ -11,11 +23,17 @@ export interface EditNicknameData {
 }
 
 @Component({
-  selector: 'app-edit-nickname-modal',
+  selector: "app-edit-nickname-modal",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AppButtonComponent, AppInputComponent, LocalePipe],
-  templateUrl: './edit-nickname-modal.component.html',
-  styleUrls: ['./edit-nickname-modal.component.css'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AppButtonComponent,
+    AppInputComponent,
+    LocalePipe,
+  ],
+  templateUrl: "./edit-nickname-modal.component.html",
+  styleUrls: ["./edit-nickname-modal.component.css"],
 })
 export class EditNicknameModalComponent implements OnChanges {
   @Input() isOpen = false;
@@ -27,13 +45,12 @@ export class EditNicknameModalComponent implements OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      type: ['', Validators.required],
-      nickname: ['', Validators.required],
+      type: ["", Validators.required],
+      nickname: ["", Validators.required],
     });
   }
 
   ngOnInit(): void {
-    console.log('EditNicknameModal: ngOnInit', this.isOpen, this.data);
     if (this.data) {
       this.form.patchValue({
         type: this.data.type,
@@ -43,14 +60,13 @@ export class EditNicknameModalComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('EditNicknameModal: ngOnChanges', changes);
-    if (changes['isOpen'] && changes['isOpen'].currentValue) {
-      console.log('Modal foi aberto!');
+    if (changes["isOpen"] && changes["isOpen"].currentValue) {
+      console.log("Modal foi aberto!");
     }
-    if (changes['data'] && changes['data'].currentValue) {
+    if (changes["data"] && changes["data"].currentValue) {
       this.form.patchValue({
-        type: this.data?.type || '',
-        nickname: this.data?.nickname || '',
+        type: this.data?.type || "",
+        nickname: this.data?.nickname || "",
       });
     }
   }
@@ -61,7 +77,7 @@ export class EditNicknameModalComponent implements OnChanges {
 
   onSaveClick(): void {
     if (this.form.valid) {
-      this.onSave.emit(this.form.get('nickname')?.value);
+      this.onSave.emit(this.form.get("nickname")?.value);
     }
   }
 
@@ -70,4 +86,4 @@ export class EditNicknameModalComponent implements OnChanges {
       this.onCloseClick();
     }
   }
-} 
+}

@@ -1,16 +1,16 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 import {
   Component,
   HostListener,
   OnInit,
   computed,
   signal,
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { LocalePipe } from '../../../shared/pipes/locale.pipe';
-import { AuthService } from '../../services/auth.service';
-import { SidebarService } from '../../services/sidebar.service';
-import { TranslationService } from '../../services/translation.service';
+} from "@angular/core";
+import { Router } from "@angular/router";
+import { LocalePipe } from "../../../shared/pipes/locale.pipe";
+import { AuthService } from "../../services/auth.service";
+import { SidebarService } from "../../services/sidebar.service";
+import { TranslationService } from "../../services/translation.service";
 
 interface NavigationItem {
   path: string;
@@ -23,14 +23,14 @@ interface NavigationItem {
 }
 
 @Component({
-  selector: 'app-sidebar',
+  selector: "app-sidebar",
   standalone: true,
   imports: [CommonModule, LocalePipe],
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css'],
+  templateUrl: "./sidebar.component.html",
+  styleUrls: ["./sidebar.component.css"],
 })
 export class SidebarComponent implements OnInit {
-  currentPath = signal('');
+  currentPath = signal("");
   isCollapsed = signal(false);
   isMobile = signal(false);
 
@@ -57,14 +57,14 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  @HostListener('window:resize')
+  @HostListener("window:resize")
   onResize() {
     this.checkScreenSize();
   }
 
   private checkScreenSize() {
-    const isMobile = window.innerWidth < 1024; // lg breakpoint
-    console.log('Screen size check:', { width: window.innerWidth, isMobile });
+    const isMobile = window.innerWidth < 1024;
+    console.log("Screen size check:", { width: window.innerWidth, isMobile });
     this.sidebarService.setMobile(isMobile);
   }
 
@@ -72,7 +72,6 @@ export class SidebarComponent implements OnInit {
     this.currentPath.set(this.router.url);
     this.router.events.subscribe(() => {
       this.currentPath.set(this.router.url);
-      // Auto-close sidebar on mobile when navigating
       if (this.isMobile()) {
         this.sidebarService.closeSidebar();
       }
@@ -83,151 +82,151 @@ export class SidebarComponent implements OnInit {
     const port = window.location.port;
     const hostname = window.location.hostname;
 
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
       switch (port) {
-        case '4200':
+        case "4200":
           return {
-            name: 'Gowd',
-            primary: 'bg-slate-900',
-            secondary: 'bg-orange-500',
-            text: 'text-white',
+            name: "Gowd",
+            primary: "bg-slate-900",
+            secondary: "bg-orange-500",
+            text: "text-white",
           };
-        case '4210':
+        case "4210":
           return {
-            name: 'Zimba',
-            primary: 'bg-gray-900',
-            secondary: 'bg-purple-500',
-            text: 'text-white',
+            name: "Zimba",
+            primary: "bg-gray-900",
+            secondary: "bg-purple-500",
+            text: "text-white",
           };
-        case '4220':
+        case "4220":
           return {
-            name: 'SulPayments',
-            primary: 'bg-blue-900',
-            secondary: 'bg-blue-400',
-            text: 'text-white',
+            name: "SulPayments",
+            primary: "bg-blue-900",
+            secondary: "bg-blue-400",
+            text: "text-white",
           };
         default:
           return {
-            name: 'Gowd',
-            primary: 'bg-blue-900',
-            secondary: 'bg-orange-500',
-            text: 'text-white',
+            name: "Gowd",
+            primary: "bg-blue-900",
+            secondary: "bg-orange-500",
+            text: "text-white",
           };
       }
     }
 
     return {
-      name: 'Gowd',
-      primary: 'bg-blue-900',
-      secondary: 'bg-orange-500',
-      text: 'text-white',
+      name: "Gowd",
+      primary: "bg-blue-900",
+      secondary: "bg-orange-500",
+      text: "text-white",
     };
   }
 
   get userName(): string {
-    return this.user()?.name || 'Usuário';
+    return this.user()?.name || "Usuário";
   }
 
   getUserInitials(): string {
     return this.userName
-      .split(' ')
+      .split(" ")
       .map((n) => n[0])
-      .join('')
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   }
 
   navigationItems = computed((): NavigationItem[] => [
     {
-      path: '/holdings',
-      label: 'holdings',
-      icon: 'business',
-      active: this.currentPath() === '/holdings',
+      path: "/holdings",
+      label: "holdings",
+      icon: "business",
+      active: this.currentPath() === "/holdings",
     },
     {
-      path: '/payins',
-      label: 'payIns',
-      icon: 'payments',
+      path: "/payins",
+      label: "payIns",
+      icon: "payments",
       active:
-        this.currentPath() === '/payins' ||
-        this.currentPath().startsWith('/payins/'),
+        this.currentPath() === "/payins" ||
+        this.currentPath().startsWith("/payins/"),
     },
     {
-      path: '/payouts',
-      label: 'payouts',
-      icon: 'account_balance_wallet',
+      path: "/payouts",
+      label: "payouts",
+      icon: "account_balance_wallet",
       active:
-        this.currentPath() === '/payouts' ||
-        this.currentPath().startsWith('/payouts/'),
+        this.currentPath() === "/payouts" ||
+        this.currentPath().startsWith("/payouts/"),
     },
     {
-      path: '/refunds',
-      label: 'refunds',
-      icon: 'money_off',
-      active: this.currentPath() === '/refunds',
+      path: "/refunds",
+      label: "refunds",
+      icon: "money_off",
+      active: this.currentPath() === "/refunds",
     },
     {
-      path: '/account-holders',
-      label: 'accountHolders',
-      icon: 'people',
+      path: "/account-holders",
+      label: "accountHolders",
+      icon: "people",
       active:
-        this.currentPath() === '/account-holders' ||
-        this.currentPath().startsWith('/account-holders/'),
+        this.currentPath() === "/account-holders" ||
+        this.currentPath().startsWith("/account-holders/"),
     },
     {
-      path: '/companies',
-      label: 'companies',
-      icon: 'corporate_fare',
-      active: this.currentPath() === '/companies',
+      path: "/companies",
+      label: "companies",
+      icon: "corporate_fare",
+      active: this.currentPath() === "/companies",
     },
     {
-      path: '/fees',
-      label: 'fees',
-      icon: 'attach_money',
-      active: this.currentPath() === '/fees',
+      path: "/fees",
+      label: "fees",
+      icon: "attach_money",
+      active: this.currentPath() === "/fees",
     },
     {
-      path: '/withdrawals',
-      label: 'withdrawals',
-      icon: 'account_balance',
+      path: "/withdrawals",
+      label: "withdrawals",
+      icon: "account_balance",
       active:
-        this.currentPath() === '/withdrawals' ||
-        this.currentPath().startsWith('/withdrawals/'),
+        this.currentPath() === "/withdrawals" ||
+        this.currentPath().startsWith("/withdrawals/"),
     },
     {
-      path: '/amls',
-      label: 'amls',
-      icon: 'security',
-      active: this.currentPath() === '/amls',
+      path: "/amls",
+      label: "amls",
+      icon: "security",
+      active: this.currentPath() === "/amls",
     },
     {
-      path: '/domain-data',
-      label: 'domainData',
-      icon: 'dns',
-      active: this.currentPath() === '/domain-data',
+      path: "/domain-data",
+      label: "domainData",
+      icon: "dns",
+      active: this.currentPath() === "/domain-data",
     },
     {
-      path: '/provider-routing',
-      label: 'providerRouting',
-      icon: 'route',
-      active: this.currentPath() === '/provider-routing',
+      path: "/provider-routing",
+      label: "providerRouting",
+      icon: "route",
+      active: this.currentPath() === "/provider-routing",
     },
     {
-      path: '/users',
-      label: 'users',
-      icon: 'person',
-      active: this.currentPath() === '/users',
+      path: "/users",
+      label: "users",
+      icon: "person",
+      active: this.currentPath() === "/users",
     },
     {
-      path: '/reports',
-      label: 'reports',
-      icon: 'assessment',
-      active: this.currentPath() === '/reports',
+      path: "/reports",
+      label: "reports",
+      icon: "assessment",
+      active: this.currentPath() === "/reports",
     },
   ]);
 
   toggleSidebar(): void {
-    console.log('Toggle sidebar clicked. Current state:', this.isCollapsed());
+    console.log("Toggle sidebar clicked. Current state:", this.isCollapsed());
     this.sidebarService.toggleSidebar();
   }
 
@@ -243,7 +242,7 @@ export class SidebarComponent implements OnInit {
     try {
       await this.authService.logout();
     } catch (error) {
-      console.error('Erro no logout:', error);
+      console.error("Erro no logout:", error);
     }
   }
 }

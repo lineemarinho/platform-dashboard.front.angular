@@ -30,7 +30,7 @@ export interface TableColumn {
     | "failed"
     | "completed"
     | "active"
-    | "inactive"; // Mapeia o status para o tipo do StatusBadgeComponent
+    | "inactive";
 }
 
 export interface ExpandedRowData {

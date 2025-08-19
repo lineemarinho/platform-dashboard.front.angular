@@ -20,7 +20,6 @@ export class PayinsService {
     take: number = 10,
     filters?: any
   ): Observable<PayinsResponse> {
-    // Se não houver filtros, usa o formato simples
     if (!filters || filters.length === 0) {
       return this.http.post<PayinsResponse>(`${this.baseUrl}/v1/payin/order`, {
         skip,
@@ -28,7 +27,6 @@ export class PayinsService {
       });
     }
 
-    // Se houver filtros, usa o formato completo da API
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
 
     console.log("=== ENVIANDO PAYLOAD PARA API PAYINS ===");

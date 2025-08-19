@@ -11,7 +11,7 @@
           <th
             class="px-3 py-5 text-left text-xs bg-[#E7EEEE] text-[#0A1535] font-medium whitespace-nowrap"
           >
-            {{ column.label }}
+            {{ column.label | locale }}
           </th>
           } @if (showActions) {
           <th
@@ -77,20 +77,6 @@
             </div>
 
             <div
-              *ngIf="columns[j]?.type === 'country'"
-              class="flex items-center gap-2"
-            >
-              <img
-                [src]="getCountryFlag(cell)"
-                aria-label="'Bandeira de ' + cell"
-                [alt]="'Bandeira de ' + cell"
-                [title]="cell"
-                class="w-5 h-5 rounded-sm"
-              />
-              <span class="text-gray-900 text-xs">{{ cell }}</span>
-            </div>
-
-            <div
               *ngIf="!columns[j]?.type || columns[j]?.type === 'text'"
               class="text-gray-900"
             >
@@ -111,6 +97,7 @@
               </div>
             </div>
           </td>
+          }
 
           <td
             *ngIf="showActions"
@@ -136,7 +123,6 @@
               </button>
             </div>
           </td>
-          }
         </tr>
 
         <tr *ngIf="isExpanded(i)" class="bg-gray-50">
@@ -184,12 +170,19 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="flex flex-col">
-          <span class="text-xs font-medium text-gray-500 mb-1">ID</span>
+          <span class="text-xs font-medium text-gray-500 mb-1">{{
+            columns[0]?.label || "ID" | locale
+          }}</span>
           <div class="flex items-center gap-2">
             <span class="text-xs sm:text-sm font-medium text-gray-900">
-              {{ formatId(getRowData(row)[0]) }}
+              {{
+                columns[0]?.type === "id"
+                  ? formatId(getRowData(row)[0])
+                  : getRowData(row)[0]
+              }}
             </span>
             <button
+              *ngIf="shouldShowCopyButton(columns[0]?.key)"
               (click)="copyToClipboard(getRowData(row)[0])"
               class="text-gray-400 hover:text-gray-600 flex items-center justify-center"
               title="Copy to clipboard"

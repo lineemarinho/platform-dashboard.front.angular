@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { LocalePipe } from '../../pipes/locale.pipe';
+import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { LocalePipe } from "../../pipes/locale.pipe";
 
 export interface BalanceCard {
   id: string;
@@ -14,11 +14,11 @@ export interface BalanceCard {
 }
 
 @Component({
-  selector: 'app-balance-card',
+  selector: "app-balance-card",
   standalone: true,
   imports: [CommonModule, LocalePipe],
-  templateUrl: './balance-card.component.html',
-  styleUrls: ['./balance-card.component.css'],
+  templateUrl: "./balance-card.component.html",
+  styleUrls: ["./balance-card.component.css"],
 })
 export class BalanceCardComponent {
   @Input() balance!: BalanceCard;
@@ -27,7 +27,6 @@ export class BalanceCardComponent {
   @Output() onViewStatement = new EventEmitter<BalanceCard>();
 
   onEditClick(): void {
-    console.log('BalanceCard: Editando apelido', this.balance);
     this.onEditNickname.emit(this.balance);
   }
 
@@ -41,14 +40,14 @@ export class BalanceCardComponent {
 
   getCurrencySymbol(currency: string): string {
     switch (currency) {
-      case 'BRL':
-        return 'R$';
-      case 'CLP':
-        return 'CLP';
-      case 'USDT':
-        return 'USDT';
-      case 'ARS':
-        return 'ARS';
+      case "BRL":
+        return "R$";
+      case "CLP":
+        return "CLP";
+      case "USDT":
+        return "USDT";
+      case "ARS":
+        return "ARS";
       default:
         return currency;
     }
@@ -56,16 +55,16 @@ export class BalanceCardComponent {
 
   getFlagIcon(flag: string): string {
     switch (flag) {
-      case 'BR':
-        return 'assets/flags/brl.svg';
-      case 'CL':
-        return 'assets/flags/clp.svg';
-      case 'AR':
-        return 'assets/flags/ars.svg';
-      case 'USDT':
-        return 'assets/flags/usd.svg';
+      case "BR":
+        return "assets/flags/brl.svg";
+      case "CL":
+        return "assets/flags/clp.svg";
+      case "AR":
+        return "assets/flags/ars.svg";
+      case "USDT":
+        return "assets/flags/usd.svg";
       default:
-        return 'assets/flags/usd.svg';
+        return "assets/flags/usd.svg";
     }
   }
-} 
+}

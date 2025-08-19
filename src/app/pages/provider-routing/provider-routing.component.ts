@@ -1,20 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ProviderRoutingService } from '../../core/services/provider-routing.service';
-import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
-import { AppInputComponent } from '../../shared/components/app-input/app-input.component';
-import { AppSelectComponent } from '../../shared/components/app-select/app-select.component';
-import { AppTableComponent } from '../../shared/components/app-table/app-table.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
-import { PageTitleComponent } from '../../shared/components/page-title/page-title.component';
-import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
-import { ProviderRouting } from '../../shared/interfaces';
-import { LocalePipe } from '../../shared/pipes';
+import { CommonModule } from "@angular/common";
+import { Component, OnInit, signal } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
+import { ProviderRoutingService } from "../../core/services/provider-routing.service";
+import { AppButtonComponent } from "../../shared/components/app-button/app-button.component";
+import { AppInputComponent } from "../../shared/components/app-input/app-input.component";
+import { AppSelectComponent } from "../../shared/components/app-select/app-select.component";
+import { AppTableComponent } from "../../shared/components/app-table/app-table.component";
+import { LoadingComponent } from "../../shared/components/loading/loading.component";
+import { PageTitleComponent } from "../../shared/components/page-title/page-title.component";
+import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
+import { ProviderRouting } from "../../shared/interfaces";
+import { LocalePipe } from "../../shared/pipes";
 
 @Component({
-  selector: 'app-provider-routing',
+  selector: "app-provider-routing",
   standalone: true,
   imports: [
     CommonModule,
@@ -28,8 +28,8 @@ import { LocalePipe } from '../../shared/pipes';
     AppInputComponent,
     AppSelectComponent,
   ],
-  templateUrl: './provider-routing.component.html',
-  styleUrl: './provider-routing.component.css',
+  templateUrl: "./provider-routing.component.html",
+  styleUrl: "./provider-routing.component.css",
 })
 export class ProviderRoutingComponent implements OnInit {
   isLoading = false;
@@ -41,18 +41,17 @@ export class ProviderRoutingComponent implements OnInit {
   itemsPerPage = 10;
 
   tableColumns = [
-    { key: 'id', label: 'ID', type: 'id' as const },
-    { key: 'company', label: 'Company', type: 'text' as const },
-    { key: 'provider', label: 'Provider', type: 'text' as const },
-    { key: 'ruleId', label: 'Rule ID', type: 'id' as const },
-    { key: 'paymentMethod', label: 'Payment Method', type: 'text' as const },
-    { key: 'accountCode', label: 'Account Code', type: 'id' as const },
-    { key: 'priority', label: 'Priority', type: 'text' as const },
-    { key: 'enabled', label: 'Enabled', type: 'status' as const },
-    { key: 'operationType', label: 'Operation Type', type: 'text' as const },
-    { key: 'currency', label: 'Currency', type: 'text' as const },
-    { key: 'createdAt', label: 'Created At', type: 'date' as const },
-
+    { key: "id", label: "ID", type: "id" as const },
+    { key: "company", label: "Company", type: "text" as const },
+    { key: "provider", label: "Provider", type: "text" as const },
+    { key: "ruleId", label: "Rule ID", type: "id" as const },
+    { key: "paymentMethod", label: "Payment Method", type: "text" as const },
+    { key: "accountCode", label: "Account Code", type: "id" as const },
+    { key: "priority", label: "Priority", type: "text" as const },
+    { key: "enabled", label: "Enabled", type: "status" as const },
+    { key: "operationType", label: "Operation Type", type: "text" as const },
+    { key: "currency", label: "Currency", type: "text" as const },
+    { key: "createdAt", label: "Created At", type: "date" as const },
   ];
 
   constructor(
@@ -61,12 +60,12 @@ export class ProviderRoutingComponent implements OnInit {
     private router: Router
   ) {
     this.filterForm = this.formBuilder.group({
-      company: [''],
-      provider: [''],
-      paymentMethod: [''],
-      operationType: [''],
-      currency: [''],
-      enabled: [''],
+      company: [""],
+      provider: [""],
+      paymentMethod: [""],
+      operationType: [""],
+      currency: [""],
+      enabled: [""],
     });
   }
 
@@ -80,21 +79,22 @@ export class ProviderRoutingComponent implements OnInit {
 
   mapRowToColumns = (routing: ProviderRouting) => [
     routing.id,
-    routing.company?.name || 'N/A',
-    routing.provider?.name || 'N/A',
+    routing.company?.name || "N/A",
+    routing.provider?.name || "N/A",
     routing.ruleId,
     routing.paymentMethod,
     routing.accountCode,
     routing.priority.toString(),
-    routing.enabled ? 'Ativo' : 'Inativo',
+    routing.enabled ? "Ativo" : "Inativo",
     routing.operationType,
     routing.currency,
-    routing.createdAt ? new Date(routing.createdAt).toLocaleDateString('pt-BR') : 'N/A',
+    routing.createdAt
+      ? new Date(routing.createdAt).toLocaleDateString("pt-BR")
+      : "N/A",
   ];
 
   onViewDetails(routing: ProviderRouting): void {
-    console.log('Ver detalhes do provider routing:', routing);
-    // Implementar navegação para detalhes
+    console.log("Ver detalhes do provider routing:", routing);
   }
 
   onFilter(): void {
@@ -124,13 +124,13 @@ export class ProviderRoutingComponent implements OnInit {
 
   hasActiveFilters(): boolean {
     return Object.values(this.filterForm.value).some(
-      (value) => value !== '' && value !== null
+      (value) => value !== "" && value !== null
     );
   }
 
   getActiveFiltersCount(): number {
     return Object.values(this.filterForm.value).filter(
-      (value) => value !== '' && value !== null
+      (value) => value !== "" && value !== null
     ).length;
   }
 
@@ -152,25 +152,20 @@ export class ProviderRoutingComponent implements OnInit {
   }
 
   loadProviderRoutings(): void {
-    console.log('Iniciando carregamento de provider routings...');
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    console.log('Parâmetros:', { skip, take });
-
     this.providerRoutingService.getProviderRoutings(skip, take).subscribe({
       next: (response) => {
-        console.log('Dados recebidos:', response);
         this.providerRoutings.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log('Loading finalizado, dados:', this.providerRoutings());
       },
       error: (error) => {
-        console.error('Erro ao carregar provider routings:', error);
+        console.error("Erro ao carregar provider routings:", error);
         this.isLoading = false;
       },
     });
   }
-} 
+}

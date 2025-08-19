@@ -19,17 +19,13 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("🔧 Interceptor: Token do Azure AD adicionado");
     } else {
-      console.log("🔧 Interceptor: Token não encontrado, usando fallback");
     }
   }
 
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        console.log("🔒 Erro 401 - Token inválido ou expirado");
-        console.log("📋 URL da requisição:", request.url);
       }
 
       return throwError(() => error);

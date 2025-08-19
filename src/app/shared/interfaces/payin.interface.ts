@@ -1,4 +1,3 @@
-// Interface para a resposta da API de Payin
 export interface PayinApiResponse {
   id: string;
   idempotencyKey?: string;
@@ -51,7 +50,6 @@ export interface PayinApiResponse {
   accountId?: string;
 }
 
-// Interface para transações da API
 export interface TransactionApiResponse {
   internalAccount: {
     id: string;
@@ -73,7 +71,6 @@ export interface TransactionApiResponse {
   companyId: string;
 }
 
-// Interface para detalhes do pagamento
 export interface PaymentDetail {
   id: string;
   code: string;
@@ -101,7 +98,6 @@ export interface PaymentDetail {
   variableFee: string;
 }
 
-// Interface para Payin (usada na listagem)
 export interface Payin {
   id: string;
   idempotencyKey: string;

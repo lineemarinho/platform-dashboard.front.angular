@@ -156,18 +156,10 @@ export class PaymentDetailsComponent implements OnInit {
   }
 
   loadPaymentDetails(paymentId: string): void {
-    console.log("=== CARREGANDO DETALHES DO PAYIN ===");
-    console.log("ID do payin:", paymentId);
-
     this.isLoading = true;
 
     this.payinsService.getPayinById(paymentId).subscribe({
       next: (response) => {
-        console.log("=== RESPOSTA DA API PAYIN ===");
-        console.log("Response completa:", response);
-        console.log("Tipo da resposta:", typeof response);
-        console.log("Keys da resposta:", Object.keys(response));
-
         this.payment = this.mapApiResponseToPaymentDetail(response, paymentId);
         this.setupFields();
         this.isLoading = false;
@@ -315,7 +307,6 @@ export class PaymentDetailsComponent implements OnInit {
   }
 
   private determineTransactionStatus(transaction: any): string {
-    // Determina o status baseado no tipo de operação e valores
     if (
       transaction.operationType === "PIX" &&
       parseFloat(transaction.amount) > 0
