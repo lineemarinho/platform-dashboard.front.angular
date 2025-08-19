@@ -86,7 +86,6 @@ export class CompaniesComponent implements OnInit {
   ];
 
   onViewDetails(company: Company): void {
-    console.log("Ver detalhes da empresa:", company);
   }
 
   onFilter(): void {
@@ -144,12 +143,9 @@ export class CompaniesComponent implements OnInit {
   }
 
   loadCompanies(): void {
-    console.log("Iniciando carregamento de companies...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
-
-    console.log("Parâmetros:", { skip, take });
 
     this.companiesService.getCompanies(skip, take).subscribe({
       next: (response) => {
@@ -158,7 +154,6 @@ export class CompaniesComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error("Erro ao carregar companies:", error);
         this.isLoading = false;
       },
     });

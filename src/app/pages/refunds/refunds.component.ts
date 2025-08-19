@@ -97,7 +97,6 @@ export class RefundsComponent implements OnInit {
   ];
 
   onViewDetails(refund: Refund): void {
-    console.log("Ver detalhes do refund:", refund);
   }
 
   onFilter(): void {
@@ -217,7 +216,6 @@ export class RefundsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error("Erro ao carregar refunds:", error);
         this.isLoading = false;
       },
     });

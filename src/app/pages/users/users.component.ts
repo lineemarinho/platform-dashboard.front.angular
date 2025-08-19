@@ -87,7 +87,6 @@ export class UsersComponent implements OnInit {
   ];
 
   onViewDetails(user: User): void {
-    console.log("Ver detalhes do usuário:", user);
   }
 
   onFilter(): void {
@@ -145,23 +144,17 @@ export class UsersComponent implements OnInit {
   }
 
   loadUsers(): void {
-    console.log("Iniciando carregamento de users...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    console.log("Parâmetros:", { skip, take });
-
     this.usersService.getUsers(skip, take).subscribe({
       next: (response) => {
-        console.log("Dados recebidos:", response);
         this.users.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log("Loading finalizado, dados:", this.users());
       },
       error: (error) => {
-        console.error("Erro ao carregar users:", error);
         this.isLoading = false;
       },
     });

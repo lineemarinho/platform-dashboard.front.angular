@@ -87,9 +87,7 @@ export class FeesComponent implements OnInit {
     new Date(fee.endDatetime).toLocaleDateString("pt-BR"),
   ];
 
-  onViewDetails(fee: Fee): void {
-    console.log("Ver detalhes da taxa:", fee);
-  }
+  onViewDetails(fee: Fee): void {}
 
   onFilter(): void {
     this.currentPage = 1;
@@ -146,7 +144,6 @@ export class FeesComponent implements OnInit {
   }
 
   loadFees(): void {
-    console.log("Iniciando carregamento de fees...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;

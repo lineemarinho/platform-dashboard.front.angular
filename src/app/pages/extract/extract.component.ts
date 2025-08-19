@@ -221,8 +221,6 @@ export class ExtractComponent implements OnInit, OnDestroy {
   }
 
   openReceipt(row: ExtractRow): void {
-    console.log("Abrindo comprovante para:", row);
-
     this.currentReceiptData = {
       transactionId: "E318724495202507171309E4cuMtdAKKJ",
       authenticationCode: "01KOC852NNQNNSHP9CX5APHPXC",
@@ -268,7 +266,6 @@ export class ExtractComponent implements OnInit, OnDestroy {
       .filter((option) => option.checked)
       .map((option) => option.key);
 
-    console.log("Filtros aplicados:", selectedFilters);
     this.showFiltersDropdown = false;
   }
 
@@ -302,16 +299,11 @@ export class ExtractComponent implements OnInit, OnDestroy {
       (option) => option.key === key
     );
     if (selectedOption) {
-      console.log("Período selecionado:", selectedOption.label);
     }
   }
 
   applyCustomPeriod(): void {
     if (this.customStartDate && this.customEndDate) {
-      console.log("Período personalizado:", {
-        startDate: this.customStartDate,
-        endDate: this.customEndDate,
-      });
       this.showCustomDateInputs = false;
     }
   }

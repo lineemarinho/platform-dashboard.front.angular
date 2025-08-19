@@ -86,7 +86,6 @@ export class DomainDataComponent implements OnInit {
   ];
 
   onViewDetails(item: DomainData): void {
-    console.log("Ver detalhes do domain data:", item);
   }
 
   onFilter(): void {
@@ -155,7 +154,6 @@ export class DomainDataComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error("Erro ao carregar domain data:", error);
         this.isLoading = false;
       },
     });

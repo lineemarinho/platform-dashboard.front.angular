@@ -29,9 +29,6 @@ export class PayinsService {
 
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
 
-    console.log("=== ENVIANDO PAYLOAD PARA API PAYINS ===");
-    console.log("Payload:", payload);
-
     return this.http.post<PayinsResponse>(
       `${this.baseUrl}/v1/payin/order`,
       payload
@@ -39,11 +36,6 @@ export class PayinsService {
   }
 
   getPayinById(id: string): Observable<any> {
-    console.log("=== BUSCANDO PAYIN POR ID ===");
-    console.log("ID:", id);
-    console.log("Base URL:", this.baseUrl);
-    console.log("URL completa:", `${this.baseUrl}/v1/payin/order/${id}`);
-
     return this.http.get<any>(`${this.baseUrl}/v1/payin/order/${id}`);
   }
 }

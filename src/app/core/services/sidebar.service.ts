@@ -20,15 +20,7 @@ export class SidebarService {
   }
 
   toggleSidebar(): void {
-    console.log(
-      "Service toggle. Current collapsed:",
-      this.isCollapsedSubject.value
-    );
     this.isCollapsedSubject.next(!this.isCollapsedSubject.value);
-    console.log(
-      "Service toggle. New collapsed:",
-      this.isCollapsedSubject.value
-    );
   }
 
   closeSidebar(): void {

@@ -41,11 +41,6 @@ export class PayoutsService {
   getPayoutDetails(payoutId: string): Observable<any> {
     const url = `${this.baseUrl}/v1/payout/order/${payoutId}`;
 
-    console.log("=== BUSCANDO DETALHES DO PAYOUT ===");
-    console.log("Base URL:", this.baseUrl);
-    console.log("URL completa:", url);
-    console.log("ID:", payoutId);
-
     return this.http.get(url);
   }
 }

@@ -285,7 +285,6 @@ export class PayoutsComponent implements OnInit {
   }
 
   loadPayouts(): void {
-    console.log("Iniciando carregamento de payouts...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
@@ -294,14 +293,11 @@ export class PayoutsComponent implements OnInit {
 
     this.payoutsService.getPayouts(skip, take, apiFilters).subscribe({
       next: (response) => {
-        console.log("Dados recebidos:", response);
         this.payouts.set(response.data);
         this.totalItems = response.data.length;
         this.isLoading = false;
-        console.log("Loading finalizado, dados:", this.payouts());
       },
       error: (error) => {
-        console.error("Erro ao carregar payouts:", error);
         this.isLoading = false;
       },
     });

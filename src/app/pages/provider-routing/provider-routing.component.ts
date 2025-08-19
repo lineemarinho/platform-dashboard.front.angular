@@ -93,9 +93,7 @@ export class ProviderRoutingComponent implements OnInit {
       : "N/A",
   ];
 
-  onViewDetails(routing: ProviderRouting): void {
-    console.log("Ver detalhes do provider routing:", routing);
-  }
+  onViewDetails(routing: ProviderRouting): void {}
 
   onFilter(): void {
     this.currentPage = 1;
@@ -163,7 +161,6 @@ export class ProviderRoutingComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error("Erro ao carregar provider routings:", error);
         this.isLoading = false;
       },
     });

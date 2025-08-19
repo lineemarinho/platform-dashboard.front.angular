@@ -32,9 +32,6 @@ export class HoldingsService {
 
     const payload = FilterBuilderUtil.buildApiRequest(skip, take, filters);
 
-    console.log("=== ENVIANDO PAYLOAD PARA API ===");
-    console.log("Payload:", payload);
-
     return this.http.post<AccountHoldersResponse>(
       `${this.baseUrl}/v1/account/holders`,
       payload

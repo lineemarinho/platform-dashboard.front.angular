@@ -1,17 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { ToastService } from '../../../core/services/toast.service';
+import { CommonModule } from "@angular/common";
+import { Component, Input } from "@angular/core";
+import { ToastService } from "../../../core/services/toast.service";
 
 @Component({
-  selector: 'app-info-field',
-  templateUrl: './info-field.component.html',
-  styleUrls: ['./info-field.component.css'],
+  selector: "app-info-field",
+  templateUrl: "./info-field.component.html",
+  styleUrls: ["./info-field.component.css"],
   standalone: true,
   imports: [CommonModule],
 })
 export class InfoFieldComponent {
-  @Input() label: string = '';
-  @Input() value: string = '';
+  @Input() label: string = "";
+  @Input() value: string = "";
   @Input() showCopy: boolean = false;
 
   constructor(private toastService: ToastService) {}
@@ -23,8 +23,7 @@ export class InfoFieldComponent {
         `${this.label} copiado para a área de transferência`
       );
     } catch (err) {
-      console.error('Erro ao copiar:', err);
-      this.toastService.error('Erro ao copiar para a área de transferência');
+      this.toastService.error("Erro ao copiar para a área de transferência");
     }
   }
 }

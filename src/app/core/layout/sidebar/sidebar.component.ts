@@ -64,7 +64,6 @@ export class SidebarComponent implements OnInit {
 
   private checkScreenSize() {
     const isMobile = window.innerWidth < 1024;
-    console.log("Screen size check:", { width: window.innerWidth, isMobile });
     this.sidebarService.setMobile(isMobile);
   }
 
@@ -226,7 +225,6 @@ export class SidebarComponent implements OnInit {
   ]);
 
   toggleSidebar(): void {
-    console.log("Toggle sidebar clicked. Current state:", this.isCollapsed());
     this.sidebarService.toggleSidebar();
   }
 

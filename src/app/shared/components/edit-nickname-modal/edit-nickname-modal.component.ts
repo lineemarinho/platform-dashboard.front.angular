@@ -61,7 +61,6 @@ export class EditNicknameModalComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["isOpen"] && changes["isOpen"].currentValue) {
-      console.log("Modal foi aberto!");
     }
     if (changes["data"] && changes["data"].currentValue) {
       this.form.patchValue({

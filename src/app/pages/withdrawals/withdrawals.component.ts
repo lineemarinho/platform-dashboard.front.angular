@@ -285,10 +285,10 @@ export class WithdrawalsComponent implements OnInit {
   onViewDetails = (row: WithdrawalRow): void => {
     this.router.navigate(["/withdrawals", row.id]).then(
       (success) => {
-        console.log("Navegação bem-sucedida:", success);
+        // console.log("Navegação bem-sucedida:", success);
       },
       (error) => {
-        console.error("Erro na navegação:", error);
+        // console.error("Erro na navegação:", error);
       }
     );
   };

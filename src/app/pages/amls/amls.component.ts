@@ -85,7 +85,6 @@ export class AmlsComponent implements OnInit {
   ];
 
   onViewDetails(aml: Aml): void {
-    console.log("Ver detalhes do AML:", aml);
   }
 
   onFilter(): void {
@@ -143,12 +142,9 @@ export class AmlsComponent implements OnInit {
   }
 
   loadAmls(): void {
-    console.log("Iniciando carregamento de AMLs...");
     this.isLoading = true;
     const skip = (this.currentPage - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
-
-    console.log("Parâmetros:", { skip, take });
 
     this.amlsService.getAmls(skip, take).subscribe({
       next: (response) => {
@@ -157,7 +153,6 @@ export class AmlsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error("Erro ao carregar AMLs:", error);
         this.isLoading = false;
       },
     });
