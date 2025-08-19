@@ -1,24 +1,17 @@
+import { Amount } from "./amount.interface";
+import { Document } from "./document.interface";
 export interface PayoutCompany {
   id: string;
   name: string;
-  document: {
-    type: string;
-    number: string;
-  };
+  document: Document;
 }
 
-export interface PayoutAmount {
-  currency: string;
-  value: string;
-}
+export interface PayoutAmount extends Amount {}
 
 export interface PayoutAccount {
   type: string;
   fullName: string;
-  document: {
-    type: string;
-    number: string;
-  };
+  document: Document;
   country?: string;
 }
 
@@ -36,10 +29,7 @@ export interface PayoutBank {
 export interface PayoutPersonalData {
   type: string;
   fullName: string;
-  document: {
-    type: string;
-    number: string;
-  };
+  document: Document;
   country: string;
 }
 
@@ -77,4 +67,4 @@ export interface Payout {
 
 export interface PayoutsResponse {
   data: Payout[];
-} 
+}

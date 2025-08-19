@@ -10,7 +10,8 @@ import { AppTableComponent } from "../../shared/components/app-table/app-table.c
 import { LoadingComponent } from "../../shared/components/loading/loading.component";
 import { PageTitleComponent } from "../../shared/components/page-title/page-title.component";
 import { PaginationComponent } from "../../shared/components/pagination/pagination.component";
-import { Payin } from "../../shared/interfaces";
+
+import { Payin } from "../../shared/interfaces/payin.interface";
 import { LocalePipe } from "../../shared/pipes";
 import {
   FilterBuilderUtil,

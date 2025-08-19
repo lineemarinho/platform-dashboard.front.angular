@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { PayinsResponse } from "../../shared/interfaces";
+import { PayinsResponse } from "../../shared/interfaces/payin.interface";
 import { FilterBuilderUtil } from "../../shared/utils/filter-builder.util";
 import { getApiUrl } from "../../shared/utils/organization-auth.util";
 

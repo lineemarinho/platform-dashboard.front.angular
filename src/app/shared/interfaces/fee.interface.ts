@@ -1,9 +1,4 @@
-export interface FeeItem {
-  description: string;
-  type: string;
-  fee: string;
-  partner?: string;
-}
+import { FeeItem } from "./fee-item.interface";
 
 export interface Fee {
   id: string;
@@ -26,4 +21,4 @@ export interface Fee {
 
 export interface FeesResponse {
   data: Fee[];
-} 
+}

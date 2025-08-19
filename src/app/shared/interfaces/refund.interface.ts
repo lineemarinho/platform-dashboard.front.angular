@@ -1,12 +1,7 @@
-export interface RefundOrderCompany {
-  id: string;
-  name: string;
-}
+import { RefundOrderCompany } from "./refund-order-company.interface";
 
-export interface RefundOrderAmount {
-  currency: string;
-  value: string;
-}
+import { Amount } from "./amount.interface";
+export interface RefundOrderAmount extends Amount {}
 
 export interface RefundOrder {
   id: string;
@@ -47,4 +42,4 @@ export interface Refund {
 
 export interface RefundsResponse {
   data: Refund[];
-} 
+}

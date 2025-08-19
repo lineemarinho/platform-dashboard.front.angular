@@ -1,12 +1,9 @@
-export interface AccountHolderDocument {
-  type: string;
-  number: string;
-}
+import { Document } from "./document.interface";
 
 export interface AccountHolder {
   id: string;
   fullName: string;
-  document: AccountHolderDocument;
+  document: Document;
   email: string;
   birthdate: string;
   active: boolean;

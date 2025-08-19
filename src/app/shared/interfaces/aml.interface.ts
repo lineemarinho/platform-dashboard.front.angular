@@ -1,7 +1,4 @@
-export interface AmlCompany {
-  id: string;
-  name: string;
-}
+import { AmlCompany } from "./aml-company.interface";
 
 export interface Aml {
   id: string;
@@ -18,4 +15,4 @@ export interface Aml {
 
 export interface AmlsResponse {
   data: Aml[];
-} 
+}

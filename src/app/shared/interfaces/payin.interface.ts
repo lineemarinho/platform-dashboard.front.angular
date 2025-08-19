@@ -1,3 +1,5 @@
+import { Amount } from "./amount.interface";
+import { Document } from "./document.interface";
 export interface PayinApiResponse {
   id: string;
   idempotencyKey?: string;
@@ -7,16 +9,10 @@ export interface PayinApiResponse {
   company: {
     id: string;
     name: string;
-    document: {
-      type: string;
-      number: string;
-    };
+    document: Document;
   };
   paymentMethod: string;
-  amount: {
-    currency: string;
-    value: string;
-  };
+  amount: Amount;
   amountClient: string;
   feeFix: string;
   feeVar: string;
@@ -28,10 +24,7 @@ export interface PayinApiResponse {
     email: string;
     phone: string;
     birth: string;
-    document: {
-      type: string;
-      number: string;
-    };
+    document: Document;
   };
   paidAt?: string;
   createdAt: string;
@@ -39,10 +32,7 @@ export interface PayinApiResponse {
   updatedAt: string;
   compensatedAt?: string;
   settledAt?: string;
-  baseAmount: {
-    currency: string;
-    value: string;
-  };
+  baseAmount: Amount;
   financialPartner: string;
   origin: string;
   product: string;
@@ -106,23 +96,14 @@ export interface Payin {
   company: {
     id: string;
     name: string;
-    document: {
-      type: string;
-      number: string;
-    };
+    document: Document;
   };
   paymentMethod: string;
-  amount: {
-    currency: string;
-    value: string;
-  };
+  amount: Amount;
   customer: {
     fullName: string;
     type: string;
-    document: {
-      type: string;
-      number: string;
-    };
+    document: Document;
     email: string;
   };
   paidAt: string;

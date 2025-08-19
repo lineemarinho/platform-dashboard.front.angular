@@ -1,14 +1,11 @@
-export interface HoldingDocument {
-  type: string;
-  number: string;
-}
+import { Document } from "./document.interface";
 
 export interface Holding {
   id: string;
   parentId: string;
   name: string;
-  status: 'ACTIVE' | 'INACTIVE';
-  document: HoldingDocument;
+  status: "ACTIVE" | "INACTIVE";
+  document: Document;
   country: string;
   type: string;
   createdAt: string;

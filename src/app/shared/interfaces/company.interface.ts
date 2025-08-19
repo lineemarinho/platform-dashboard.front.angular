@@ -1,16 +1,6 @@
-export interface CompanyAccount {
-  id: string;
-  type: string;
-}
-
-export interface CompanyDocument {
-  type: string;
-  number: string;
-}
-
-export interface CompanyHolding {
-  id: string;
-}
+import { CompanyAccount } from "./company-account.interface";
+import { CompanyHolding } from "./company-holding.interface";
+import { Document } from "./document.interface";
 
 export interface Company {
   id: string;
@@ -20,7 +10,7 @@ export interface Company {
   accounts: CompanyAccount[];
   holding: CompanyHolding;
   createdAt: string;
-  document: CompanyDocument;
+  document: Document;
 }
 
 export interface CompaniesResponse {
