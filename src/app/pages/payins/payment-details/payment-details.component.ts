@@ -14,8 +14,7 @@ import {
 } from "../../../shared/components/breadcrumb";
 import { ErrorMessageComponent } from "../../../shared/components/error-message/error-message.component";
 import { InfoFieldComponent } from "../../../shared/components/info-field/info-field.component";
-import { PayinApiResponse } from "../../../shared/interfaces";
-import { PaymentDetail } from "../../../shared/interfaces/payin.interface";
+import { PayinApiResponse, PaymentDetail } from "../../../shared/interfaces";
 import { LocalePipe } from "../../../shared/pipes/locale.pipe";
 
 @Component({

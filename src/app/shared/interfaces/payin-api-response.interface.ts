@@ -1,5 +1,6 @@
 import { Amount } from "./amount.interface";
-import { Document } from "./document.interface";
+import { PayinCompany } from "./payin-company.interface";
+import { PayinCustomer } from "./payin-customer.interface";
 import { TransactionApiResponse } from "./transaction-api-response.interface";
 
 export interface PayinApiResponse {
@@ -8,11 +9,7 @@ export interface PayinApiResponse {
   code: string;
   additionalInfo?: string;
   status: string;
-  company: {
-    id: string;
-    name: string;
-    document: Document;
-  };
+  company: PayinCompany;
   paymentMethod: string;
   amount: Amount;
   amountClient: string;
@@ -20,14 +17,7 @@ export interface PayinApiResponse {
   feeVar: string;
   feeAdd: string;
   transactions: TransactionApiResponse[];
-  customer: {
-    type: string;
-    fullName: string;
-    email: string;
-    phone: string;
-    birth: string;
-    document: Document;
-  };
+  customer: PayinCustomer;
   paidAt?: string;
   createdAt: string;
   basePricePair: string;
