@@ -1,25 +1,6 @@
-import { RefundOrderCompany } from "./refund-order-company.interface";
-
-import { Amount } from "./amount.interface";
-export interface RefundOrderAmount extends Amount {}
-
-export interface RefundOrder {
-  id: string;
-  company: RefundOrderCompany;
-  endToEndId?: string;
-  amount: RefundOrderAmount;
-}
-
-export interface RefundRequester {
-  name: string;
-  email: string;
-}
-
-export interface RefundHistoryStep {
-  step: string;
-  status: string;
-  updatedAt: string;
-}
+import { RefundHistoryStep } from "./refund-history-step.interface";
+import { RefundOrder } from "./refund-order.interface";
+import { RefundRequester } from "./refund-requester.interface";
 
 export interface Refund {
   id: string;
