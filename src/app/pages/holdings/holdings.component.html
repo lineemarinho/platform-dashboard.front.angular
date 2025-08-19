@@ -1,7 +1,6 @@
 <div class="w-full">
   <app-page-title [title]="'holdings' | locale"></app-page-title>
 
-  <!-- Desktop Filters -->
   <form [formGroup]="filterForm" class="hidden lg:block bg-white mb-6 w-full">
     <div class="flex items-end justify-between w-full">
       <div class="flex flex-wrap gap-3 items-end flex-1">
@@ -179,7 +178,6 @@
   </div>
 </div>
 
-<!-- Debug: isLoading = {{ isLoading }} -->
 <app-loading
   *ngIf="isLoading"
   message="Carregando titulares..."
@@ -187,7 +185,6 @@
   size="md"
 ></app-loading>
 
-<!-- Debug: Dados carregados = {{ holdings().length }} -->
 <div>
   <app-table
     *ngIf="!isLoading"
