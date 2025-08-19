@@ -35,3 +35,4 @@ export * from "./refund-requester.interface";
 export * from "./refund.interface";
 export * from "./transaction-api-response.interface";
 export * from "./user.interface";
+export * from "./withdrawal.interface";

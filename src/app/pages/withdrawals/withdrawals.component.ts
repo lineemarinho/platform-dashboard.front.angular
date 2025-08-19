@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToastService } from "../../core/services/toast.service";
 import { TranslationService } from "../../core/services/translation.service";
+import { WithdrawalsService } from "../../core/services/withdrawals.service";
 import { AppButtonComponent } from "../../shared/components/app-button/app-button.component";
 import { AppInputComponent } from "../../shared/components/app-input/app-input.component";
 import {
@@ -16,6 +17,11 @@ import {
 } from "../../shared/components/app-table/app-table.component";
 import { PageTitleComponent } from "../../shared/components/page-title/page-title.component";
 import { LocalePipe } from "../../shared/pipes/locale.pipe";
+import {
+  FilterBuilderUtil,
+  FilterCondition,
+  FilterGroup,
+} from "../../shared/utils/filter-builder.util";
 
 @Component({
   selector: "app-withdrawals",
@@ -36,6 +42,13 @@ import { LocalePipe } from "../../shared/pipes/locale.pipe";
 export class WithdrawalsComponent implements OnInit {
   filterForm: FormGroup;
   isMobileFiltersOpen = false;
+  isLoading = false;
+
+  withdrawals = [] as WithdrawalRow[];
+
+  totalItems = 0;
+  currentPage = 1;
+  itemsPerPage = 10;
 
   statusOptions: SelectOption[] = [
     { value: "approved", label: "approved" },
@@ -58,44 +71,16 @@ export class WithdrawalsComponent implements OnInit {
     { key: "createdAt", label: "createdAt", type: "text" },
   ];
 
-  tableRows: WithdrawalRow[] = [
-    {
-      id: "ff0fc...56404c",
-      fullName: "Nuuvem",
-      status: "approved",
-      operationType: "WITHDRAW",
-      currency: "BRL",
-      requestedValue: "R$ 10,00",
-      value: "R$ 10,00",
-      createdAt: "01/09/2026 19:00",
-    },
-    {
-      id: "abc123...def456",
-      fullName: "TechCorp",
-      status: "pending",
-      operationType: "WITHDRAW",
-      currency: "USD",
-      requestedValue: "$ 50.00",
-      value: "$ 50.00",
-      createdAt: "01/09/2026 18:30",
-    },
-    {
-      id: "xyz789...uvw012",
-      fullName: "DigitalPay",
-      status: "approved",
-      operationType: "WITHDRAW",
-      currency: "EUR",
-      requestedValue: "€ 25.00",
-      value: "€ 25.00",
-      createdAt: "01/09/2026 17:45",
-    },
-  ];
+  get tableRows(): WithdrawalRow[] {
+    return this.withdrawals;
+  }
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private translationService: TranslationService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private withdrawalsService: WithdrawalsService
   ) {
     this.filterForm = this.fb.group({
       startDate: [""],
@@ -116,6 +101,8 @@ export class WithdrawalsComponent implements OnInit {
       this.updateAllOptions();
       this.updateTableColumns();
     });
+
+    this.loadWithdrawals();
   }
 
   updateAllOptions(): void {
@@ -242,15 +229,14 @@ export class WithdrawalsComponent implements OnInit {
   }
 
   onFilter(): void {
-    this.toastService.info(
-      this.translationService.translate("filter") + " aplicado com sucesso!",
-      2000
-    );
+    this.currentPage = 1;
+    this.loadWithdrawals();
   }
 
   onClear(): void {
     this.filterForm.reset();
-    this.toastService.success("Filtros limpos com sucesso!", 2000);
+    this.currentPage = 1;
+    this.loadWithdrawals();
   }
 
   toggleMobileFilters(): void {
@@ -292,4 +278,52 @@ export class WithdrawalsComponent implements OnInit {
 
     return result;
   };
+
+  private buildApiFilters(): (FilterCondition | FilterGroup)[] {
+    const formValue = this.filterForm.value as any;
+    const filters: (FilterCondition | FilterGroup)[] = [];
+
+    if (formValue.startDate || formValue.endDate) {
+      const dateFilters = FilterBuilderUtil.buildDateRangeFilter(
+        "createdAt",
+        "createdAt",
+        formValue.startDate,
+        formValue.endDate
+      );
+      filters.push(...dateFilters);
+    }
+
+    if (formValue.status) {
+      const statusValue = String(formValue.status).toUpperCase();
+      const statusFilter = FilterBuilderUtil.buildSelectFilter(
+        "status",
+        statusValue
+      );
+      if (statusFilter) filters.push(statusFilter);
+    }
+
+    return FilterBuilderUtil.buildFinalFilters(filters);
+  }
+
+  private loadWithdrawals(): void {
+    this.isLoading = true;
+    const skip = (this.currentPage - 1) * this.itemsPerPage;
+    const take = this.itemsPerPage;
+    const apiFilters = this.buildApiFilters();
+
+    this.withdrawalsService.getWithdrawals(skip, take, apiFilters).subscribe({
+      next: (response) => {
+        this.withdrawals = response.data as unknown as WithdrawalRow[];
+        this.totalItems = response.data.length;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastService.error(
+          this.translationService.translate("errorLoadingData") ||
+            "Erro ao carregar withdrawals"
+        );
+      },
+    });
+  }
 }
