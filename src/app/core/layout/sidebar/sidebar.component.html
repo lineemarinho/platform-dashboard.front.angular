@@ -81,7 +81,7 @@
   <div class="p-4 border-b border-slate-700 mobile-user-section">
     <div class="flex items-center gap-3">
       <div
-        class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-lg user-avatar"
+        class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-sm user-avatar"
       >
         {{ getUserInitials() }}
       </div>
@@ -96,12 +96,12 @@
   }
 
   <!-- Navigation Menu -->
-  <nav class="flex-1 py-4">
+  <nav class="flex-1 py-2">
     <div class="space-y-1 px-2">
       @for (item of navigationItems(); track item.path) {
       <div class="relative">
         <button
-          class="flex items-center gap-3 w-full p-3 rounded-lg text-left transition-colors group nav-item"
+          class="flex items-center gap-3 w-full p-2 rounded-lg text-left transition-colors group nav-item"
           [class]="
             item.active
               ? brandConfig.secondary + ' text-white shadow-sm'
@@ -114,7 +114,7 @@
             item.icon
           }}</span>
           @if (!isCollapsed()) {
-          <span class="font-medium text-sm break-words">{{
+          <span class="font-medium text-xs break-words">{{
             item.label | locale
           }}</span>
           }
@@ -133,7 +133,7 @@
     >
       <span class="material-icons text-lg flex-shrink-0">logout</span>
       @if (!isCollapsed()) {
-      <span class="font-medium">Sair</span>
+      <span class="text-xs">Sair</span>
       }
     </button>
   </div>

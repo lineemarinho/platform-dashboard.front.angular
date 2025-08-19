@@ -70,7 +70,7 @@ export class HoldingsComponent implements OnInit {
     },
     { key: "phone", label: "Telefone", type: "text" as const },
     { key: "type", label: "Tipo", type: "text" as const },
-    { key: "companyId", label: "ID Empresa", type: "id" as const },
+    { key: "companyId", label: "ID Empresa", type: "text" as const },
     { key: "country", label: "País", type: "country" as const },
     { key: "createdAt", label: "Data de criação", type: "date" as const },
     { key: "updatedAt", label: "Última atualização", type: "date" as const },
