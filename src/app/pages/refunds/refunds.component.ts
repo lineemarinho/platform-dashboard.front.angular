@@ -96,8 +96,7 @@ export class RefundsComponent implements OnInit {
       : "N/A",
   ];
 
-  onViewDetails(refund: Refund): void {
-  }
+  onViewDetails(refund: Refund): void {}
 
   onFilter(): void {
     this.currentPage = 1;

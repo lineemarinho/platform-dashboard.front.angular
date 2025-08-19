@@ -56,28 +56,12 @@ export class AuthService {
         system: {
           loggerOptions: {
             loggerCallback: (level, message, containsPii) => {
-              if (containsPii) {
-                return;
-              }
-              switch (level) {
-                case 0:
-                  console.error(message);
-                  break;
-                case 1:
-                  console.warn(message);
-                  break;
-                case 2:
-                  console.info(message);
-                  break;
-                case 3:
-                  console.debug(message);
-                  break;
-                default:
-                  console.log(message);
-                  break;
+              if (containsPii) return;
+              if (level === 0) {
+                console.error(message);
               }
             },
-            logLevel: 2,
+            logLevel: 0,
           },
         },
       });

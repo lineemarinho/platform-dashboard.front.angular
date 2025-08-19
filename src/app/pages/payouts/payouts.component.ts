@@ -116,8 +116,6 @@ export class PayoutsComponent implements OnInit {
       ? new Date(payout.createdAt).toLocaleDateString("pt-BR")
       : "N/A";
 
-    console.log("Payout createdAt:", payout.createdAt, "Formatted:", createdAt);
-
     return [
       payout.id,
       payout.code,

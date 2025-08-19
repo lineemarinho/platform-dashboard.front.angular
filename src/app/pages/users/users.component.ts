@@ -86,8 +86,7 @@ export class UsersComponent implements OnInit {
     user.permissionGroups || "N/A",
   ];
 
-  onViewDetails(user: User): void {
-  }
+  onViewDetails(user: User): void {}
 
   onFilter(): void {
     this.currentPage = 1;
