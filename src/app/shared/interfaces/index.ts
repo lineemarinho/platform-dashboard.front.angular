@@ -14,6 +14,7 @@ export * from "./fee-item.interface";
 export * from "./fee.interface";
 export * from "./holding.interface";
 export * from "./pagination-request.interface";
+export * from "./payin-api-customer.interface";
 export * from "./payin-api-response.interface";
 export * from "./payin-company.interface";
 export * from "./payin-customer.interface";

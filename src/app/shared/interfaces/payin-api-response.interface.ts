@@ -1,6 +1,6 @@
 import { Amount } from "./amount.interface";
+import { PayinApiCustomer } from "./payin-api-customer.interface";
 import { PayinCompany } from "./payin-company.interface";
-import { PayinCustomer } from "./payin-customer.interface";
 import { TransactionApiResponse } from "./transaction-api-response.interface";
 
 export interface PayinApiResponse {
@@ -17,7 +17,7 @@ export interface PayinApiResponse {
   feeVar: string;
   feeAdd: string;
   transactions: TransactionApiResponse[];
-  customer: PayinCustomer;
+  customer: PayinApiCustomer;
   paidAt?: string;
   createdAt: string;
   basePricePair: string;

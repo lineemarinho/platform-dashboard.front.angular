@@ -5,4 +5,6 @@ export interface PayinCustomer {
   type: string;
   document: Document;
   email: string;
+  phone: string;
+  birth: string;
 }
